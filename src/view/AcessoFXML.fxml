@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" style="-fx-background-color: #212121;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AcessoFXMLController">
+   <children>
+      <ImageView fitHeight="962.0" fitWidth="1336.0" layoutX="-192.0" layoutY="-82.0" nodeOrientation="INHERIT" opacity="0.35" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="-62.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-56.0" AnchorPane.topAnchor="0.0">
+         <rotationAxis>
+            <Point3D />
+         </rotationAxis>
+         <image>
+            <Image url="@../imagem/Design.png" />
+         </image>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <AnchorPane layoutX="768.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="900.0" prefWidth="432.0" style="-fx-background-color: #1e88e5;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text fill="WHITE" layoutX="170.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ACESSO">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Text>
+            <TextField cache="true" layoutX="149.0" layoutY="260.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <Text fill="WHITE" layoutX="149.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Localhost">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="154.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Porta">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField cache="true" layoutX="149.0" layoutY="334.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <Text fill="WHITE" layoutX="146.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField cache="true" layoutX="149.0" layoutY="407.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <Text fill="WHITE" layoutX="151.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Senha">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <PasswordField layoutX="149.0" layoutY="475.0" prefHeight="25.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <Button layoutX="149.0" layoutY="583.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="154.0" style="-fx-background-color: #42a5f5; -fx-background-radius: 32;" text="Conectar" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>               
+               <effect>
+                  <DropShadow color="#76dad7eb" />
+               </effect>
+            </Button>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </AnchorPane>
+      <Text layoutX="343.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SPANDF">
+         <font>
+            <Font name="System Bold" size="58.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="0.3571428571428571" endY="0.6761904761904762" startX="0.3571428571428571" startY="0.13333333333333325">
+               <stops>
+                  <Stop color="#0000005e" />
+                  <Stop color="#0000005e" offset="0.007662835249042145" />
+                  <Stop color="#9bb6f8" offset="0.6628352490421452" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <Text fill="#fcfcfc" layoutX="45.0" layoutY="498.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerador automático de Stored Procedure e Functions" wrappingWidth="805.8818359375">
+         <font>
+            <Font name="System Bold Italic" size="31.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="747.0" layoutY="858.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Versão 1.0" AnchorPane.bottomAnchor="10.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
