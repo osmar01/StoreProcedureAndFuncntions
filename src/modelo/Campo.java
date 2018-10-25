@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import javafx.scene.control.CheckBox;
+
 /**
  *
  * @author Junnio
@@ -13,8 +15,10 @@ public class Campo {
     private String nome;
     private String filtro;
     private String ordenador;
+    private CheckBox checkbox;
 
     public Campo() {
+        checkbox = new CheckBox();
     }
 
     public String getNome() {
@@ -39,6 +43,14 @@ public class Campo {
 
     public void setOrdenador(String ordenador) {
         this.ordenador = ordenador;
+    }
+
+    public CheckBox getCheckbox() {
+        return checkbox;
+    }
+
+    public void setCheckbox(CheckBox checkbox) {
+        this.checkbox = checkbox;
     }
     
     

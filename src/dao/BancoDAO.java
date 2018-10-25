@@ -46,7 +46,4 @@ public class BancoDAO {
         return bancos;
     }
 
-    public static void main(String[] args) {
-
-    }
 }

@@ -6,18 +6,24 @@
 package controller;
 
 import dao.BancoDAO;
+import dao.CampoDAO;
 import dao.TabelaDAO;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import modelo.Banco;
+import modelo.Campo;
 import modelo.Tabela;
 
 /**
@@ -34,13 +40,20 @@ public class HomeFXMLController implements Initializable {
     private TreeItem<String> itemTabela;
     private TreeItem<String> parentBanco;
     private TreeItem<String> root;
+    private CampoDAO campoDAO;
+    private ObservableList<Campo> obsservableCampos;
+    private List<Campo> campos; 
     
     @FXML
     private TreeTableView<String> treeTableviewBancoDados;
     @FXML
     private TreeTableColumn<String, String> treetableColumnBancoDados;
     @FXML
-    private TableView<?> tableView;
+    private TableView<Campo> tableView;
+    @FXML
+    private TableColumn<String, String> tableColumnAtributos;
+    @FXML
+    private TableColumn<String, String> tableColumnExibir;
 
     /**
      * Initializes the controller class.
@@ -74,7 +87,28 @@ public class HomeFXMLController implements Initializable {
         treetableColumnBancoDados.setCellValueFactory((TreeTableColumn.CellDataFeatures<String, String> param) -> new SimpleStringProperty(param.getValue().getValue()));
     }
     
+    
     public void inicializarTableView(){
+        campoDAO = new CampoDAO();
+        campos = campoDAO.listarCampos("dra", "cidade");
         
+        tableColumnAtributos.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        tableColumnExibir.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
+        
+        obsservableCampos = FXCollections.observableArrayList(campos);
+        tableView.setItems(obsservableCampos);
+        
+        
+        
+    }
+    
+    public void selecionarTabela(){
+        String banco = itemTabela.getValue().toString();
+        String table = parentBanco.getValue().toString();
+        
+        banco = treeTableviewBancoDados.getSelectionModel().getSelectedItem().toString();
+        System.out.println(banco);
+        System.out.println(table);
+    
     }
 }
