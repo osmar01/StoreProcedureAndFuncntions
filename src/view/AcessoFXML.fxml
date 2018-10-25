@@ -31,7 +31,7 @@
                   <Font name="System Bold" size="30.0" />
                </font>
             </Text>
-            <TextField fx:id="localhosttxt" cache="true" layoutX="149.0" layoutY="260.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <TextField fx:id="localhosttxt" cache="true" layoutX="149.0" layoutY="260.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" text="localhost" />
             <Text fill="WHITE" layoutX="149.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host">
                <font>
                   <Font size="14.0" />
@@ -42,26 +42,29 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="portatxt" cache="true" layoutX="149.0" layoutY="334.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <TextField fx:id="portatxt" cache="true" layoutX="149.0" layoutY="334.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" text="3306" />
             <Text fill="WHITE" layoutX="146.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
-            <TextField fx:id="usuariotxt" cache="true" layoutX="149.0" layoutY="407.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
+            <TextField fx:id="usuariotxt" cache="true" layoutX="149.0" layoutY="407.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-radius: 22;" text="root" />
             <Text fill="WHITE" layoutX="151.0" layoutY="465.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Senha">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
-            <PasswordField fx:id="senhatxt" layoutX="149.0" layoutY="475.0" prefHeight="25.0" prefWidth="154.0" style="-fx-background-radius: 22;" />
-            <Button fx:id="conectarbtn" layoutX="149.0" layoutY="583.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="154.0" style="-fx-background-color: #42a5f5; -fx-background-radius: 32;" text="Conectar" textAlignment="CENTER" textFill="WHITE">
+            <PasswordField fx:id="senhatxt" layoutX="149.0" layoutY="475.0" prefHeight="25.0" prefWidth="154.0" style="-fx-background-radius: 22;" text="root" />
+            <Button fx:id="conectarbtn" layoutX="149.0" layoutY="583.0" mnemonicParsing="false" onAction="#acessar" prefHeight="49.0" prefWidth="154.0" style="-fx-background-color: #42a5f5; -fx-background-radius: 32;" text="Conectar" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>               
                <effect>
                   <DropShadow color="#76dad7eb" />
                </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
          </children>
          <opaqueInsets>

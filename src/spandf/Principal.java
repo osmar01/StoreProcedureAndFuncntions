@@ -17,15 +17,16 @@ import javafx.stage.Stage;
  * @author Junnio
  */
 public class Principal extends Application {
+    private static Stage stage;
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/PrincipalFXML.fxml"));
-        
+        Parent root = FXMLLoader.load(getClass().getResource("/view/HomeFXML.fxml"));        
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
         stage.show();
+        setStage(stage);
     }
 
     /**
@@ -33,6 +34,13 @@ public class Principal extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private static void setStage(Stage stage) {
+        Principal.stage=stage;
+    }
+    private static Stage getStage(){
+        return stage;
     }
     
 }

@@ -39,6 +39,12 @@ public class Conection {
 
     }
     
+    public static Connection getConexao() {     
+        Conectar();                 
+        return con;
+    }
+    
+    
     public static boolean verificaConexao(){
             return con!=null;
     }

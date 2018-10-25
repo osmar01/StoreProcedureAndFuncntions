@@ -28,10 +28,13 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TreeTableView layoutY="25.0" prefHeight="511.0" prefWidth="200.0" AnchorPane.bottomAnchor="364.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <TreeTableView fx:id="treeTableviewBancoDados" layoutY="25.0" prefHeight="511.0" prefWidth="200.0" AnchorPane.bottomAnchor="364.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
             <columns>
-                <TreeTableColumn editable="false" prefWidth="199.0" resizable="false" text="BANCO DE DADOS" />
+                <TreeTableColumn fx:id="treetableColumnBancoDados" editable="false" prefWidth="199.0" resizable="false" text="Navegar" />
             </columns>
+         <columnResizePolicy>
+            <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
         </TreeTableView>
         <TitledPane animated="false" layoutY="535.0" prefHeight="365.0" prefWidth="200.0" text="INFORMAÇÕES" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="535.0">
             <content>
@@ -61,7 +64,7 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="147.0" prefWidth="1050.0">
                                             <children>
-                                                <TableView layoutX="14.0" layoutY="36.0" prefHeight="83.0" prefWidth="311.0">
+                                                <TableView fx:id="tableView" layoutX="14.0" layoutY="36.0" prefHeight="83.0" prefWidth="311.0">
                                                     <columns>
                                                         <TableColumn editable="false" prefWidth="262.0" resizable="false" sortable="false" text="Atributos" />
                                                         <TableColumn prefWidth="48.0" text="Exibir" />
