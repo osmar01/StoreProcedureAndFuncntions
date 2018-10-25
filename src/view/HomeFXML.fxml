@@ -28,7 +28,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TreeTableView fx:id="treeTableviewBancoDados" layoutY="25.0" prefHeight="511.0" prefWidth="200.0" AnchorPane.bottomAnchor="364.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <TreeTableView fx:id="treeTableviewBancoDados" layoutY="25.0" onMouseClicked="#selecionarTabela" prefHeight="511.0" prefWidth="200.0" AnchorPane.bottomAnchor="364.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
             <columns>
                 <TreeTableColumn fx:id="treetableColumnBancoDados" editable="false" prefWidth="199.0" resizable="false" text="Navegar" />
             </columns>
@@ -45,29 +45,16 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="1078.0">
                     <children>
-                        <Pane layoutX="18.0" layoutY="14.0" prefHeight="20.0" prefWidth="1049.0" style="-fx-background-color: #e3f2fd;">
-                            <children>
-                                <CheckBox layoutX="317.0" mnemonicParsing="false" text="Update" />
-                                <CheckBox layoutX="95.0" mnemonicParsing="false" text="Select" />
-                                <CheckBox layoutX="211.0" mnemonicParsing="false" text="Insert" />
-                                <Label text="Operações:">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                                <CheckBox layoutX="421.0" mnemonicParsing="false" text="Delete" />
-                            </children>
-                        </Pane>
-                        <TabPane layoutX="18.0" layoutY="42.0" prefHeight="271.0" prefWidth="1050.0" style="-fx-background-color: #e3f2fd;" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane layoutX="7.0" layoutY="5.0" prefHeight="308.0" prefWidth="1061.0" style="-fx-background-color: #e3f2fd;" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
-                                <Tab text="Tabela">
+                                <Tab text="Select">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="147.0" prefWidth="1050.0">
                                             <children>
                                                 <TableView fx:id="tableView" layoutX="14.0" layoutY="36.0" prefHeight="83.0" prefWidth="311.0">
                                                     <columns>
-                                                        <TableColumn editable="false" prefWidth="262.0" resizable="false" sortable="false" text="Atributos" />
-                                                        <TableColumn prefWidth="48.0" text="Exibir" />
+                                                        <TableColumn fx:id="tableColumnAtributos" editable="false" prefWidth="262.0" resizable="false" sortable="false" text="Atributos" />
+                                                        <TableColumn fx:id="tableColumnExibir" prefWidth="48.0" text="Exibir" />
                                                     </columns>
                                                 </TableView>
                                                 <Label layoutX="554.0" layoutY="41.0" text="Filtro">
@@ -125,9 +112,78 @@
                                         </AnchorPane>
                                     </content>
                                 </Tab>
+                        <Tab text="Insert">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                            <Label layoutX="484.0" layoutY="14.0" text="Insert">
+                                                <font>
+                                                    <Font size="14.0" />
+                                                </font>
+                                            </Label>
+                                    <TableView layoutX="310.0" layoutY="89.0" prefHeight="156.0" prefWidth="362.0">
+                                      <columns>
+                                          <TableColumn prefWidth="54.0" text="incluir" />
+                                        <TableColumn prefWidth="128.66668701171875" text="Campos" />
+                                          <TableColumn prefWidth="178.0" text="Adicionar Valor" />
+                                      </columns>
+                                    </TableView>
+                                    <Separator layoutX="-125.0" layoutY="38.0" prefHeight="0.0" prefWidth="1160.0" />
+                                    <Label layoutX="315.0" layoutY="65.0" text="Selecione os campos e adicione os valores respectivos">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Delete">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TableView layoutX="406.0" layoutY="55.0" prefHeight="200.0" prefWidth="267.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="campo" />
+                                        <TableColumn prefWidth="75.0" text="incluir" />
+                                          <TableColumn prefWidth="116.0" text="Condiçao/Where" />
+                                      </columns>
+                                    </TableView>
+                                    <Label layoutX="545.0" layoutY="17.0" text="Delete">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Separator layoutX="16.0" layoutY="41.0" prefHeight="1.0" prefWidth="1028.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab text="Update">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="501.0" layoutY="18.0" text="Update">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Separator layoutX="2.0" layoutY="36.0" prefHeight="3.0" prefWidth="1048.0" />
+                                    <TableView layoutX="352.0" layoutY="44.0" prefHeight="200.0" prefWidth="352.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="Campos" />
+                                        <TableColumn prefWidth="75.0" text="Incluir" />
+                                          <TableColumn prefWidth="75.0" text="Valor" />
+                                          <TableColumn prefWidth="126.0" text="Condicao/where" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
                             </tabs>
                         </TabPane>
-                        <Pane layoutX="19.0" layoutY="313.0" prefHeight="183.0" prefWidth="1048.0" style="-fx-background-color: #e3f2fd;">
+                        <Pane layoutX="8.0" layoutY="313.0" prefHeight="183.0" prefWidth="1059.0" style="-fx-background-color: #e3f2fd;">
                             <children>
                                 <TextArea layoutX="170.0" layoutY="42.0" prefHeight="84.0" prefWidth="455.0" />
                                 <Label layoutX="426.0" layoutY="14.0" text="Resultado da expressao SQL">
