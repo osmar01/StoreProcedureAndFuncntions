@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.Banco;
 import modelo.Tabela;
 
 /**
@@ -26,12 +25,8 @@ public class TabelaDAO {
     private ResultSet rs;
     private Tabela tabela;    
     
-    /**
-     *
-     * @param banco
-     * @return
-     */
-    public List<Tabela> listarTabelas(Banco banco) {
+   
+    public List<Tabela> listarTabelas(String nomeTabela) {
        
         tabelas = new ArrayList<>();
         con = null;
@@ -39,7 +34,7 @@ public class TabelaDAO {
         rs = null;
                 
         String sql = "SELECT DISTINCT TABLE_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS "
-                + "WHERE TABLE_SCHEMA LIKE '"+banco.getNome()+"';";
+                + "WHERE TABLE_SCHEMA LIKE '"+nomeTabela+"';";
 
         try {
             con = Conection.getConexao();

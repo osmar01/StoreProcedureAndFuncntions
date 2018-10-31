@@ -17,10 +17,10 @@ import java.util.logging.Logger;
  */
 public class Conection {
 
-    private static String host = "localhost";
-    private static String porta = "3306";
-    private static String usuario = "root";
-    private static String senha= "root";
+    private static String host;
+    private static String porta ;
+    private static String usuario ;
+    private static String senha;
 
     private static Connection con = null;
 

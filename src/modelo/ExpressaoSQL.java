@@ -16,7 +16,8 @@ public class ExpressaoSQL {
     private List relacionamento;
     private List<Banco> Bancos;
     
-    public String gerarExpressaoSQL(){
+    public String gerarExpressaoSQL(Tabela tabela, List<Campo> campos){
+        
         return null;
     }
     public void salvarConsulta(){

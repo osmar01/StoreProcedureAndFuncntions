@@ -9,18 +9,19 @@ import dao.BancoDAO;
 import dao.CampoDAO;
 import dao.TabelaDAO;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import modelo.Banco;
 import modelo.Campo;
@@ -35,26 +36,44 @@ public class HomeFXMLController implements Initializable {
 
     private BancoDAO bancodao;
     private List<Banco> bancos;
-    private TabelaDAO tabeladao;
-    private List<Tabela> tabelas;
-    private TreeItem<String> itemTabela;
-    private TreeItem<String> parentBanco;
-    private TreeItem<String> root;
+    private ObservableList<Banco> observableBancos;
     private CampoDAO campoDAO;
-    private ObservableList<Campo> obsservableCampos;
-    private List<Campo> campos; 
-    
-    @FXML
-    private TreeTableView<String> treeTableviewBancoDados;
-    @FXML
-    private TreeTableColumn<String, String> treetableColumnBancoDados;
+    private List<Campo> campos;
+    private ObservableList<Campo> observableCampos;
+    private ObservableList<String> observableFiltro;
+    private ObservableList<String> observableOperador;
+    private TabelaDAO tabelaDAO;
+    private List<Tabela> tabelas;
+    private ObservableList<Tabela> observableTabelas;
+        
+
     @FXML
     private TableView<Campo> tableView;
     @FXML
     private TableColumn<String, String> tableColumnAtributos;
     @FXML
     private TableColumn<String, String> tableColumnExibir;
+    @FXML
+    private ListView<Banco> listViewBancos;
+    @FXML
+    private ListView<Tabela> listViewTabela;
+    @FXML
+    private ComboBox<Campo> comboboxCampoFiltro;
+    @FXML
+    private ComboBox<String> comboboxFiltro;
+    @FXML
+    private ComboBox<String> comboboxOperadorLogico;
+    @FXML
+    private ComboBox<Campo> comboboxOrdenador;
+    @FXML
+    private CheckBox checkBoxCrescente;
+    @FXML
+    private CheckBox checkBoxDecrescente;
+    @FXML
+    private TextArea textAreaResultado;
+    
 
+    
     /**
      * Initializes the controller class.
      *
@@ -63,52 +82,108 @@ public class HomeFXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        inicializarTreeTableview();
-        inicializarTableView();
-    }
-
-    public void inicializarTreeTableview() {
-        bancodao = new BancoDAO();
-        bancos = bancodao.listarBancos();
-        tabeladao = new TabelaDAO();
-
-        root = new TreeItem<>("BANCOS DE DADOS");
-
-        for (Banco banco : bancos) {
-            tabelas = tabeladao.listarTabelas(banco);
-            parentBanco = new TreeItem<>(banco.getNome());
-            for (Tabela tabela : tabelas) {
-                itemTabela = new TreeItem<>(tabela.getNome());
-                parentBanco.getChildren().addAll(itemTabela);
-            }
-            root.getChildren().addAll(parentBanco);
-        }
-        treeTableviewBancoDados.setRoot(root);
-        treetableColumnBancoDados.setCellValueFactory((TreeTableColumn.CellDataFeatures<String, String> param) -> new SimpleStringProperty(param.getValue().getValue()));
+        inicializarListViewBancos();
+        inicializarComboboxFiltro();
+        inicializarComboboxOperadorLogico();        
     }
     
-    
-    public void inicializarTableView(){
-        campoDAO = new CampoDAO();
-        campos = campoDAO.listarCampos("dra", "cidade");
+    public void inicializarComboboxFiltro(){
+        String igual = "=";
+        String maior = ">";
+        String menor = "<";
         
+        List<String> filtros = new ArrayList<>();
+        filtros.add(igual);
+        filtros.add(menor);
+        filtros.add(maior);
+        
+        observableFiltro = FXCollections.observableArrayList(filtros);
+        comboboxFiltro.setItems(observableFiltro);                      
+    }
+    
+    public void inicializarComboboxOperadorLogico(){
+        String and = "AND";
+        String or = "OR";
+        String not = "NOT";        
+        
+        
+        List<String> operadores = new ArrayList<>();
+        operadores.add(and);
+        operadores.add(or);
+        operadores.add(not);
+        
+        observableOperador = FXCollections.observableArrayList(operadores);
+        comboboxOperadorLogico.setItems(observableOperador);
+    }
+    
+    @FXML
+    public void getCampos() {
+        campoDAO = new CampoDAO();
+        campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
+        observableCampos = FXCollections.observableArrayList(campos);
+        inicializarTableViewCampos();
+        inicializarComboboxCampoFiltro();
+        inicializarComboboxOrdenador();
+        setResultado();
+    }
+    
+    public void inicializarTableViewCampos(){        
         tableColumnAtributos.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnExibir.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
+
+        tableView.setItems(observableCampos);
+    }
         
-        obsservableCampos = FXCollections.observableArrayList(campos);
-        tableView.setItems(obsservableCampos);
-        
-        
-        
+    public void inicializarComboboxCampoFiltro(){
+        comboboxCampoFiltro.setItems(observableCampos);    
     }
     
-    public void selecionarTabela(){
-        String banco = itemTabela.getValue().toString();
-        String table = parentBanco.getValue().toString();
-        
-        banco = treeTableviewBancoDados.getSelectionModel().getSelectedItem().toString();
-        System.out.println(banco);
-        System.out.println(table);
-    
+    public void inicializarComboboxOrdenador(){
+        comboboxOrdenador.setItems(observableCampos);
     }
+
+    public void inicializarListViewBancos() {
+        bancodao = new BancoDAO();
+        bancos = bancodao.listarBancos();
+        observableBancos = FXCollections.observableArrayList(bancos);
+        listViewBancos.setItems(observableBancos);
+    }
+
+    public Banco getBancoSelecionado() {
+        Banco nomeBanco = listViewBancos.getSelectionModel().getSelectedItem();
+        return nomeBanco;
+    }
+
+    public Tabela getTabelaSelecionada() {
+        Tabela nomeTabela = listViewTabela.getSelectionModel().getSelectedItem();
+        return nomeTabela;
+    }
+
+    @FXML
+    public void inicializarListViewTabela() {
+        tabelaDAO = new TabelaDAO();
+        tabelas = tabelaDAO.listarTabelas(getBancoSelecionado().getNome());
+        observableTabelas = FXCollections.observableArrayList(tabelas);
+        listViewTabela.setItems(observableTabelas);
+    }
+    @FXML
+    public void marcarCheckBoxCrescente(){
+        if (checkBoxCrescente.isSelected()){
+            checkBoxDecrescente.setSelected(false);
+        }       
+    }
+    @FXML
+    public void marcarCheckBoxDecrescente(){        
+        if (checkBoxDecrescente.isSelected()){
+            checkBoxCrescente.setSelected(false);
+        }
+    }
+    
+    public void setResultado(){
+        String resultado;
+        
+        textAreaResultado.setText("SELECT * FROM "+getTabelaSelecionada().getNome()+";");
+    }
+    
+          
 }

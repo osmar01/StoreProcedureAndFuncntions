@@ -40,7 +40,7 @@ public class Campo {
     public String getOrdenador() {
         return ordenador;
     }
-
+    
     public void setOrdenador(String ordenador) {
         this.ordenador = ordenador;
     }
@@ -51,6 +51,11 @@ public class Campo {
 
     public void setCheckbox(CheckBox checkbox) {
         this.checkbox = checkbox;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
     
     

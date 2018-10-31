@@ -88,7 +88,7 @@ public class AcessoFXMLController implements Initializable {
 //            conectarbtn.getScene().getWindow().hide();
 //        }
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/HomeFXML.fxml"));        
+        Parent root = FXMLLoader.load(getClass().getResource("/view/PrincipalFXML.fxml"));        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

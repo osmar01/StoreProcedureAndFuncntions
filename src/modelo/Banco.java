@@ -45,6 +45,11 @@ public class Banco {
     public void setTabelas(List<Tabela> tabelas) {
         this.tabelas = tabelas;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
     
     
 }
