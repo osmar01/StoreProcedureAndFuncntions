@@ -19,10 +19,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import modelo.Banco;
 import modelo.Campo;
 import modelo.Tabela;
@@ -45,7 +51,12 @@ public class HomeFXMLController implements Initializable {
     private TabelaDAO tabelaDAO;
     private List<Tabela> tabelas;
     private ObservableList<Tabela> observableTabelas;
-        
+    private TableView<Campo> tabela;
+    private TableColumn<Campo, String> nomeColuna;
+    private TableColumn<Campo, String> exibirColuna;
+    private TabPane tabPaneTabela;
+    private Tab tabNome;
+    private ListView<Campo> listViewCampos;
 
     @FXML
     private TableView<Campo> tableView;
@@ -71,9 +82,11 @@ public class HomeFXMLController implements Initializable {
     private CheckBox checkBoxDecrescente;
     @FXML
     private TextArea textAreaResultado;
-    
+    @FXML
+    private AnchorPane anchorPanePrincipal;
+    @FXML
+    private AnchorPane anchorPaneTabela;
 
-    
     /**
      * Initializes the controller class.
      *
@@ -84,38 +97,37 @@ public class HomeFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         inicializarListViewBancos();
         inicializarComboboxFiltro();
-        inicializarComboboxOperadorLogico();        
+        inicializarComboboxOperadorLogico();
     }
-    
-    public void inicializarComboboxFiltro(){
+
+    public void inicializarComboboxFiltro() {
         String igual = "=";
         String maior = ">";
         String menor = "<";
-        
+
         List<String> filtros = new ArrayList<>();
         filtros.add(igual);
         filtros.add(menor);
         filtros.add(maior);
-        
+
         observableFiltro = FXCollections.observableArrayList(filtros);
-        comboboxFiltro.setItems(observableFiltro);                      
+        comboboxFiltro.setItems(observableFiltro);
     }
-    
-    public void inicializarComboboxOperadorLogico(){
+
+    public void inicializarComboboxOperadorLogico() {
         String and = "AND";
         String or = "OR";
-        String not = "NOT";        
-        
-        
+        String not = "NOT";
+
         List<String> operadores = new ArrayList<>();
         operadores.add(and);
         operadores.add(or);
         operadores.add(not);
-        
+
         observableOperador = FXCollections.observableArrayList(operadores);
         comboboxOperadorLogico.setItems(observableOperador);
     }
-    
+
     @FXML
     public void getCampos() {
         campoDAO = new CampoDAO();
@@ -125,20 +137,22 @@ public class HomeFXMLController implements Initializable {
         inicializarComboboxCampoFiltro();
         inicializarComboboxOrdenador();
         setResultado();
+        criarTabela();
+
     }
-    
-    public void inicializarTableViewCampos(){        
+
+    public void inicializarTableViewCampos() {
         tableColumnAtributos.setCellValueFactory(new PropertyValueFactory<>("nome"));
         tableColumnExibir.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
 
         tableView.setItems(observableCampos);
     }
-        
-    public void inicializarComboboxCampoFiltro(){
-        comboboxCampoFiltro.setItems(observableCampos);    
+
+    public void inicializarComboboxCampoFiltro() {
+        comboboxCampoFiltro.setItems(observableCampos);
     }
-    
-    public void inicializarComboboxOrdenador(){
+
+    public void inicializarComboboxOrdenador() {
         comboboxOrdenador.setItems(observableCampos);
     }
 
@@ -166,24 +180,56 @@ public class HomeFXMLController implements Initializable {
         observableTabelas = FXCollections.observableArrayList(tabelas);
         listViewTabela.setItems(observableTabelas);
     }
+
     @FXML
-    public void marcarCheckBoxCrescente(){
-        if (checkBoxCrescente.isSelected()){
+    public void marcarCheckBoxCrescente() {
+        if (checkBoxCrescente.isSelected()) {
             checkBoxDecrescente.setSelected(false);
-        }       
+        }
     }
+
     @FXML
-    public void marcarCheckBoxDecrescente(){        
-        if (checkBoxDecrescente.isSelected()){
+    public void marcarCheckBoxDecrescente() {
+        if (checkBoxDecrescente.isSelected()) {
             checkBoxCrescente.setSelected(false);
         }
     }
-    
-    public void setResultado(){
+
+    public void setResultado() {
         String resultado;
+
+        textAreaResultado.setText("SELECT * FROM " + getTabelaSelecionada().getNome() + ";");
+    }
+
+    public void criarTabela() {
+                                      
+        Pane painelTabela = new Pane();
+        painelTabela.setLayoutX(50);
+        painelTabela.setLayoutY(40); 
         
-        textAreaResultado.setText("SELECT * FROM "+getTabelaSelecionada().getNome()+";");
+        listViewCampos = new ListView<>();
+        listViewCampos.setItems(observableCampos);
+        listViewCampos.setPrefWidth(160);
+        listViewCampos.setPrefHeight(190);
+               
+        tabPaneTabela = new TabPane();
+        tabNome = new Tab();
+                
+        tabNome.setText(getTabelaSelecionada().getNome());
+        tabNome.setContent(listViewCampos);        
+        
+        tabPaneTabela.getTabs().add(tabNome);
+                
+        painelTabela.getChildren().add(tabPaneTabela);        
+        anchorPaneTabela.getChildren().addAll(painelTabela);
+
     }
     
-          
+    public void posicionarTabela(){
+        
+        
+        
+    
+    }
+
 }
