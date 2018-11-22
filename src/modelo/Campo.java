@@ -15,6 +15,8 @@ public class Campo {
     private String nome;
     private String filtro;
     private String ordenador;
+    private String valor;
+    private String operador = "";
     private CheckBox checkbox;
 
     public Campo() {
@@ -53,6 +55,25 @@ public class Campo {
         this.checkbox = checkbox;
     }
 
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public String getOperador() {
+        return operador;
+    }
+
+    public void setOperador(String operador) {
+        this.operador = operador;
+    }
+    
+    
+    
+    
     @Override
     public String toString() {
         return nome;

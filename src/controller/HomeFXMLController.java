@@ -8,14 +8,20 @@ package controller;
 import dao.BancoDAO;
 import dao.CampoDAO;
 import dao.TabelaDAO;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -24,11 +30,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import modelo.Banco;
 import modelo.Campo;
 import modelo.Tabela;
@@ -57,6 +64,8 @@ public class HomeFXMLController implements Initializable {
     private TabPane tabPaneTabela;
     private Tab tabNome;
     private ListView<Campo> listViewCampos;
+    private List<Campo> camposSelecionados = new ArrayList<>();
+    private List<Campo> filtrosSelecionados = new ArrayList<>();
 
     @FXML
     private TableView<Campo> tableView;
@@ -86,6 +95,14 @@ public class HomeFXMLController implements Initializable {
     private AnchorPane anchorPanePrincipal;
     @FXML
     private AnchorPane anchorPaneTabela;
+    @FXML
+    private TextField campoCriterio;
+    @FXML
+    private Button btnAdd;
+    @FXML
+    private Button btnAdd1;
+    @FXML
+    private Button btnGerarStoredProcedure;
 
     /**
      * Initializes the controller class.
@@ -98,6 +115,7 @@ public class HomeFXMLController implements Initializable {
         inicializarListViewBancos();
         inicializarComboboxFiltro();
         inicializarComboboxOperadorLogico();
+
     }
 
     public void inicializarComboboxFiltro() {
@@ -138,7 +156,7 @@ public class HomeFXMLController implements Initializable {
         inicializarComboboxOrdenador();
         setResultado();
         criarTabela();
-
+        camposSelecionadosExibir();
     }
 
     public void inicializarTableViewCampos() {
@@ -196,40 +214,100 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void setResultado() {
-        String resultado;
-
-        textAreaResultado.setText("SELECT * FROM " + getTabelaSelecionada().getNome() + ";");
+        String campo = "";
+        String filtro = "";
+        if (camposSelecionados.isEmpty()) {
+            campo = "*";
+        } else {
+            campo = camposSelecionados.get(0).toString();
+            for (int i = 1; i < camposSelecionados.size(); i++) {
+                campo = campo + ", " + camposSelecionados.get(i).toString();
+            }
+        }
+        if (!filtrosSelecionados.isEmpty()) {
+            filtro = " WHERE ";
+            for (int i = 0; i < filtrosSelecionados.size(); i++) {
+                filtro = filtro + filtrosSelecionados.get(i).getNome() + " " + filtrosSelecionados.get(i).getFiltro() + " "
+                        + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador()+" ";
+            }
+        }
+        textAreaResultado.setWrapText(true);
+        textAreaResultado.setText("SELECT " + campo + " FROM " + getTabelaSelecionada().getNome() + filtro + ";");
     }
 
     public void criarTabela() {
-                                      
+
         Pane painelTabela = new Pane();
         painelTabela.setLayoutX(50);
-        painelTabela.setLayoutY(40); 
-        
+        painelTabela.setLayoutY(40);
+
         listViewCampos = new ListView<>();
         listViewCampos.setItems(observableCampos);
         listViewCampos.setPrefWidth(160);
         listViewCampos.setPrefHeight(190);
-               
+
         tabPaneTabela = new TabPane();
         tabNome = new Tab();
-                
+
         tabNome.setText(getTabelaSelecionada().getNome());
-        tabNome.setContent(listViewCampos);        
-        
+        tabNome.setContent(listViewCampos);
+
         tabPaneTabela.getTabs().add(tabNome);
-                
-        painelTabela.getChildren().add(tabPaneTabela);        
+
+        painelTabela.getChildren().add(tabPaneTabela);
         anchorPaneTabela.getChildren().addAll(painelTabela);
 
     }
-    
-    public void posicionarTabela(){
-        
-        
-        
-    
+
+    public void posicionarTabela() {
+    }
+
+    public void camposSelecionadosExibir() {
+
+        for (Campo campo : campos) {
+            campo.getCheckbox().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (campo.getCheckbox().isSelected()) {
+                        if (!camposSelecionados.contains(campo)) {
+                            camposSelecionados.add(campo);
+                        }
+                        setResultado();
+                    }
+                    if (!campo.getCheckbox().isSelected()) {
+                        camposSelecionados.remove(campo);
+                        setResultado();
+                    }
+                }
+            });
+
+        }
+    }
+
+    @FXML
+    public void filtrosSelecionados() {
+
+        Campo cmpo = new Campo();
+        cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());
+        cmpo.setFiltro(comboboxFiltro.getSelectionModel().getSelectedItem());
+        cmpo.setValor(campoCriterio.getText());
+        cmpo.setOperador(comboboxOperadorLogico.getSelectionModel().getSelectedItem());
+
+        if (cmpo.getOperador() == null) {
+            cmpo.setOperador("");
+        }
+        filtrosSelecionados.add(cmpo);
+        setResultado();
+
+    }
+    @FXML
+    public void gerarStoredProcedure() throws IOException{
+        Stage stage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        //btnGerarStoredProcedure.getScene().getWindow().hide();
     }
 
 }

@@ -37,37 +37,7 @@ public class AcessoFXMLController implements Initializable {
     private Button conectarbtn;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-//        conectarbtn.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Conection.setHost(localhosttxt.getText());
-//                Conection.setPorta(portatxt.getText());
-//                Conection.setUsuario(usuariotxt.getText());
-//                Conection.setSenha(senhatxt.getText());
-//                Conection.Conectar();
-//                if (Conection.verificaConexao()) {
-//                    //Chama outra cena
-//                    Principal principal = new Principal();
-//                    //Stage stage = new Stage();
-//                    //Parent root = null;
-//                    try {
-//                        principal.start(new Stage());
-//                    } catch (Exception ex) {
-//                        Logger.getLogger(AcessoFXMLController.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//////                    try {
-//////                        //root = FXMLLoader.load(getClass().getResource("/view/HomeFXML.fxml"));
-//////                    } catch (IOException e) {
-//////                    }
-////                    Scene scene = new Scene(root);
-////                    stage.setScene(scene);
-////                    stage.show();
-//                    conectarbtn.getScene().getWindow().hide();
-//                }
-//            }
-//        });
+    public void initialize(URL url, ResourceBundle rb) {  
     }
 
     public void acessar() throws IOException {
@@ -88,7 +58,7 @@ public class AcessoFXMLController implements Initializable {
 //            conectarbtn.getScene().getWindow().hide();
 //        }
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/PrincipalFXML.fxml"));        
+        Parent root = FXMLLoader.load(getClass().getResource("/view/InicioFXML.fxml"));        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
