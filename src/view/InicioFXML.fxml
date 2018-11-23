@@ -98,7 +98,7 @@
                                                 <ComboBox fx:id="comboboxCampoFiltro" layoutX="290.0" layoutY="61.0" pickOnBounds="false" prefHeight="25.0" prefWidth="193.0" promptText="Selecione" />
                                                 <ComboBox fx:id="comboboxFiltro" layoutX="493.0" layoutY="61.0" prefHeight="25.0" prefWidth="95.0" promptText="Selecione" />
                                                 <TextField fx:id="campoCriterio" layoutX="599.0" layoutY="61.0" prefHeight="25.0" prefWidth="123.0" />
-                                                <ComboBox fx:id="comboboxOperadorLogico" layoutX="739.0" layoutY="61.0" prefHeight="25.0" prefWidth="114.0" promptText="Selecione" visibleRowCount="3" />
+                                                <ComboBox fx:id="comboboxOperadorLogico" layoutX="739.0" layoutY="61.0" prefHeight="25.0" prefWidth="114.0" promptText="Selecione" visibleRowCount="4" />
                                                 <Button fx:id="btnAdd" layoutX="863.0" layoutY="61.0" mnemonicParsing="false" onAction="#filtrosSelecionados" text="Adicionar" />
                                                 <Label layoutX="290.0" layoutY="36.0" text="Campos para filtrar">
                                                     <font>

@@ -119,11 +119,13 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void inicializarComboboxFiltro() {
+        String selecione = "Selecione";
         String igual = "=";
         String maior = ">";
         String menor = "<";
 
         List<String> filtros = new ArrayList<>();
+        filtros.add(selecione);
         filtros.add(igual);
         filtros.add(menor);
         filtros.add(maior);
@@ -133,11 +135,13 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void inicializarComboboxOperadorLogico() {
+        String selecione = "Selecione";
         String and = "AND";
         String or = "OR";
         String not = "NOT";
 
         List<String> operadores = new ArrayList<>();
+        operadores.add(selecione);
         operadores.add(and);
         operadores.add(or);
         operadores.add(not);
@@ -167,7 +171,12 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void inicializarComboboxCampoFiltro() {
+        Campo e = new Campo();
+        e.setNome("Selecione");
+        campos.add(0, e);
+        observableCampos = FXCollections.observableArrayList(campos);
         comboboxCampoFiltro.setItems(observableCampos);
+
     }
 
     public void inicializarComboboxOrdenador() {
