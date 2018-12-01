@@ -240,6 +240,6 @@
                 </AnchorPane>
             </content>
         </TitledPane>
-        <AnchorPane fx:id="anchorPaneTabela" layoutX="208.0" layoutY="25.0" prefHeight="342.0" prefWidth="1070.0" />
+        <AnchorPane fx:id="areaTrabalho" layoutX="208.0" layoutY="25.0" prefHeight="342.0" prefWidth="1070.0" />
     </children>
 </AnchorPane>

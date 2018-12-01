@@ -13,12 +13,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,17 +57,15 @@ public class HomeFXMLController implements Initializable {
     private ObservableList<Banco> observableBancos;
     private CampoDAO campoDAO;
     private List<Campo> campos;
+
     private ObservableList<Campo> observableCampos;
     private ObservableList<String> observableFiltro;
     private ObservableList<String> observableOperador;
+
     private TabelaDAO tabelaDAO;
     private List<Tabela> tabelas;
     private ObservableList<Tabela> observableTabelas;
-    private TableView<Campo> tabela;
-    private TableColumn<Campo, String> nomeColuna;
-    private TableColumn<Campo, String> exibirColuna;
-    private TabPane tabPaneTabela;
-    private Tab tabNome;
+
     private ListView<Campo> listViewCampos;
     private List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
@@ -94,7 +97,7 @@ public class HomeFXMLController implements Initializable {
     @FXML
     private AnchorPane anchorPanePrincipal;
     @FXML
-    private AnchorPane anchorPaneTabela;
+    private AnchorPane areaTrabalho;
     @FXML
     private TextField campoCriterio;
     @FXML
@@ -103,6 +106,10 @@ public class HomeFXMLController implements Initializable {
     private Button btnAdd1;
     @FXML
     private Button btnGerarStoredProcedure;
+
+    private double initX;
+    private double initY;
+    private Point2D dragAnchor;
 
     /**
      * Initializes the controller class.
@@ -237,7 +244,7 @@ public class HomeFXMLController implements Initializable {
             filtro = " WHERE ";
             for (int i = 0; i < filtrosSelecionados.size(); i++) {
                 filtro = filtro + filtrosSelecionados.get(i).getNome() + " " + filtrosSelecionados.get(i).getFiltro() + " "
-                        + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador()+" ";
+                        + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador() + " ";
             }
         }
         textAreaResultado.setWrapText(true);
@@ -246,29 +253,96 @@ public class HomeFXMLController implements Initializable {
 
     public void criarTabela() {
 
-        Pane painelTabela = new Pane();
-        painelTabela.setLayoutX(50);
-        painelTabela.setLayoutY(40);
+        TableView<Campo> tabela = new TableView<>();
+        //esconde o cabeçalho da tableview tabela
+        tabela.widthProperty().addListener((ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) -> {
+            Pane header = (Pane) tabela.lookup("TableHeaderRow");
+            if (header.isVisible()) {
+                header.setMaxHeight(0);
+                header.setMinHeight(0);
+                header.setPrefHeight(0);
+                header.setVisible(false);
+            }
+        });
 
-        listViewCampos = new ListView<>();
-        listViewCampos.setItems(observableCampos);
-        listViewCampos.setPrefWidth(160);
-        listViewCampos.setPrefHeight(190);
+        TableColumn<Campo, String> nomeColuna = new TableColumn<>(getTabelaSelecionada().getNome());
+        nomeColuna.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        nomeColuna.setSortable(false);
 
-        tabPaneTabela = new TabPane();
-        tabNome = new Tab();
+        TableColumn<Campo, String> exibircheckbox = new TableColumn<>();
+        exibircheckbox.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
+        exibircheckbox.setSortable(false);
 
+        tabela.getColumns().add(nomeColuna);
+        tabela.getColumns().add(exibircheckbox);
+
+        tabela.setItems(observableCampos);
+        //ajusta o tamnaho da tabela, altura automatica e largura fixa de 160
+        tabela.setPrefWidth(160);
+        tabela.setFixedCellSize(25);
+        tabela.prefHeightProperty().bind(tabela.fixedCellSizeProperty().multiply(Bindings.size(tabela.getItems()).add(1.01)));
+        tabela.minHeightProperty().bind(tabela.prefHeightProperty());
+        tabela.maxHeightProperty().bind(tabela.prefHeightProperty());
+
+//        listViewCampos = new ListView<>();
+//        listViewCampos.setItems(observableCampos);
+//        listViewCampos.setPrefWidth(160);
+//        listViewCampos.setPrefHeight(190);
+        TabPane tabPaneTabela = new TabPane();
+        //posicoes inicias da tabpane
+        tabPaneTabela.setLayoutX(10);
+        tabPaneTabela.setLayoutY(10);
+
+        Tab tabNome = new Tab();
         tabNome.setText(getTabelaSelecionada().getNome());
-        tabNome.setContent(listViewCampos);
+        tabNome.setContent(tabela);
 
         tabPaneTabela.getTabs().add(tabNome);
+        //calcula a nova posição arrastando a tabela
+        tabPaneTabela.setOnMouseDragged((MouseEvent me) -> {
+            double dragX = me.getSceneX() - dragAnchor.getX();
+            double dragY = me.getSceneY() - dragAnchor.getY();
 
-        painelTabela.getChildren().add(tabPaneTabela);
-        anchorPaneTabela.getChildren().addAll(painelTabela);
+            double newXPosition = initX + dragX;
+            double newYPosition = initY + dragY;
 
-    }
+            tabPaneTabela.setTranslateX(newXPosition);
+            tabPaneTabela.setTranslateY(newYPosition);
+        });
 
-    public void posicionarTabela() {
+        tabPaneTabela.setOnMouseEntered((MouseEvent me) -> {
+            tabPaneTabela.toFront();
+        });
+        //calcula a nova posicao enquanto o click é pressionado
+        tabPaneTabela.setOnMousePressed((MouseEvent me) -> {
+            initX = tabPaneTabela.getTranslateX();
+            initY = tabPaneTabela.getTranslateY();
+            dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
+        });
+
+        areaTrabalho.getChildren().addAll(tabPaneTabela);
+
+//        tabela.setOnMouseDragged((MouseEvent me) -> {
+//            double dragX = me.getSceneX() - dragAnchor.getX();
+//            double dragY = me.getSceneY() - dragAnchor.getY();
+//            //calculate new position of the node
+//            double newXPosition = initX + dragX;
+//            double newYPosition = initY + dragY;
+//            //if new position do not exceeds borders of the rectangle, translate to this position
+//            tabela.setTranslateX(newXPosition);
+//            tabela.setTranslateY(newYPosition);
+//        });
+//
+//        tabela.setOnMouseEntered((MouseEvent me) -> {
+//            tabela.toFront();
+//        });
+//        tabela.setOnMousePressed((MouseEvent me) -> {
+//            //when mouse is pressed, store initial position
+//            initX = tabela.getTranslateX();
+//            initY = tabela.getTranslateY();
+//            dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
+//        });
+//        areaTrabalho.getChildren().addAll(tabela);
     }
 
     public void camposSelecionadosExibir() {
@@ -309,14 +383,14 @@ public class HomeFXMLController implements Initializable {
         setResultado();
 
     }
+
     @FXML
-    public void gerarStoredProcedure() throws IOException{
+    public void gerarStoredProcedure() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));        
+        Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        //btnGerarStoredProcedure.getScene().getWindow().hide();
     }
 
 }
