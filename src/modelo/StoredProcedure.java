@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,21 +13,46 @@ import java.util.List;
  * @author Junnio
  */
 public class StoredProcedure {
-    private String nome;
-    private List Parametros;
+
+    private String nome;    
+    private List<Parametro> parametrosSelecionados = new ArrayList<>();
     private ExpressaoSQL query;
+    private String resultado;
+
+    final String COMECO = "DELIMITER $$\n";
+    final String TERMINO = "DELIMITER;";
+    final String CRIA_PROCEDURE = "CREATE PROCEDURE ";
+    final String INICIO = "BEGIN";
+    final String FIM = "END $$";
 
     public StoredProcedure() {
     }
 
-    public String gerarStoredProcedure(){
+    public String storedProcedure(String query) {
+
+        String parametro = "";
+
+        if (parametrosSelecionados.isEmpty()) {
+        } else {
+            parametro = parametrosSelecionados.get(0).toString();
+            for (int i = 1; i < parametrosSelecionados.size(); i++) {
+                parametro = parametro + ", "+ parametrosSelecionados.get(i).toString();
+            }
+        }
+        resultado = 
+                COMECO + CRIA_PROCEDURE +nome+"( "+ parametro + " )\n" +
+                INICIO + "\n" +
+                query + "\n" +
+                FIM + "\n" +
+                TERMINO;
+                
+        return resultado;
+    }
+
+    public String salvarStoredProcedure() {
         return null;
     }
-    
-    public String salvarStoredProcedure(){
-        return null;
-    }
-    
+
     public String getNome() {
         return nome;
     }
@@ -36,11 +62,11 @@ public class StoredProcedure {
     }
 
     public List getParametros() {
-        return Parametros;
+        return parametrosSelecionados;
     }
 
-    public void setParametros(List Parametros) {
-        this.Parametros = Parametros;
+    public void setParametros(List parametros) {
+        this.parametrosSelecionados = parametros;
     }
 
     public ExpressaoSQL getQuery() {
@@ -50,7 +76,13 @@ public class StoredProcedure {
     public void setQuery(ExpressaoSQL query) {
         this.query = query;
     }
-    
-    
+
+    public String getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
     
 }

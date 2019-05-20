@@ -67,15 +67,9 @@ public class HomeFXMLController implements Initializable {
     private ObservableList<Tabela> observableTabelas;
 
     private ListView<Campo> listViewCampos;
-    private List<Campo> camposSelecionados = new ArrayList<>();
+    public List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
-
-    @FXML
-    private TableView<Campo> tableView;
-    @FXML
-    private TableColumn<String, String> tableColumnAtributos;
-    @FXML
-    private TableColumn<String, String> tableColumnExibir;
+    
     @FXML
     private ListView<Banco> listViewBancos;
     @FXML
@@ -162,7 +156,7 @@ public class HomeFXMLController implements Initializable {
         campoDAO = new CampoDAO();
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
         observableCampos = FXCollections.observableArrayList(campos);
-        inicializarTableViewCampos();
+        
         inicializarComboboxCampoFiltro();
         inicializarComboboxOrdenador();
         setResultado();
@@ -170,12 +164,7 @@ public class HomeFXMLController implements Initializable {
         camposSelecionadosExibir();
     }
 
-    public void inicializarTableViewCampos() {
-        tableColumnAtributos.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        tableColumnExibir.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
 
-        tableView.setItems(observableCampos);
-    }
 
     public void inicializarComboboxCampoFiltro() {
         Campo e = new Campo();
@@ -385,9 +374,18 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
-    public void gerarStoredProcedure() throws IOException {
+    public void abrirTelaGerarStoredProcedure() throws IOException {
         Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));        
+        //Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));
+        Parent root = loader.load();
+        
+        GerarSPlFXMLController spController =  loader.getController();
+        System.out.println(textAreaResultado.getText());
+        spController.setResultado(this.textAreaResultado.getText());
+        spController.setParametros(camposSelecionados);
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

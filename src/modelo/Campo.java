@@ -13,6 +13,7 @@ import javafx.scene.control.CheckBox;
  */
 public class Campo {
     private String nome;
+    private String tipo;
     private String filtro;
     private String ordenador;
     private String valor;
@@ -70,9 +71,14 @@ public class Campo {
     public void setOperador(String operador) {
         this.operador = operador;
     }
-    
-    
-    
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     
     @Override
     public String toString() {
