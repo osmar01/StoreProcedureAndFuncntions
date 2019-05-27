@@ -90,7 +90,7 @@
                                                 <ComboBox fx:id="comboboxFiltro" layoutX="185.0" layoutY="61.0" prefHeight="25.0" prefWidth="95.0" promptText="Selecione" />
                                                 <TextField fx:id="campoCriterio" layoutX="301.0" layoutY="61.0" prefHeight="25.0" prefWidth="156.0" />
                                                 <ComboBox fx:id="comboboxOperadorLogico" layoutX="477.0" layoutY="61.0" prefHeight="25.0" prefWidth="115.0" promptText="Selecione" visibleRowCount="4" />
-                                                <Button fx:id="btnAdd" layoutX="620.0" layoutY="61.0" mnemonicParsing="false" onAction="#filtrosSelecionados" text="Adicionar" />
+                                                <Button fx:id="btnAdd" layoutX="620.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" text="Adicionar" />
                                                 <Label layoutX="17.0" layoutY="36.0" text="Campos para filtrar">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
@@ -135,7 +135,7 @@
                                                     </cursor>
                                                 </CheckBox>
                                                 <Button layoutX="427.0" layoutY="136.0" mnemonicParsing="false" text="Gerar espressão SQL" />
-                                    <Button fx:id="btnAdd1" layoutX="696.0" layoutY="61.0" mnemonicParsing="false" onAction="#filtrosSelecionados" text="Remover" />
+                                    <Button fx:id="btnRemover" layoutX="696.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" text="Remover" />
                                             </children>
                                         </AnchorPane>
                                     </content>

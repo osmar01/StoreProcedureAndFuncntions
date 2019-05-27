@@ -23,8 +23,7 @@ public class CampoDAO {
     private PreparedStatement pstm;
     private ResultSet rs;
     
-    private List<Campo> campos;
-    private Campo campo;
+    private List<Campo> campos;   
     public List<Campo> listarCampos(String banco, String tabela){
         campos = new ArrayList<>();
         
@@ -38,7 +37,14 @@ public class CampoDAO {
 //            pstm.setString(1, banco);
 //            pstm.setString(2, "%" +tabela);
             rs = pstm.executeQuery(sql);
+            
+            Campo campoSelectIndex;
+            campoSelectIndex = new Campo();
+            campoSelectIndex.setNome("Selecione");
+            campos.add(campoSelectIndex);
+            
             while (rs.next()) {
+                Campo campo;
                 campo = new Campo();
                 campo.setNome(rs.getString("COLUMN_NAME"));
                 campo.setTipo(rs.getString("DATA_TYPE"));

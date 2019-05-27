@@ -69,7 +69,7 @@ public class HomeFXMLController implements Initializable {
     private ListView<Campo> listViewCampos;
     public List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
-    
+
     @FXML
     private ListView<Banco> listViewBancos;
     @FXML
@@ -156,7 +156,7 @@ public class HomeFXMLController implements Initializable {
         campoDAO = new CampoDAO();
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
         observableCampos = FXCollections.observableArrayList(campos);
-        
+
         inicializarComboboxCampoFiltro();
         inicializarComboboxOrdenador();
         setResultado();
@@ -164,12 +164,7 @@ public class HomeFXMLController implements Initializable {
         camposSelecionadosExibir();
     }
 
-
-
     public void inicializarComboboxCampoFiltro() {
-        Campo e = new Campo();
-        e.setNome("Selecione");
-        campos.add(0, e);
         observableCampos = FXCollections.observableArrayList(campos);
         comboboxCampoFiltro.setItems(observableCampos);
 
@@ -352,12 +347,11 @@ public class HomeFXMLController implements Initializable {
                     }
                 }
             });
-
         }
     }
 
     @FXML
-    public void filtrosSelecionados() {
+    public void adicionarCamposFiltrar() {
 
         Campo cmpo = new Campo();
         cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());
@@ -374,18 +368,32 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
+    public void removerCamposFiltrados() {
+        String campoRemove;
+        if (!comboboxCampoFiltro.getSelectionModel().isEmpty()){
+            campoRemove = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+            for (int i = 0; i < filtrosSelecionados.size(); i++) {
+                if (filtrosSelecionados.get(i).getNome().equals(campoRemove)) {
+                    filtrosSelecionados.remove(filtrosSelecionados.get(i));
+                }
+            }
+        }        
+        setResultado();
+    }
+
+    @FXML
     public void abrirTelaGerarStoredProcedure() throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));        
+        loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));
         Parent root = loader.load();
-        
-        GerarSPlFXMLController spController =  loader.getController();
+
+        GerarSPlFXMLController spController = loader.getController();
         System.out.println(textAreaResultado.getText());
         spController.setResultado(this.textAreaResultado.getText());
         spController.setParametros(camposSelecionados);
-        
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
