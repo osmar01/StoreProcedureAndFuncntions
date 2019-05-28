@@ -19,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,7 +56,7 @@ public class HomeFXMLController implements Initializable {
     private BancoDAO bancodao;
     private List<Banco> bancos;
     private ObservableList<Banco> observableBancos;
-    private CampoDAO campoDAO;
+    private CampoDAO campoDAO = new CampoDAO();
     private List<Campo> campos;
 
     private ObservableList<Campo> observableCampos;
@@ -153,10 +154,7 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void getCampos() {
-        campoDAO = new CampoDAO();
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
-        observableCampos = FXCollections.observableArrayList(campos);
-
         inicializarComboboxCampoFiltro();
         inicializarComboboxOrdenador();
         setResultado();
@@ -277,11 +275,11 @@ public class HomeFXMLController implements Initializable {
         tabPaneTabela.setLayoutX(10);
         tabPaneTabela.setLayoutY(10);
 
-        Tab tabNome = new Tab();
-        tabNome.setText(getTabelaSelecionada().getNome());
-        tabNome.setContent(tabela);
+        Tab tab = new Tab();
+        tab.setText(getTabelaSelecionada().getNome());
+        tab.setContent(tabela);
 
-        tabPaneTabela.getTabs().add(tabNome);
+        tabPaneTabela.getTabs().add(tab);
         //calcula a nova posição arrastando a tabela
         tabPaneTabela.setOnMouseDragged((MouseEvent me) -> {
             double dragX = me.getSceneX() - dragAnchor.getX();
@@ -303,6 +301,21 @@ public class HomeFXMLController implements Initializable {
             initY = tabPaneTabela.getTranslateY();
             dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
         });
+
+        if (tab.isSelected()) {
+            String nomeTabela = tab.getText();
+            System.out.println(nomeTabela);
+            List<Campo> campos = campoDAO.listarCampos(nomeTabela, getTabelaSelecionada().getNome());
+            ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
+            comboboxCampoFiltro.setItems(observableCampos);
+            
+
+        }
+//        tab.isSelected(new EventHandler<Event>() {
+//            @Override
+//            public void handle(Event event) {
+//            }
+//        });
 
         areaTrabalho.getChildren().addAll(tabPaneTabela);
 
@@ -354,30 +367,32 @@ public class HomeFXMLController implements Initializable {
     public void adicionarCamposFiltrar() {
 
         Campo cmpo = new Campo();
-        cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());
-        cmpo.setFiltro(comboboxFiltro.getSelectionModel().getSelectedItem());
-        cmpo.setValor(campoCriterio.getText());
-        cmpo.setOperador(comboboxOperadorLogico.getSelectionModel().getSelectedItem());
+        if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
+            cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());
+            cmpo.setFiltro(comboboxFiltro.getSelectionModel().getSelectedItem());
+            cmpo.setValor(campoCriterio.getText());
+            cmpo.setOperador(comboboxOperadorLogico.getSelectionModel().getSelectedItem());
 
-        if (cmpo.getOperador() == null) {
-            cmpo.setOperador("");
+            if (cmpo.getOperador() == null) {
+                cmpo.setOperador("");
+            }
+            filtrosSelecionados.add(cmpo);
+            setResultado();
         }
-        filtrosSelecionados.add(cmpo);
-        setResultado();
-
+        System.out.println("Selecione um campo");
     }
 
     @FXML
     public void removerCamposFiltrados() {
         String campoRemove;
-        if (!comboboxCampoFiltro.getSelectionModel().isEmpty()){
+        if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
             campoRemove = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
             for (int i = 0; i < filtrosSelecionados.size(); i++) {
                 if (filtrosSelecionados.get(i).getNome().equals(campoRemove)) {
                     filtrosSelecionados.remove(filtrosSelecionados.get(i));
                 }
             }
-        }        
+        }
         setResultado();
     }
 
