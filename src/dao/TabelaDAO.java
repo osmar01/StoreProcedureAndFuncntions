@@ -23,19 +23,19 @@ public class TabelaDAO {
     private PreparedStatement pstm;
     private ResultSet rs;       
     
+    public TabelaDAO(){
+        con = Conection.getConexao();
+    }
    
     public List<Tabela> listarTabelas(String nomeTabela) {
        
-        List<Tabela> tabelas = new ArrayList<>();
-        con = null;
-        pstm =null;
-        rs = null;
+        List<Tabela> tabelas = new ArrayList<>();        
                 
         String sql = "SELECT DISTINCT TABLE_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS "
                 + "WHERE TABLE_SCHEMA LIKE '"+nomeTabela+"';";
 
         try {
-            con = Conection.getConexao();
+            
             pstm = con.prepareStatement(sql);
             //pstm.setString(1,"%"+ banco.getNome());
             rs = pstm.executeQuery(sql);
@@ -59,7 +59,7 @@ public class TabelaDAO {
                 + "TABLE_SCHEMA = '"+nomeBanco+"' AND TABLE_NAME = '"+nomeTabela+"' AND "
                 + "REFERENCED_TABLE_NAME IS NOT NULL;";
         try {
-            con = Conection.getConexao();
+            
             pstm = con.prepareStatement(sql);
             //pstm.setString(1,"%"+ banco.getNome());
             rs = pstm.executeQuery(sql);

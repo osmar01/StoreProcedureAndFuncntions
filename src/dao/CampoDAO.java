@@ -18,34 +18,38 @@ import modelo.Campo;
  * @author Junnio
  */
 public class CampoDAO {
-    
+
     private Connection con;
     private PreparedStatement pstm;
     private ResultSet rs;
-    
-    private List<Campo> campos;   
-    public List<Campo> listarCampos(String banco, String tabela){
+
+    private List<Campo> campos;
+
+    public CampoDAO() {
+        con = Conection.getConexao();
+    }
+
+    public List<Campo> listarCampos(String banco, String tabela) {
         campos = new ArrayList<>();
-        
+
         String sql = "SELECT DISTINCT COLUMN_NAME, DATA_TYPE "
-                   + "FROM INFORMATION_SCHEMA.COLUMNS "
-                   + "WHERE TABLE_SCHEMA = '"+banco+"' AND TABLE_NAME LIKE '%"+tabela+"'; ";
-        
+                + "FROM INFORMATION_SCHEMA.COLUMNS "
+                + "WHERE TABLE_SCHEMA = '" + banco + "' AND TABLE_NAME LIKE '%" + tabela + "'; ";
+
         try {
-            con = Conection.getConexao();
+
             pstm = con.prepareStatement(sql);
 //            pstm.setString(1, banco);
 //            pstm.setString(2, "%" +tabela);
             rs = pstm.executeQuery(sql);
-            
+
             Campo campoSelectIndex;
             campoSelectIndex = new Campo();
             campoSelectIndex.setNome("Selecione");
             campos.add(campoSelectIndex);
-            
+
             while (rs.next()) {
-                Campo campo;
-                campo = new Campo();
+                Campo campo = new Campo();
                 campo.setNome(rs.getString("COLUMN_NAME"));
                 campo.setTipo(rs.getString("DATA_TYPE"));
                 campos.add(campo);
@@ -54,7 +58,7 @@ public class CampoDAO {
             System.err.println("Erro encotrado   003 Campo_SQL, causa:" + e.getMessage());
         }
         return campos;
-        
-    }    
-    
+
+    }
+
 }

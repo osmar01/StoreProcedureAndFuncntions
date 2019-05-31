@@ -251,7 +251,7 @@ public class HomeFXMLController implements Initializable {
         } else {
             rel = getTabelaSelecionada().getNome();
         }
-        System.out.println(rel);
+
         textAreaResultado.setWrapText(true);
         textAreaResultado.setText("SELECT " + campo + " FROM " + rel + filtro + pontoVirgula);
     }
@@ -331,15 +331,47 @@ public class HomeFXMLController implements Initializable {
                 comboboxOrdenador.setItems(observableCampos);
             }
         });
+//        tab.setOnClosed(new EventHandler<Event>() {
+//            @Override
+//            public void handle(Event event) {
+//                if (!tabelasCriadas.isEmpty()) {
+//                    for (int i = 0; i < tabelasCriadas.size(); i++) {
+//                        if (tabelasCriadas.get(i).getNome().equals(tab.getText())) {
+//                            tabelasCriadas.remove(tabelasCriadas.get(i));
+//                            listViewTabela.getSelectionModel().clearSelection();
+//                            setResultado();
+//                        }
+//                    }
+//                }
+//                if (!tabelasReferenciadas.isEmpty()) {
+//                    for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+//                        if (tabelasReferenciadas.get(i).getNome().equals(tab.getText())) {
+//                            tabelasReferenciadas.remove(tabelasReferenciadas.get(i));
+//                            listViewTabela.getSelectionModel().clearSelection();
+//                            setResultado();
+//                        }
+//                    }
+//                }
+//
+//                if (!tabelasRelacionadas.isEmpty()) {
+//                    for (int i = 0; i < tabelasRelacionadas.size(); i++) {
+//                        if (tabelasRelacionadas.get(i).getNomeReferenciada().equals(tab.getText())) {
+//                            tabelasRelacionadas.remove(tabelasRelacionadas.get(i));
+//                            listViewTabela.getSelectionModel().clearSelection();
+//                            verificaRelacionameto();
+//                            setResultado();
+//                        }
+//                    }
+//                }
+//
+//            }
+//        });
 
         //acumula as tabelas referencias 
         List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
         for (int i = 0; i < listAux.size(); i++) {
             tabelasReferenciadas.add(listAux.get(i));
 
-        }
-        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
-            System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
         }
 
         setTabelasCriadas(getTabelaSelecionada().getNome(), campos, tabelasReferenciadas);
