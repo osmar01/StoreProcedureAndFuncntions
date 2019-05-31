@@ -10,6 +10,7 @@ import dao.CampoDAO;
 import dao.TabelaDAO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -63,8 +64,11 @@ public class HomeFXMLController implements Initializable {
     private ObservableList<String> observableFiltro;
     private ObservableList<String> observableOperador;
 
-    private TabelaDAO tabelaDAO;
+    private TabelaDAO tabelaDAO = new TabelaDAO();
     private List<Tabela> tabelas;
+    private List<Tabela> tabelasCriadas = new ArrayList<>();
+    private List<Tabela> tabelasReferenciadas = new ArrayList<>();
+    private List<Tabela> tabelasRelacionadas = new ArrayList<>();
     private ObservableList<Tabela> observableTabelas;
 
     private ListView<Campo> listViewCampos;
@@ -191,7 +195,6 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void inicializarListViewTabela() {
-        tabelaDAO = new TabelaDAO();
         tabelas = tabelaDAO.listarTabelas(getBancoSelecionado().getNome());
         observableTabelas = FXCollections.observableArrayList(tabelas);
         listViewTabela.setItems(observableTabelas);
@@ -214,6 +217,8 @@ public class HomeFXMLController implements Initializable {
     public void setResultado() {
         String campo = "";
         String filtro = "";
+        String rel = "";
+        String pontoVirgula = ";";
         if (camposSelecionados.isEmpty()) {
             campo = "*";
         } else {
@@ -228,17 +233,35 @@ public class HomeFXMLController implements Initializable {
                 filtro = filtro + filtrosSelecionados.get(i).getNome() + " " + filtrosSelecionados.get(i).getFiltro() + " "
                         + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador() + " ";
             }
+        } else {
+            filtro = ";";
+            pontoVirgula = "";
         }
+
+        if (!tabelasRelacionadas.isEmpty()) {
+            rel = rel + tabelasRelacionadas.get(0).getNome() + " INNER JOIN "
+                    + tabelasRelacionadas.get(0).getNomeReferenciada() + " ON "
+                    + tabelasRelacionadas.get(0).getNomeColuna() + " = "
+                    + tabelasRelacionadas.get(0).getNomeColunaReferenciada() + "\n";
+            for (int i = 1; i < tabelasRelacionadas.size(); i++) {
+                rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome() + " ON "
+                        + tabelasRelacionadas.get(i).getNomeColuna() + " = "
+                        + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
+            }
+        } else {
+            rel = getTabelaSelecionada().getNome();
+        }
+        System.out.println(rel);
         textAreaResultado.setWrapText(true);
-        textAreaResultado.setText("SELECT " + campo + " FROM " + getTabelaSelecionada().getNome() + filtro + ";");
+        textAreaResultado.setText("SELECT " + campo + " FROM " + rel + filtro + pontoVirgula);
     }
 
     public void criarTabela() {
 
-        TableView<Campo> tabela = new TableView<>();
+        TableView<Campo> tabelaView = new TableView<>();
         //esconde o cabeçalho da tableview tabela
-        tabela.widthProperty().addListener((ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) -> {
-            Pane header = (Pane) tabela.lookup("TableHeaderRow");
+        tabelaView.widthProperty().addListener((ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) -> {
+            Pane header = (Pane) tabelaView.lookup("TableHeaderRow");
             if (header.isVisible()) {
                 header.setMaxHeight(0);
                 header.setMinHeight(0);
@@ -254,22 +277,18 @@ public class HomeFXMLController implements Initializable {
         TableColumn<Campo, String> exibircheckbox = new TableColumn<>();
         exibircheckbox.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
         exibircheckbox.setSortable(false);
+        //------------
+        tabelaView.getColumns().add(nomeColuna);
+        tabelaView.getColumns().add(exibircheckbox);
 
-        tabela.getColumns().add(nomeColuna);
-        tabela.getColumns().add(exibircheckbox);
-
-        tabela.setItems(observableCampos);
+        tabelaView.setItems(observableCampos);
         //ajusta o tamnaho da tabela, altura automatica e largura fixa de 160
-        tabela.setPrefWidth(160);
-        tabela.setFixedCellSize(25);
-        tabela.prefHeightProperty().bind(tabela.fixedCellSizeProperty().multiply(Bindings.size(tabela.getItems()).add(1.01)));
-        tabela.minHeightProperty().bind(tabela.prefHeightProperty());
-        tabela.maxHeightProperty().bind(tabela.prefHeightProperty());
+        tabelaView.setPrefWidth(160);
+        tabelaView.setFixedCellSize(25);
+        tabelaView.prefHeightProperty().bind(tabelaView.fixedCellSizeProperty().multiply(Bindings.size(tabelaView.getItems()).add(1.01)));
+        tabelaView.minHeightProperty().bind(tabelaView.prefHeightProperty());
+        tabelaView.maxHeightProperty().bind(tabelaView.prefHeightProperty());
 
-//        listViewCampos = new ListView<>();
-//        listViewCampos.setItems(observableCampos);
-//        listViewCampos.setPrefWidth(160);
-//        listViewCampos.setPrefHeight(190);
         TabPane tabPaneTabela = new TabPane();
         //posicoes inicias da tabpane
         tabPaneTabela.setLayoutX(10);
@@ -277,7 +296,7 @@ public class HomeFXMLController implements Initializable {
 
         Tab tab = new Tab();
         tab.setText(getTabelaSelecionada().getNome());
-        tab.setContent(tabela);
+        tab.setContent(tabelaView);
 
         tabPaneTabela.getTabs().add(tab);
         //calcula a nova posição arrastando a tabela
@@ -302,44 +321,62 @@ public class HomeFXMLController implements Initializable {
             dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
         });
 
-        if (tab.isSelected()) {
-            String nomeTabela = tab.getText();
-            System.out.println(nomeTabela);
-            List<Campo> campos = campoDAO.listarCampos(nomeTabela, getTabelaSelecionada().getNome());
-            ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
-            comboboxCampoFiltro.setItems(observableCampos);
-            
+        tabPaneTabela.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                String nomeTabela = tab.getText();
+                List<Campo> campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
+                ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
+                comboboxCampoFiltro.setItems(observableCampos);
+                comboboxOrdenador.setItems(observableCampos);
+            }
+        });
+
+        //acumula as tabelas referencias 
+        List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
+        for (int i = 0; i < listAux.size(); i++) {
+            tabelasReferenciadas.add(listAux.get(i));
 
         }
-//        tab.isSelected(new EventHandler<Event>() {
-//            @Override
-//            public void handle(Event event) {
-//            }
-//        });
+        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+            System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
+        }
+
+        setTabelasCriadas(getTabelaSelecionada().getNome(), campos, tabelasReferenciadas);
+
+        verificaRelacionameto();
 
         areaTrabalho.getChildren().addAll(tabPaneTabela);
+    }
 
-//        tabela.setOnMouseDragged((MouseEvent me) -> {
-//            double dragX = me.getSceneX() - dragAnchor.getX();
-//            double dragY = me.getSceneY() - dragAnchor.getY();
-//            //calculate new position of the node
-//            double newXPosition = initX + dragX;
-//            double newYPosition = initY + dragY;
-//            //if new position do not exceeds borders of the rectangle, translate to this position
-//            tabela.setTranslateX(newXPosition);
-//            tabela.setTranslateY(newYPosition);
-//        });
-//
-//        tabela.setOnMouseEntered((MouseEvent me) -> {
-//            tabela.toFront();
-//        });
-//        tabela.setOnMousePressed((MouseEvent me) -> {
-//            //when mouse is pressed, store initial position
-//            initX = tabela.getTranslateX();
-//            initY = tabela.getTranslateY();
-//            dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
-//        });
-//        areaTrabalho.getChildren().addAll(tabela);
+    public void verificaRelacionameto() {
+        tabelasRelacionadas.clear();
+        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+            for (int j = 0; j < tabelasCriadas.size(); j++) {
+                if (tabelasReferenciadas.get(i).getNomeReferenciada().equals(tabelasCriadas.get(j).getNome())) {
+                    Tabela tabela = new Tabela();
+                    tabela.setNomeReferenciada(tabelasReferenciadas.get(i).getNomeReferenciada());//cidade
+                    tabela.setNome(tabelasReferenciadas.get(i).getNome());//bairro
+                    tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
+                    tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
+                    tabelasRelacionadas.add(tabela);
+                    setResultado();
+                }
+            }
+        }
+        System.out.println("tabelas relacionadas");
+        for (int i = 0; i < tabelasRelacionadas.size(); i++) {
+            System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
+            System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
+        }
+    }
+
+    public void setTabelasCriadas(String nome, List<Campo> campos, List<Tabela> referenciadas) {
+        Tabela tabela = new Tabela();
+        tabela.setNome(nome);
+        tabela.setCampos(campos);
+        tabela.setReferenciadas(referenciadas);
+        tabelasCriadas.add(tabela);
     }
 
     public void camposSelecionadosExibir() {

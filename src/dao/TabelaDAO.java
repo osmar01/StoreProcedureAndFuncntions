@@ -19,16 +19,14 @@ import modelo.Tabela;
  */
 public class TabelaDAO {
 
-    private List<Tabela> tabelas;
     private Connection con;
     private PreparedStatement pstm;
-    private ResultSet rs;
-    private Tabela tabela;    
+    private ResultSet rs;       
     
    
     public List<Tabela> listarTabelas(String nomeTabela) {
        
-        tabelas = new ArrayList<>();
+        List<Tabela> tabelas = new ArrayList<>();
         con = null;
         pstm =null;
         rs = null;
@@ -42,7 +40,7 @@ public class TabelaDAO {
             //pstm.setString(1,"%"+ banco.getNome());
             rs = pstm.executeQuery(sql);
             while (rs.next()) {
-                tabela = new Tabela();
+                Tabela tabela = new Tabela();
                 tabela.setNome(rs.getString("TABLE_NAME"));
                 tabelas.add(tabela);
             }
@@ -50,6 +48,33 @@ public class TabelaDAO {
             System.err.println("Erro encotrado   001T, causa:" + e.getMessage());
         }
         return tabelas;
+    }
+    
+    public List<Tabela> referenciadas(String nomeBanco, String nomeTabela){
+        
+        List<Tabela> tabelasReferenciadas = new ArrayList<>();
+        
+        String sql ="SELECT TABLE_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, "
+                + "REFERENCED_COLUMN_NAME  FROM information_schema.KEY_COLUMN_USAGE WHERE "
+                + "TABLE_SCHEMA = '"+nomeBanco+"' AND TABLE_NAME = '"+nomeTabela+"' AND "
+                + "REFERENCED_TABLE_NAME IS NOT NULL;";
+        try {
+            con = Conection.getConexao();
+            pstm = con.prepareStatement(sql);
+            //pstm.setString(1,"%"+ banco.getNome());
+            rs = pstm.executeQuery(sql);
+            while (rs.next()) {
+                Tabela tabela = new Tabela();
+                tabela.setNomeReferenciada(rs.getString("REFERENCED_TABLE_NAME"));
+                tabela.setNome(rs.getString("TABLE_NAME"));
+                tabela.setNomeColuna(rs.getString("COLUMN_NAME"));
+                tabela.setNomeColunaReferenciada(rs.getString("REFERENCED_COLUMN_NAME"));
+                tabelasReferenciadas.add(tabela);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro encotrado   001T, causa:" + e.getMessage());
+        }
+        return tabelasReferenciadas;
     }
 
 }
