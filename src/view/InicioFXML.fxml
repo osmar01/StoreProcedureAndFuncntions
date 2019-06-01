@@ -213,18 +213,21 @@
                         </TabPane>
                         <Pane layoutX="8.0" layoutY="150.0" prefHeight="233.0" prefWidth="1059.0" style="-fx-background-color: #e3f2fd;">
                             <children>
-                                <TextArea fx:id="textAreaResultado" layoutX="233.0" layoutY="34.0" prefHeight="146.0" prefWidth="423.0" />
-                                <Label layoutX="233.0" layoutY="15.0" text="Resultado da expressao SQL">
+                                <TextArea fx:id="textAreaResultado" layoutX="539.0" layoutY="34.0" prefHeight="146.0" prefWidth="423.0" />
+                                <Label layoutX="539.0" layoutY="15.0" text="Resultado da expressao SQL">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <Button layoutX="249.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
-                                <Button layoutX="450.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
-                                <ComboBox layoutX="349.0" layoutY="193.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
-                                <Button fx:id="btnGerarStoredProcedure" layoutX="662.0" layoutY="51.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="33.0" prefWidth="163.0" text="Gerar Stored Procedure" />
-                                <Button layoutX="662.0" layoutY="91.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="164.0" text="Gerar Function" />
-                        <Button layoutX="553.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
+                                <Button layoutX="555.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
+                                <Button layoutX="756.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
+                                <ComboBox layoutX="655.0" layoutY="193.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
+                                <Button fx:id="btnGerarStoredProcedure" layoutX="447.0" layoutY="66.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="33.0" prefWidth="56.0" text="Gerar" />
+                        <Button layoutX="859.0" layoutY="193.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
+                        <TextField layoutX="279.0" layoutY="67.0" prefHeight="33.0" prefWidth="168.0" />
+                        <Label layoutX="230.0" layoutY="75.0" prefHeight="17.0" prefWidth="55.0" text="Nome" />
+                        <RadioButton layoutX="135.0" layoutY="74.0" mnemonicParsing="false" text="RadioButton" />
+                        <RadioButton layoutX="38.0" layoutY="75.0" mnemonicParsing="false" text="RadioButton" />
                             </children>
                         </Pane>
                     </children>

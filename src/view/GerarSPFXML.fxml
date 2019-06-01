@@ -19,32 +19,14 @@
             <TextField fx:id="txtNomeProcedure" alignment="CENTER" layoutX="482.0" layoutY="79.0" prefHeight="25.0" prefWidth="140.0" />
          </children>
       </HBox>
-      <HBox alignment="TOP_CENTER" layoutX="300.0" layoutY="135.0" prefHeight="96.0" prefWidth="364.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="358.0">
-         <children>
-            <Label alignment="CENTER" layoutX="325.0" layoutY="150.0" prefHeight="17.0" prefWidth="118.0" text="Lista de Parametros">
-               <HBox.margin>
-                  <Insets top="5.0" />
-               </HBox.margin>
-            </Label>
-            <TableView fx:id="tableViewParametro" prefHeight="96.0" prefWidth="248.0">
-               <columns>
-                  <TableColumn fx:id="columnNome" prefWidth="115.0" text="Nome" />
-                  <TableColumn fx:id="columnTipo" prefWidth="79.0" text="Tipo" />
-                  <TableColumn fx:id="columnCheckBox" prefWidth="52.0" text="Exibir" />
-               </columns>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </TableView>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" layoutX="478.0" layoutY="260.0" prefHeight="30.0" prefWidth="103.0" AnchorPane.leftAnchor="478.0" AnchorPane.rightAnchor="441.0">
+      <HBox alignment="TOP_CENTER" layoutX="300.0" layoutY="135.0" prefHeight="30.0" prefWidth="481.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="241.0">
          <children>
             <Button fx:id="btnGerarSP" alignment="CENTER" mnemonicParsing="false" onAction="#gerarStoredProcedure" prefHeight="30.0" prefWidth="109.0" text="Gerar" textAlignment="CENTER" />
          </children>
       </HBox>
-      <Separator layoutX="289.0" layoutY="305.0" prefHeight="7.0" prefWidth="483.0" AnchorPane.leftAnchor="289.0" AnchorPane.rightAnchor="252.0" />
-      <TabPane layoutX="213.0" layoutY="330.0" prefHeight="188.0" prefWidth="627.0" tabClosingPolicy="UNAVAILABLE">
+      <HBox alignment="CENTER" layoutX="478.0" layoutY="260.0" prefHeight="30.0" prefWidth="103.0" AnchorPane.leftAnchor="478.0" AnchorPane.rightAnchor="441.0" />
+      <Separator layoutX="289.0" layoutY="177.0" prefHeight="17.0" prefWidth="481.0" AnchorPane.leftAnchor="289.0" AnchorPane.rightAnchor="252.0" />
+      <TabPane layoutX="216.0" layoutY="228.0" prefHeight="188.0" prefWidth="627.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Resultado">
             <content>
@@ -56,7 +38,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button alignment="CENTER" layoutX="417.0" layoutY="530.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Copiar" textAlignment="CENTER" />
-      <Button alignment="CENTER" layoutX="540.0" layoutY="530.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Exportar" textAlignment="CENTER" />
+      <Button alignment="CENTER" layoutX="417.0" layoutY="433.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Copiar" textAlignment="CENTER" />
+      <Button alignment="CENTER" layoutX="540.0" layoutY="433.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Exportar" textAlignment="CENTER" />
    </children>
 </AnchorPane>

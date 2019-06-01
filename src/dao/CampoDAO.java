@@ -32,7 +32,7 @@ public class CampoDAO {
     public List<Campo> listarCampos(String banco, String tabela) {
         campos = new ArrayList<>();
 
-        String sql = "SELECT DISTINCT COLUMN_NAME, DATA_TYPE "
+        String sql = "SELECT DISTINCT COLUMN_NAME, COLUMN_TYPE "
                 + "FROM INFORMATION_SCHEMA.COLUMNS "
                 + "WHERE TABLE_SCHEMA = '" + banco + "' AND TABLE_NAME LIKE '%" + tabela + "'; ";
 
@@ -51,7 +51,7 @@ public class CampoDAO {
             while (rs.next()) {
                 Campo campo = new Campo();
                 campo.setNome(rs.getString("COLUMN_NAME"));
-                campo.setTipo(rs.getString("DATA_TYPE"));
+                campo.setTipo(rs.getString("COLUMN_TYPE"));
                 campos.add(campo);
             }
         } catch (Exception e) {

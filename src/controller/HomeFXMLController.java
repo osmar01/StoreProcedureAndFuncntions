@@ -156,6 +156,11 @@ public class HomeFXMLController implements Initializable {
         comboboxOperadorLogico.setItems(observableOperador);
     }
 
+    public boolean verificaOperadorLogico() {
+        boolean equals = comboboxOperadorLogico.getSelectionModel().getSelectedItem().equals("Selecione");
+        return equals;
+    }
+
     @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
@@ -228,8 +233,12 @@ public class HomeFXMLController implements Initializable {
             }
         }
         if (!filtrosSelecionados.isEmpty()) {
+
             filtro = " WHERE ";
             for (int i = 0; i < filtrosSelecionados.size(); i++) {
+                if (filtrosSelecionados.get(i).getOperador().equals("Selecione")) {
+                    filtrosSelecionados.get(i).setOperador("");
+                }
                 filtro = filtro + filtrosSelecionados.get(i).getNome() + " " + filtrosSelecionados.get(i).getFiltro() + " "
                         + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador() + " ";
             }
@@ -249,7 +258,9 @@ public class HomeFXMLController implements Initializable {
                         + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
             }
         } else {
-            rel = getTabelaSelecionada().getNome();
+            if (getTabelaSelecionada() != null) {
+                rel = getTabelaSelecionada().getNome();
+            }
         }
 
         textAreaResultado.setWrapText(true);
@@ -373,6 +384,9 @@ public class HomeFXMLController implements Initializable {
             tabelasReferenciadas.add(listAux.get(i));
 
         }
+        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+            System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
+        }
 
         setTabelasCriadas(getTabelaSelecionada().getNome(), campos, tabelasReferenciadas);
 
@@ -409,6 +423,16 @@ public class HomeFXMLController implements Initializable {
         tabela.setCampos(campos);
         tabela.setReferenciadas(referenciadas);
         tabelasCriadas.add(tabela);
+    }
+
+    @FXML
+    public void limpar() {
+        tabelasRelacionadas.clear();
+        tabelasReferenciadas.clear();
+        tabelasCriadas.clear();
+        listViewTabela.getSelectionModel().clearSelection();
+        filtrosSelecionados.clear();
+        setResultado();
     }
 
     public void camposSelecionadosExibir() {
