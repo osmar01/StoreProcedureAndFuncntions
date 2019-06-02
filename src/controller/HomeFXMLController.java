@@ -253,14 +253,13 @@ public class HomeFXMLController implements Initializable {
                     + tabelasRelacionadas.get(0).getNomeColuna() + " = "
                     + tabelasRelacionadas.get(0).getNomeColunaReferenciada() + "\n";
             for (int i = 1; i < tabelasRelacionadas.size(); i++) {
-                rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome() + " ON "
+                rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome()
+                        + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
                         + tabelasRelacionadas.get(i).getNomeColuna() + " = "
                         + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
             }
-        } else {
-            if (getTabelaSelecionada() != null) {
-                rel = getTabelaSelecionada().getNome();
-            }
+        } else if (getTabelaSelecionada() != null) {
+            rel = getTabelaSelecionada().getNome();
         }
 
         textAreaResultado.setWrapText(true);
@@ -392,6 +391,8 @@ public class HomeFXMLController implements Initializable {
 
         verificaRelacionameto();
 
+        atualizaRelacionamento();
+
         areaTrabalho.getChildren().addAll(tabPaneTabela);
     }
 
@@ -406,7 +407,7 @@ public class HomeFXMLController implements Initializable {
                     tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
                     tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
                     tabelasRelacionadas.add(tabela);
-                    setResultado();
+
                 }
             }
         }
@@ -415,6 +416,30 @@ public class HomeFXMLController implements Initializable {
             System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
             System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
         }
+    }
+
+    public void atualizaRelacionamento() {
+        int cont = 0;
+
+        for (int i = 0; i < tabelasCriadas.size(); i++) {
+            for (int j = 0; j < tabelasRelacionadas.size(); j++) {
+                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNome())) {
+                    cont++;
+                    if (cont == 2) {
+                        tabelasRelacionadas.get(j).setNome("");
+                    }
+                }
+                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNomeReferenciada())) {
+                    cont++;
+                    if (cont == 2) {
+                        tabelasRelacionadas.get(j).setNomeReferenciada("");
+                    }
+
+                }
+
+            }
+        }
+        setResultado();
     }
 
     public void setTabelasCriadas(String nome, List<Campo> campos, List<Tabela> referenciadas) {
