@@ -71,9 +71,10 @@ public class HomeFXMLController implements Initializable {
     private List<Tabela> tabelasRelacionadas = new ArrayList<>();
     private ObservableList<Tabela> observableTabelas;
 
-    private ListView<Campo> listViewCampos;
     public List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
+
+    String textoTab;
 
     @FXML
     private ListView<Banco> listViewBancos;
@@ -253,10 +254,13 @@ public class HomeFXMLController implements Initializable {
                     + tabelasRelacionadas.get(0).getNomeColuna() + " = "
                     + tabelasRelacionadas.get(0).getNomeColunaReferenciada() + "\n";
             for (int i = 1; i < tabelasRelacionadas.size(); i++) {
-                rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome()
-                        + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
-                        + tabelasRelacionadas.get(i).getNomeColuna() + " = "
-                        + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
+                if (tabelasRelacionadas.get(i).getNome() != " "
+                        || tabelasRelacionadas.get(i).getNomeReferenciada() != " ") {
+                    rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome()
+                            + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
+                            + tabelasRelacionadas.get(i).getNomeColuna() + " = "
+                            + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
+                }
             }
         } else if (getTabelaSelecionada() != null) {
             rel = getTabelaSelecionada().getNome();
@@ -341,41 +345,53 @@ public class HomeFXMLController implements Initializable {
                 comboboxOrdenador.setItems(observableCampos);
             }
         });
-//        tab.setOnClosed(new EventHandler<Event>() {
-//            @Override
-//            public void handle(Event event) {
+        textoTab = tab.getText();
+
+        tab.setOnClosed(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
 //                if (!tabelasCriadas.isEmpty()) {
 //                    for (int i = 0; i < tabelasCriadas.size(); i++) {
-//                        if (tabelasCriadas.get(i).getNome().equals(tab.getText())) {
+//                        if (tabelasCriadas.get(i).getNome().equals(textoTab)) {
+//                            System.out.println("removida da tabela criadas: " + tabelasCriadas.get(i).getNome());
 //                            tabelasCriadas.remove(tabelasCriadas.get(i));
 //                            listViewTabela.getSelectionModel().clearSelection();
 //                            setResultado();
+//
 //                        }
 //                    }
 //                }
 //                if (!tabelasReferenciadas.isEmpty()) {
-//                    for (int i = 0; i < tabelasReferenciadas.size(); i++) {
-//                        if (tabelasReferenciadas.get(i).getNome().equals(tab.getText())) {
-//                            tabelasReferenciadas.remove(tabelasReferenciadas.get(i));
+//                    int tam = tabelasReferenciadas.size();                    
+//                    for (int i = 0; i < tam; ) {
+//                        if (tabelasReferenciadas.get(i).getNome().equals(textoTab)) {
+//                            System.out.println("removida da lista referenciadas: " + tabelasReferenciadas.get(i).getNome());
+//                            tabelasReferenciadas.remove(i);
+//                            tam--;
 //                            listViewTabela.getSelectionModel().clearSelection();
 //                            setResultado();
+//                        }else{
+//                            i++;
 //                        }
 //                    }
 //                }
-//
 //                if (!tabelasRelacionadas.isEmpty()) {
 //                    for (int i = 0; i < tabelasRelacionadas.size(); i++) {
-//                        if (tabelasRelacionadas.get(i).getNomeReferenciada().equals(tab.getText())) {
-//                            tabelasRelacionadas.remove(tabelasRelacionadas.get(i));
+//                        if (tabelasRelacionadas.get(i).getNomeReferenciada().equals(textoTab)) {
+//                            System.out.println("removida da lista relacionadas: " + tabelasRelacionadas.get(i).getNome());
+//                            tabelasRelacionadas.remove(i);
 //                            listViewTabela.getSelectionModel().clearSelection();
-//                            verificaRelacionameto();
 //                            setResultado();
 //                        }
 //                    }
 //                }
 //
-//            }
-//        });
+//                for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+//                    System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
+//                    //System.out.println(tabelasReferenciadas.get(i).getNome());
+//                }
+            }
+        });
 
         //acumula as tabelas referencias 
         List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
@@ -392,6 +408,8 @@ public class HomeFXMLController implements Initializable {
         verificaRelacionameto();
 
         atualizaRelacionamento();
+
+        setResultado();
 
         areaTrabalho.getChildren().addAll(tabPaneTabela);
     }
@@ -411,7 +429,7 @@ public class HomeFXMLController implements Initializable {
                 }
             }
         }
-        System.out.println("tabelas relacionadas");
+        System.out.println("tabelas relacionadas ");
         for (int i = 0; i < tabelasRelacionadas.size(); i++) {
             System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
             System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
@@ -421,25 +439,27 @@ public class HomeFXMLController implements Initializable {
     public void atualizaRelacionamento() {
         int cont = 0;
 
+        System.out.println("atualiza metodo");
         for (int i = 0; i < tabelasCriadas.size(); i++) {
             for (int j = 0; j < tabelasRelacionadas.size(); j++) {
+
                 if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNome())) {
                     cont++;
-                    if (cont == 2) {
-                        tabelasRelacionadas.get(j).setNome("");
+                    if (cont >= 2) {
+                        tabelasRelacionadas.get(j).setNome(" ");
                     }
                 }
                 if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNomeReferenciada())) {
                     cont++;
-                    if (cont == 2) {
-                        tabelasRelacionadas.get(j).setNomeReferenciada("");
+                    if (cont >= 2) {
+                        tabelasRelacionadas.get(j).setNomeReferenciada(" ");
                     }
-
                 }
 
             }
+            cont = 0;
         }
-        setResultado();
+
     }
 
     public void setTabelasCriadas(String nome, List<Campo> campos, List<Tabela> referenciadas) {
