@@ -15,11 +15,7 @@ public class Parametro {
     
     private String nome;
     private String tipo;
-    private CheckBox checkbox;       
-
-    public Parametro() {
-        checkbox = new CheckBox();
-    }
+    private String valor;
 
     public String getNome() {
         return nome;
@@ -37,17 +33,18 @@ public class Parametro {
         this.tipo = tipo;
     }
 
-    public CheckBox getCheckbox() {
-        return checkbox;
+    public String getValor() {
+        return valor;
     }
 
-    public void setCheckbox(CheckBox checkbox) {
-        this.checkbox = checkbox;
+    public void setValor(String valor) {
+        this.valor = valor;
     }
-    
+
     @Override
     public String toString() {
-        return nome +" "+ tipo;
+        return nome + " " + tipo;
     }
+    
     
 }

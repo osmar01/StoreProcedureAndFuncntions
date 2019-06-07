@@ -15,12 +15,12 @@ import java.util.List;
 public class StoredProcedure {
 
     private String nome;    
-    private List<Parametro> parametrosSelecionados = new ArrayList<>();
+    private List<Parametro> parametros = new ArrayList<>();
     private ExpressaoSQL query;
-    private String resultado;
+    private String procedure;
 
     final String COMECO = "DELIMITER $$\n";
-    final String TERMINO = "DELIMITER;";
+    final String TERMINO = "DELIMITER $$";
     final String CRIA_PROCEDURE = "CREATE PROCEDURE ";
     final String INICIO = "BEGIN";
     final String FIM = "END $$";
@@ -29,24 +29,30 @@ public class StoredProcedure {
     }
 
     public String storedProcedure(String query) {
-
+        
         String parametro = "";
-
-        if (parametrosSelecionados.isEmpty()) {
+        tornarParametro();
+        if (parametros.isEmpty()) {
         } else {
-            parametro = parametrosSelecionados.get(0).toString();
-            for (int i = 1; i < parametrosSelecionados.size(); i++) {
-                parametro = parametro + ", "+ parametrosSelecionados.get(i).toString();
+            parametro = parametros.get(0).toString();
+            for (int i = 1; i < parametros.size(); i++) {
+                parametro = parametro + ", "+ parametros.get(i).toString();
             }
         }
-        resultado = 
+        procedure = 
                 COMECO + CRIA_PROCEDURE +nome+"( "+ parametro + " )\n" +
                 INICIO + "\n" +
                 query + "\n" +
                 FIM + "\n" +
                 TERMINO;
                 
-        return resultado;
+        return procedure;
+    }
+    
+    public void tornarParametro(){
+        for (int i = 0; i < parametros.size(); i++) {            
+            parametros.get(i).setNome("param_"+i);            
+        }               
     }
 
     public String salvarStoredProcedure() {
@@ -62,11 +68,11 @@ public class StoredProcedure {
     }
 
     public List getParametros() {
-        return parametrosSelecionados;
+        return parametros;
     }
 
     public void setParametros(List parametros) {
-        this.parametrosSelecionados = parametros;
+        this.parametros = parametros;
     }
 
     public ExpressaoSQL getQuery() {
@@ -78,11 +84,11 @@ public class StoredProcedure {
     }
 
     public String getResultado() {
-        return resultado;
+        return procedure;
     }
 
     public void setResultado(String resultado) {
-        this.resultado = resultado;
+        this.procedure = resultado;
     }
     
 }

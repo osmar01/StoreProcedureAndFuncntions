@@ -543,12 +543,15 @@ public class HomeFXMLController implements Initializable {
     @FXML
     public void adicionarCamposFiltrar() {
         Campo cmpo = new Campo();
+        String nome = "";
         if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
-            cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());
+            nome = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+            cmpo.setNome(nome);
             cmpo.setFiltro(comboboxFiltro.getSelectionModel().getSelectedItem());
             cmpo.setValor(campoCriterio.getText());
             cmpo.setOperador(comboboxOperadorLogico.getSelectionModel().getSelectedItem());
-
+            cmpo.setTipo(getTipoCampo(campos, nome));
+            
             if (cmpo.getOperador() == null) {
                 cmpo.setOperador("");
             }
@@ -556,6 +559,23 @@ public class HomeFXMLController implements Initializable {
             setResultado();
         }
         System.out.println("Selecione um campo");
+    }
+    //retorna o tipo do campo (varchar, int, double)
+    public String getTipoCampo(List<Campo> campos, String nome){
+        String tipoCampo="";
+        for (Campo campo : campos) {
+            if(campo.getNome().equals(nome)){
+                tipoCampo = campo.getTipo();
+            }            
+        }
+        return tipoCampo;
+    }
+    
+    public void tornarParametro(){
+        for (int i = 0; i < filtrosSelecionados.size(); i++) {            
+            filtrosSelecionados.get(i).setValor("param_"+i);            
+        }        
+        setResultado();
     }
 
     @FXML
@@ -577,13 +597,13 @@ public class HomeFXMLController implements Initializable {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("/view/GerarSPFXML.fxml"));
         Parent root = loader.load();
 
         GerarSPlFXMLController spController = loader.getController();
         System.out.println(textAreaResultado.getText());
+        tornarParametro();
         spController.setResultado(this.textAreaResultado.getText());
-        spController.setParametros(camposSelecionados);
+        spController.setParametros(filtrosSelecionados);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

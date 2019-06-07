@@ -17,7 +17,7 @@ public class Campo {
     private String filtro;
     private String ordenador;
     private String valor;
-    private String operador = "";
+    private String operador;
     private CheckBox checkbox;
 
     public Campo() {
