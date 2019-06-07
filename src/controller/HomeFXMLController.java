@@ -10,13 +10,10 @@ import dao.CampoDAO;
 import dao.TabelaDAO;
 import java.io.IOException;
 import java.net.URL;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.IntStream;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -166,7 +163,8 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void getCampos() {
-        campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
+        campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
+                getTabelaSelecionada().getNome());
         inicializarComboboxCampoFiltro();
         inicializarComboboxOrdenador();
         setResultado();
@@ -238,18 +236,16 @@ public class HomeFXMLController implements Initializable {
             }
         }
         if (!filtrosSelecionados.isEmpty()) {
-
             filtro = " WHERE ";
             for (int i = 0; i < filtrosSelecionados.size(); i++) {
                 if (filtrosSelecionados.get(i).getOperador().equals("Selecione")) {
                     filtrosSelecionados.get(i).setOperador("");
                 }
-                filtro = filtro + filtrosSelecionados.get(i).getNome() + " " + filtrosSelecionados.get(i).getFiltro() + " "
-                        + filtrosSelecionados.get(i).getValor() + "\n " + filtrosSelecionados.get(i).getOperador() + " ";
+                filtro = filtro + filtrosSelecionados.get(i).getNome() + " "
+                        + filtrosSelecionados.get(i).getFiltro() + " "
+                        + filtrosSelecionados.get(i).getValor() + "\n "
+                        + filtrosSelecionados.get(i).getOperador() + " ";
             }
-        } else {
-            filtro = ";";
-            pontoVirgula = "";
         }
 
         if (!tabelasRelacionadas.isEmpty()) {
@@ -269,12 +265,17 @@ public class HomeFXMLController implements Initializable {
         } else if (getTabelaSelecionada() != null) {
             rel = getTabelaSelecionada().getNome();
         }
-        if (!camposOrdenadosPor.isEmpty()) {
-            for (int i = 0; i < camposOrdenadosPor.size(); i++) {
-                ordenador = ordenador + camposOrdenadosPor.get(i).getNome()
-                        + camposOrdenadosPor.get(i).getOrdenador();
 
+        if (!camposOrdenadosPor.isEmpty()) {
+            ordenador = " ORDER BY " + camposOrdenadosPor.get(0).getNome()
+                    + " " + camposOrdenadosPor.get(0).getOrdenador();
+            for (int i = 1; i < camposOrdenadosPor.size(); i++) {
+                ordenador = ordenador + ", " + camposOrdenadosPor.get(i).getNome()
+                        + " " + camposOrdenadosPor.get(i).getOrdenador();
             }
+        } else {
+            ordenador = ";";
+            pontoVirgula = "";
         }
 
         textAreaResultado.setWrapText(true);
@@ -310,7 +311,8 @@ public class HomeFXMLController implements Initializable {
         //ajusta o tamnaho da tabela, altura automatica e largura fixa de 160
         tabelaView.setPrefWidth(160);
         tabelaView.setFixedCellSize(25);
-        tabelaView.prefHeightProperty().bind(tabelaView.fixedCellSizeProperty().multiply(Bindings.size(tabelaView.getItems()).add(1.01)));
+        tabelaView.prefHeightProperty().bind(tabelaView.fixedCellSizeProperty()
+                .multiply(Bindings.size(tabelaView.getItems()).add(1.01)));
         tabelaView.minHeightProperty().bind(tabelaView.prefHeightProperty());
         tabelaView.maxHeightProperty().bind(tabelaView.prefHeightProperty());
 
@@ -405,7 +407,8 @@ public class HomeFXMLController implements Initializable {
         });
 
         //acumula as tabelas referencias 
-        List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
+        List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(),
+                getTabelaSelecionada().getNome());
         for (int i = 0; i < listAux.size(); i++) {
             tabelasReferenciadas.add(listAux.get(i));
 
@@ -436,7 +439,6 @@ public class HomeFXMLController implements Initializable {
                     tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
                     tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
                     tabelasRelacionadas.add(tabela);
-
                 }
             }
         }
@@ -466,7 +468,6 @@ public class HomeFXMLController implements Initializable {
                         tabelasRelacionadas.get(j).setNomeReferenciada(" ");
                     }
                 }
-
             }
             cont = 0;
         }
@@ -492,15 +493,15 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void adicionarCampoOrdenarPor() {
-        Campo c = new Campo();
         checkBoxCrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
             @Override
             public void handle(MouseEvent event) {
                 if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
                     String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
                     for (Campo campo : campos) {
                         if (campo.getNome().equals(nome)) {
+                            
+                            campo.setNome(nome);
                             campo.setOrdenador(" ASC");
                             if (checkBoxCrescente.isSelected()) {
                                 if (!camposOrdenadosPor.contains(campo)) {
@@ -514,8 +515,6 @@ public class HomeFXMLController implements Initializable {
                             }
                         }
                     }
-//                    c.setNome(nome);
-//                    c.setOrdenador(" ASC");
                 }
             }
         });
@@ -542,8 +541,7 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
-    public void adicionarCamposFiltrar() {//botao adicioanar filtros
-
+    public void adicionarCamposFiltrar() {
         Campo cmpo = new Campo();
         if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
             cmpo.setNome(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome());

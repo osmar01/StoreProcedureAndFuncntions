@@ -43,14 +43,6 @@ public class GerarSPlFXMLController implements Initializable {
     public String resultado = "";
     
     @FXML
-    private TableView<Parametro> tableViewParametro;
-    @FXML
-    private TableColumn<String, String> columnNome;
-    @FXML
-    private TableColumn<String, String> columnTipo;
-    @FXML
-    private TableColumn<String, String> columnCheckBox;
-    @FXML
     private Button btnGerarSP;
     @FXML
     private TextArea txtAreaResultFinal;
@@ -68,19 +60,11 @@ public class GerarSPlFXMLController implements Initializable {
     }
 
     public void setResultado(String resultado) {
-        this.resultado = resultado;
-
-        System.out.println(this.resultado);
+        this.resultado = resultado;        
     }
 
     public void inicializarListViewParam() {
         observableParametro = FXCollections.observableArrayList(parametros);
-
-        columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        columnTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-        columnCheckBox.setCellValueFactory(new PropertyValueFactory<>("checkbox"));
-
-        tableViewParametro.setItems(observableParametro);
     }
 
     public void setParametros(List<Campo> campos) {

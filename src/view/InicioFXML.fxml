@@ -124,7 +124,7 @@
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <CheckBox fx:id="checkBoxCrescente" layoutX="967.0" layoutY="56.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" selected="true" text="Crescente">
+                                                <CheckBox fx:id="checkBoxCrescente" layoutX="967.0" layoutY="56.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -213,21 +213,19 @@
                         </TabPane>
                         <Pane layoutX="8.0" layoutY="150.0" prefHeight="233.0" prefWidth="1059.0" style="-fx-background-color: #e3f2fd;">
                             <children>
-                                <TextArea fx:id="textAreaResultado" layoutX="539.0" layoutY="34.0" prefHeight="146.0" prefWidth="423.0" />
-                                <Label layoutX="539.0" layoutY="15.0" text="Resultado da expressao SQL">
+                                <TextArea fx:id="textAreaResultado" layoutX="230.0" layoutY="34.0" prefHeight="146.0" prefWidth="423.0" />
+                                <Label layoutX="230.0" layoutY="15.0" text="Resultado da expressao SQL">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <Button layoutX="555.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
-                                <Button layoutX="756.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
-                                <ComboBox layoutX="655.0" layoutY="193.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
-                                <Button fx:id="btnGerarStoredProcedure" layoutX="447.0" layoutY="66.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="33.0" prefWidth="56.0" text="Gerar" />
-                        <Button layoutX="859.0" layoutY="193.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
-                        <TextField layoutX="279.0" layoutY="67.0" prefHeight="33.0" prefWidth="168.0" />
-                        <Label layoutX="230.0" layoutY="75.0" prefHeight="17.0" prefWidth="55.0" text="Nome" />
-                        <RadioButton layoutX="135.0" layoutY="74.0" mnemonicParsing="false" text="RadioButton" />
-                        <RadioButton layoutX="38.0" layoutY="75.0" mnemonicParsing="false" text="RadioButton" />
+                                <Button layoutX="246.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
+                                <Button layoutX="447.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
+                                <ComboBox layoutX="346.0" layoutY="193.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
+                                <Button fx:id="btnGerarStoredProcedure" layoutX="921.0" layoutY="91.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="33.0" prefWidth="56.0" text="Criar" />
+                        <Button layoutX="550.0" layoutY="193.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
+                        <RadioButton layoutX="828.0" layoutY="99.0" mnemonicParsing="false" text="Function" />
+                        <RadioButton layoutX="687.0" layoutY="99.0" mnemonicParsing="false" text="Stored Procedure" />
                             </children>
                         </Pane>
                     </children>
