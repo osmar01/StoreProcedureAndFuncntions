@@ -73,6 +73,7 @@ public class HomeFXMLController implements Initializable {
 
     public List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
+    private List<Campo> camposOrdenadosPor = new ArrayList<>();
 
     String textoTab;
 
@@ -130,12 +131,18 @@ public class HomeFXMLController implements Initializable {
         String igual = "=";
         String maior = ">";
         String menor = "<";
+        String menorIgual = "<=";
+        String maoirIgual = ">=";
+        String diferente = "!=";
 
         List<String> filtros = new ArrayList<>();
         filtros.add(selecione);
         filtros.add(igual);
         filtros.add(menor);
         filtros.add(maior);
+        filtros.add(menorIgual);
+        filtros.add(maoirIgual);
+        filtros.add(diferente);
 
         observableFiltro = FXCollections.observableArrayList(filtros);
         comboboxFiltro.setItems(observableFiltro);
@@ -157,11 +164,6 @@ public class HomeFXMLController implements Initializable {
         comboboxOperadorLogico.setItems(observableOperador);
     }
 
-    public boolean verificaOperadorLogico() {
-        boolean equals = comboboxOperadorLogico.getSelectionModel().getSelectedItem().equals("Selecione");
-        return equals;
-    }
-
     @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), getTabelaSelecionada().getNome());
@@ -170,6 +172,7 @@ public class HomeFXMLController implements Initializable {
         setResultado();
         criarTabela();
         camposSelecionadosExibir();
+        adicionarCampoOrdenarPor();
     }
 
     public void inicializarComboboxCampoFiltro() {
@@ -224,6 +227,7 @@ public class HomeFXMLController implements Initializable {
         String campo = "";
         String filtro = "";
         String rel = "";
+        String ordenador = "";
         String pontoVirgula = ";";
         if (camposSelecionados.isEmpty()) {
             campo = "*";
@@ -265,9 +269,16 @@ public class HomeFXMLController implements Initializable {
         } else if (getTabelaSelecionada() != null) {
             rel = getTabelaSelecionada().getNome();
         }
+        if (!camposOrdenadosPor.isEmpty()) {
+            for (int i = 0; i < camposOrdenadosPor.size(); i++) {
+                ordenador = ordenador + camposOrdenadosPor.get(i).getNome()
+                        + camposOrdenadosPor.get(i).getOrdenador();
+
+            }
+        }
 
         textAreaResultado.setWrapText(true);
-        textAreaResultado.setText("SELECT " + campo + " FROM " + rel + filtro + pontoVirgula);
+        textAreaResultado.setText("SELECT " + campo + " FROM " + rel + filtro + ordenador + pontoVirgula);
     }
 
     public void criarTabela() {
@@ -480,8 +491,37 @@ public class HomeFXMLController implements Initializable {
         setResultado();
     }
 
-    public void camposSelecionadosExibir() {
+    public void adicionarCampoOrdenarPor() {
+        Campo c = new Campo();
+        checkBoxCrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+            @Override
+            public void handle(MouseEvent event) {
+                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
+                    String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
+                    for (Campo campo : campos) {
+                        if (campo.getNome().equals(nome)) {
+                            campo.setOrdenador(" ASC");
+                            if (checkBoxCrescente.isSelected()) {
+                                if (!camposOrdenadosPor.contains(campo)) {
+                                    camposOrdenadosPor.add(campo);
+                                }
+                                setResultado();
+                            }
+                            if (!checkBoxCrescente.isSelected()) {
+                                camposOrdenadosPor.remove(campo);
+                                setResultado();
+                            }
+                        }
+                    }
+//                    c.setNome(nome);
+//                    c.setOrdenador(" ASC");
+                }
+            }
+        });
+    }
+
+    public void camposSelecionadosExibir() {
         for (Campo campo : campos) {
             campo.getCheckbox().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -502,7 +542,7 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
-    public void adicionarCamposFiltrar() {
+    public void adicionarCamposFiltrar() {//botao adicioanar filtros
 
         Campo cmpo = new Campo();
         if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
