@@ -71,7 +71,7 @@
             <Insets />
          </opaqueInsets>
       </AnchorPane>
-      <Text layoutX="343.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SPANDF">
+      <Text layoutX="343.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CANDO">
          <font>
             <Font name="System Bold" size="58.0" />
          </font>
@@ -86,7 +86,7 @@
             </LinearGradient>
          </fill>
       </Text>
-      <Text fill="#fcfcfc" layoutX="45.0" layoutY="498.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerador automático de Stored Procedure e Functions" wrappingWidth="805.8818359375">
+      <Text fill="#fcfcfc" layoutX="45.0" layoutY="498.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gerar Procedure" textAlignment="CENTER" wrappingWidth="805.8818359375">
          <font>
             <Font name="System Bold Italic" size="31.0" />
          </font>
