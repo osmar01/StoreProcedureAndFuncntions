@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,12 +30,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -70,6 +74,7 @@ public class HomeFXMLController implements Initializable {
 
     public List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
+    private List<Campo> parametros = new ArrayList<>();
     private List<Campo> camposOrdenadosPor = new ArrayList<>();
 
     String textoTab;
@@ -101,9 +106,16 @@ public class HomeFXMLController implements Initializable {
     @FXML
     private Button btnAdd;
     @FXML
-    private Button btnAdd1;
+    private Button btnRemover;
     @FXML
     private Button btnGerarStoredProcedure;
+
+    @FXML
+    private RadioButton radioFunction;
+    @FXML
+    private RadioButton radioStoredProcedure;
+
+    String radioSelected;
 
     private double initX;
     private double initY;
@@ -120,6 +132,7 @@ public class HomeFXMLController implements Initializable {
         inicializarListViewBancos();
         inicializarComboboxFiltro();
         inicializarComboboxOperadorLogico();
+        inicializaRadioButton();
 
     }
 
@@ -489,29 +502,49 @@ public class HomeFXMLController implements Initializable {
         tabelasCriadas.clear();
         listViewTabela.getSelectionModel().clearSelection();
         filtrosSelecionados.clear();
+        areaTrabalho.getChildren().clear();
         setResultado();
+        comboboxOrdenador.setItems(null);
+        comboboxCampoFiltro.setItems(null);
+
     }
 
     public void adicionarCampoOrdenarPor() {
         checkBoxCrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
-                    String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
-                    for (Campo campo : campos) {
-                        if (campo.getNome().equals(nome)) {
-                            
-                            campo.setNome(nome);
-                            campo.setOrdenador(" ASC");
-                            if (checkBoxCrescente.isSelected()) {
-                                if (!camposOrdenadosPor.contains(campo)) {
-                                    camposOrdenadosPor.add(campo);
+                if (comboboxOrdenador.getSelectionModel() != null) {
+                    if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
+                        String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
+                        for (Campo campo : campos) {
+                            if (campo.getNome().equals(nome)) {
+
+                                if (checkBoxCrescente.isSelected()) {
+                                    campo.setNome(nome);
+                                    campo.setOrdenador(" ASC");
+                                    if (!camposOrdenadosPor.contains(campo)) {
+                                        camposOrdenadosPor.add(campo);
+                                    }
+                                    setResultado();
                                 }
-                                setResultado();
-                            }
-                            if (!checkBoxCrescente.isSelected()) {
-                                camposOrdenadosPor.remove(campo);
-                                setResultado();
+                                if (!checkBoxCrescente.isSelected()) {
+                                    camposOrdenadosPor.remove(campo);
+                                    setResultado();
+                                }
+                                if (checkBoxDecrescente.isSelected()) {
+                                    campo.setNome(nome);
+                                    campo.setOrdenador(" DESC");
+                                    if (!camposOrdenadosPor.contains(campo)) {
+                                        camposOrdenadosPor.add(campo);
+                                    }
+                                    setResultado();
+                                }
+                                if (!checkBoxDecrescente.isSelected()) {
+                                    camposOrdenadosPor.remove(campo);
+                                    setResultado();
+                                }
+                                
+                                
                             }
                         }
                     }
@@ -551,7 +584,7 @@ public class HomeFXMLController implements Initializable {
             cmpo.setValor(campoCriterio.getText());
             cmpo.setOperador(comboboxOperadorLogico.getSelectionModel().getSelectedItem());
             cmpo.setTipo(getTipoCampo(campos, nome));
-            
+
             if (cmpo.getOperador() == null) {
                 cmpo.setOperador("");
             }
@@ -560,21 +593,22 @@ public class HomeFXMLController implements Initializable {
         }
         System.out.println("Selecione um campo");
     }
+
     //retorna o tipo do campo (varchar, int, double)
-    public String getTipoCampo(List<Campo> campos, String nome){
-        String tipoCampo="";
+    public String getTipoCampo(List<Campo> campos, String nome) {
+        String tipoCampo = "";
         for (Campo campo : campos) {
-            if(campo.getNome().equals(nome)){
+            if (campo.getNome().equals(nome)) {
                 tipoCampo = campo.getTipo();
-            }            
+            }
         }
         return tipoCampo;
     }
-    
-    public void tornarParametro(){
-        for (int i = 0; i < filtrosSelecionados.size(); i++) {            
-            filtrosSelecionados.get(i).setValor("param_"+i);            
-        }        
+
+    public void tornarParametro() {
+        for (int i = 0; i < filtrosSelecionados.size(); i++) {
+            filtrosSelecionados.get(i).setValor("param_" + i);
+        }
         setResultado();
     }
 
@@ -592,22 +626,63 @@ public class HomeFXMLController implements Initializable {
         setResultado();
     }
 
+    public void inicializaRadioButton() {
+        ToggleGroup group = new ToggleGroup();
+
+        radioStoredProcedure.setToggleGroup(group);
+        radioFunction.setToggleGroup(group);
+
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable,
+                    Toggle oldValue, Toggle newValue) {
+                if (group.getSelectedToggle() != null) {
+//                    radioSelected = group.getSelectedToggle().getToggleGroup().getUserData().toString();
+//                    System.out.println(radioSelected);;
+                }
+            }
+        });
+
+    }
+
+    public boolean verificaRadioButton() {
+        if (radioStoredProcedure.isSelected() || radioFunction.isSelected()) {
+            return true;
+        } else {
+            System.out.println("Selecione uma opção!");
+            return false;
+        }
+    }
+
     @FXML
     public void abrirTelaGerarStoredProcedure() throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
-        Parent root = loader.load();
 
-        GerarSPlFXMLController spController = loader.getController();
-        System.out.println(textAreaResultado.getText());
-        tornarParametro();
-        spController.setResultado(this.textAreaResultado.getText());
-        spController.setParametros(filtrosSelecionados);
+        if (verificaRadioButton()) {
+            if (radioStoredProcedure.isSelected()) {
+                loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
+                Parent root = loader.load();
+                GerarSPlFXMLController spController = loader.getController();
+                System.out.println(textAreaResultado.getText());
+                tornarParametro();
+                spController.setResultado(this.textAreaResultado.getText());
+                spController.setParametros(filtrosSelecionados);
 
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+            if (radioFunction.isSelected()) {
+                loader.setLocation(getClass().getResource("/view/GerarFunction.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        }
+
     }
 
 }
