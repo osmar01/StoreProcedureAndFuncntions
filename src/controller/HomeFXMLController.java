@@ -183,7 +183,8 @@ public class HomeFXMLController implements Initializable {
         setResultado();
         criarTabela();
         camposSelecionadosExibir();
-        adicionarCampoOrdenarPor();
+        adicionarCampoOrdenarPorCrescente();
+        adicionarCampoOrdenarPorDescrescente();
     }
 
     public void inicializarComboboxCampoFiltro() {
@@ -509,46 +510,64 @@ public class HomeFXMLController implements Initializable {
 
     }
 
-    public void adicionarCampoOrdenarPor() {
+    public void adicionarCampoOrdenarPorCrescente() {
         checkBoxCrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (comboboxOrdenador.getSelectionModel() != null) {
-                    if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
-                        String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
-                        for (Campo campo : campos) {
-                            if (campo.getNome().equals(nome)) {
+                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().
+                        getSelectedItem().getNome())) {
+                    String nome = comboboxOrdenador.getSelectionModel().
+                            getSelectedItem().getNome();
+                    for (Campo campo : campos) {
+                        if (campo.getNome().equals(nome)) {
+                            campo.setNome(nome);
+                            campo.setOrdenador(" ASC");
 
-                                if (checkBoxCrescente.isSelected()) {
-                                    campo.setNome(nome);
-                                    campo.setOrdenador(" ASC");
-                                    if (!camposOrdenadosPor.contains(campo)) {
-                                        camposOrdenadosPor.add(campo);
-                                    }
-                                    setResultado();
+                            if (checkBoxCrescente.isSelected()) {
+                                if (!camposOrdenadosPor.contains(campo)) {
+                                    camposOrdenadosPor.add(campo);
                                 }
-                                if (!checkBoxCrescente.isSelected()) {
-                                    camposOrdenadosPor.remove(campo);
-                                    setResultado();
+                                setResultado();
+                            }
+                            if (!checkBoxCrescente.isSelected()) {
+                                camposOrdenadosPor.remove(campo);
+                                setResultado();
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+
+    public void adicionarCampoOrdenarPorDescrescente() {
+        checkBoxDecrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
+                    String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
+                    for (Campo campo : campos) {
+                        if (campo.getNome().equals(nome)) {
+                            campo.setNome(nome);
+                            campo.setOrdenador(" DESC");
+
+                            if (checkBoxDecrescente.isSelected()) {
+                                if (!camposOrdenadosPor.contains(campo)) {
+                                    camposOrdenadosPor.add(campo);
                                 }
-                                if (checkBoxDecrescente.isSelected()) {
-                                    campo.setNome(nome);
-                                    campo.setOrdenador(" DESC");
-                                    if (!camposOrdenadosPor.contains(campo)) {
-                                        camposOrdenadosPor.add(campo);
-                                    }
-                                    setResultado();
-                                }
-                                if (!checkBoxDecrescente.isSelected()) {
-                                    camposOrdenadosPor.remove(campo);
-                                    setResultado();
-                                }
-                                
-                                
+                                setResultado();
+                            }
+                            if (!checkBoxDecrescente.isSelected()) {
+                                camposOrdenadosPor.remove(campo);
+                                setResultado();
                             }
                         }
                     }
                 }
+
             }
         });
     }

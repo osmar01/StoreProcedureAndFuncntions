@@ -86,56 +86,52 @@
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboboxCampoFiltro" layoutX="17.0" layoutY="61.0" pickOnBounds="false" prefHeight="25.0" prefWidth="150.0" promptText="Selecione" />
+                                                <ComboBox fx:id="comboboxCampoFiltro" layoutX="17.0" layoutY="61.0" pickOnBounds="false" prefHeight="25.0" prefWidth="135.0" promptText="Selecione" />
                                                 <ComboBox fx:id="comboboxFiltro" layoutX="185.0" layoutY="61.0" prefHeight="25.0" prefWidth="95.0" promptText="Selecione" />
-                                                <TextField fx:id="campoCriterio" layoutX="301.0" layoutY="61.0" prefHeight="25.0" prefWidth="156.0" />
-                                                <ComboBox fx:id="comboboxOperadorLogico" layoutX="477.0" layoutY="61.0" prefHeight="25.0" prefWidth="115.0" promptText="Selecione" visibleRowCount="4" />
-                                                <Button fx:id="btnAdd" layoutX="620.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" text="Adicionar" />
+                                                <TextField fx:id="campoCriterio" layoutX="301.0" layoutY="61.0" prefHeight="25.0" prefWidth="119.0" />
+                                                <ComboBox fx:id="comboboxOperadorLogico" layoutX="450.0" layoutY="61.0" prefHeight="25.0" prefWidth="115.0" promptText="Selecione" visibleRowCount="4" />
+                                                <Button fx:id="btnAdd" layoutX="578.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" prefHeight="25.0" prefWidth="31.0" text="+" />
                                                 <Label layoutX="17.0" layoutY="36.0" text="Campos para filtrar">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Label layoutX="301.0" layoutY="36.0" text="Critério/Parametro">
+                                                <Label layoutX="301.0" layoutY="36.0" text="Critério">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Label layoutX="477.0" layoutY="36.0" text="Operador Lógico">
+                                                <Label layoutX="452.0" layoutY="37.0" text="Operador Lógico">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Label layoutX="17.0" layoutY="4.0" text="Seleção de condição">
+                                                <Separator layoutX="17.0" layoutY="7.0" prefHeight="13.0" prefWidth="1016.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" />
+                                                <Separator layoutX="641.0" layoutY="58.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
+                                                <Label layoutX="683.0" layoutY="26.0" text="Ordenar por">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Separator layoutX="17.0" layoutY="23.0" prefHeight="0.0" prefWidth="1016.0" />
-                                                <Separator layoutX="744.0" layoutY="61.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
-                                                <Label layoutX="785.0" layoutY="34.0" text="Campos para ordenar">
-                                                    <font>
-                                                        <Font name="System Bold" size="14.0" />
-                                                    </font>
-                                                </Label>
-                                                <ComboBox fx:id="comboboxOrdenador" layoutX="786.0" layoutY="61.0" prefHeight="25.0" prefWidth="144.0" promptText="Selecione" />
-                                                <Label layoutX="947.0" layoutY="33.0" text="Ordenar por">
-                                                    <font>
-                                                        <Font name="System Bold" size="14.0" />
-                                                    </font>
-                                                </Label>
-                                                <CheckBox fx:id="checkBoxCrescente" layoutX="947.0" layoutY="56.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
+                                                <ComboBox fx:id="comboboxOrdenador" layoutX="683.0" layoutY="61.0" prefHeight="25.0" prefWidth="101.0" promptText="Selecione" />
+                                                <CheckBox fx:id="checkBoxCrescente" layoutX="794.0" layoutY="53.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="948.0" layoutY="76.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
+                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="794.0" layoutY="74.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                 </CheckBox>
-                                    <Button fx:id="btnRemover" layoutX="696.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" text="Remover" />
-                                    <Separator layoutX="27.0" layoutY="101.0" prefHeight="0.0" prefWidth="1016.0" />
+                                    <Button fx:id="btnRemover" layoutX="620.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" prefHeight="25.0" prefWidth="31.0" text="-" />
+                                    <Separator layoutX="27.0" layoutY="101.0" prefHeight="0.0" prefWidth="1016.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="1.0" />
+                                    <Separator layoutX="862.0" layoutY="58.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
+                                    <Label layoutX="902.0" layoutY="22.0" text="Agrupar por">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
                                             </children>
                                         </AnchorPane>
                                     </content>
