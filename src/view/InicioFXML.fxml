@@ -113,23 +113,23 @@
                                                 </Label>
                                                 <Separator layoutX="17.0" layoutY="23.0" prefHeight="0.0" prefWidth="1016.0" />
                                                 <Separator layoutX="744.0" layoutY="61.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
-                                                <Label layoutX="799.0" layoutY="34.0" text="Campos para ordenar">
+                                                <Label layoutX="785.0" layoutY="34.0" text="Campos para ordenar">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboboxOrdenador" layoutX="799.0" layoutY="61.0" prefHeight="25.0" prefWidth="144.0" promptText="Selecione" />
-                                                <Label layoutX="967.0" layoutY="33.0" text="Ordenar por">
+                                                <ComboBox fx:id="comboboxOrdenador" layoutX="786.0" layoutY="61.0" prefHeight="25.0" prefWidth="144.0" promptText="Selecione" />
+                                                <Label layoutX="947.0" layoutY="33.0" text="Ordenar por">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <CheckBox fx:id="checkBoxCrescente" layoutX="967.0" layoutY="56.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
+                                                <CheckBox fx:id="checkBoxCrescente" layoutX="947.0" layoutY="56.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="967.0" layoutY="76.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
+                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="948.0" layoutY="76.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -232,6 +232,6 @@
                 </AnchorPane>
             </content>
         </TitledPane>
-        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="342.0" prefWidth="1056.0" />
+        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="432.0" prefWidth="1056.0" />
     </children>
 </AnchorPane>
