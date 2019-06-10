@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GerarSPlFXMLController">
    <children>
-      <HBox layoutX="5.0" layoutY="38.0" prefHeight="25.0" prefWidth="549.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox layoutX="5.0" layoutY="22.0" prefHeight="25.0" prefWidth="559.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Label alignment="CENTER" layoutX="490.0" layoutY="46.0" prefHeight="17.0" prefWidth="97.0" text="Function" textAlignment="CENTER" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="437.0">
                <font>
@@ -64,7 +64,7 @@
             </TabPane>
          </children>
       </HBox>
-      <HBox layoutX="2.0" layoutY="446.0" prefHeight="30.0" prefWidth="549.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0">
+      <HBox layoutX="2.0" layoutY="462.0" prefHeight="30.0" prefWidth="557.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Button alignment="CENTER" layoutX="417.0" layoutY="433.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Copiar" textAlignment="CENTER">
                <HBox.margin>
