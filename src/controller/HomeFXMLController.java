@@ -90,8 +90,6 @@ public class HomeFXMLController implements Initializable {
     @FXML
     private ComboBox<String> comboboxOperadorLogico;
     @FXML
-    private ComboBox<Campo> comboboxOrdenador;
-    @FXML
     private CheckBox checkBoxCrescente;
     @FXML
     private CheckBox checkBoxDecrescente;
@@ -178,8 +176,7 @@ public class HomeFXMLController implements Initializable {
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
                 getTabelaSelecionada().getNome());
-        inicializarComboboxCampoFiltro();
-        inicializarComboboxOrdenador();
+        inicializarComboboxCampoFiltro();        
         setResultado();
         criarTabela();
         camposSelecionadosExibir();
@@ -191,11 +188,7 @@ public class HomeFXMLController implements Initializable {
         observableCampos = FXCollections.observableArrayList(campos);
         comboboxCampoFiltro.setItems(observableCampos);
 
-    }
-
-    public void inicializarComboboxOrdenador() {
-        comboboxOrdenador.setItems(observableCampos);
-    }
+    }   
 
     public void inicializarListViewBancos() {
         bancodao = new BancoDAO();
@@ -368,8 +361,7 @@ public class HomeFXMLController implements Initializable {
                 String nomeTabela = tab.getText();
                 List<Campo> campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
                 ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
-                comboboxCampoFiltro.setItems(observableCampos);
-                comboboxOrdenador.setItems(observableCampos);
+                comboboxCampoFiltro.setItems(observableCampos);                
             }
         });
         textoTab = tab.getText();
@@ -504,8 +496,7 @@ public class HomeFXMLController implements Initializable {
         listViewTabela.getSelectionModel().clearSelection();
         filtrosSelecionados.clear();
         areaTrabalho.getChildren().clear();
-        setResultado();
-        comboboxOrdenador.setItems(null);
+        setResultado();        
         comboboxCampoFiltro.setItems(null);
 
     }
@@ -514,9 +505,9 @@ public class HomeFXMLController implements Initializable {
         checkBoxCrescente.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().
+                if (!"Selecione".equals(comboboxCampoFiltro.getSelectionModel().
                         getSelectedItem().getNome())) {
-                    String nome = comboboxOrdenador.getSelectionModel().
+                    String nome = comboboxCampoFiltro.getSelectionModel().
                             getSelectedItem().getNome();
                     for (Campo campo : campos) {
                         if (campo.getNome().equals(nome)) {
@@ -547,8 +538,8 @@ public class HomeFXMLController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
 
-                if (!"Selecione".equals(comboboxOrdenador.getSelectionModel().getSelectedItem().getNome())) {
-                    String nome = comboboxOrdenador.getSelectionModel().getSelectedItem().getNome();
+                if (!"Selecione".equals(comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome())) {
+                    String nome = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
                     for (Campo campo : campos) {
                         if (campo.getNome().equals(nome)) {
                             campo.setNome(nome);
