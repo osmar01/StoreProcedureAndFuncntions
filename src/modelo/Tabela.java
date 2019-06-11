@@ -22,6 +22,28 @@ public class Tabela {
 
     public Tabela() {
     }
+  
+    
+  public void verificaRelacionameto(List<Tabela> tabelasRelacionadas,List<Tabela> tabelasReferenciadas, List<Tabela> tabelasCriadas) {
+        tabelasRelacionadas.clear();
+        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
+            for (int j = 0; j < tabelasCriadas.size(); j++) {
+                if (tabelasReferenciadas.get(i).getNomeReferenciada().equals(tabelasCriadas.get(j).getNome())) {
+                    Tabela tabela = new Tabela();
+                    tabela.setNomeReferenciada(tabelasReferenciadas.get(i).getNomeReferenciada());//cidade
+                    tabela.setNome(tabelasReferenciadas.get(i).getNome());//bairro
+                    tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
+                    tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
+                    tabelasRelacionadas.add(tabela);
+                }
+            }
+        }
+        System.out.println("tabelas relacionadas ");
+        for (int i = 0; i < tabelasRelacionadas.size(); i++) {
+            System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
+            System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
+        }
+    }
 
     public void exibirTabela(){
     }

@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class ExpressaoSQL {
     private String tipo;
+    private String resultado;
     private List relacionamento;
     private List<Campo> campos;
-    private List<Banco> Bancos;
     
     public String gerarExpressaoSQL(Tabela tabela, List<Campo> campos){
         
@@ -41,14 +41,6 @@ public class ExpressaoSQL {
         this.relacionamento = relacionamento;
     }
 
-    public List<Banco> getBancos() {
-        return Bancos;
-    }
-
-    public void setBancos(List<Banco> Bancos) {
-        this.Bancos = Bancos;
-    }
-
     public List<Campo> getCampos() {
         return campos;
     }
@@ -56,7 +48,12 @@ public class ExpressaoSQL {
     public void setCampos(List<Campo> campos) {
         this.campos = campos;
     }
-   
-    
-    
+
+    public String getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }           
 }

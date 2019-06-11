@@ -59,6 +59,7 @@ public class HomeFXMLController implements Initializable {
     private List<Banco> bancos;
     private ObservableList<Banco> observableBancos;
     private CampoDAO campoDAO = new CampoDAO();
+    private Campo cmp = new Campo();
     private List<Campo> campos;
 
     private ObservableList<Campo> observableCampos;
@@ -66,6 +67,7 @@ public class HomeFXMLController implements Initializable {
     private ObservableList<String> observableOperador;
 
     private TabelaDAO tabelaDAO = new TabelaDAO();
+    private Tabela tabela = new Tabela();
     private List<Tabela> tabelas;
     private List<Tabela> tabelasCriadas = new ArrayList<>();
     private List<Tabela> tabelasReferenciadas = new ArrayList<>();
@@ -176,7 +178,7 @@ public class HomeFXMLController implements Initializable {
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
                 getTabelaSelecionada().getNome());
-        inicializarComboboxCampoFiltro();        
+        inicializarComboboxCampoFiltro();
         setResultado();
         criarTabela();
         camposSelecionadosExibir();
@@ -188,7 +190,7 @@ public class HomeFXMLController implements Initializable {
         observableCampos = FXCollections.observableArrayList(campos);
         comboboxCampoFiltro.setItems(observableCampos);
 
-    }   
+    }
 
     public void inicializarListViewBancos() {
         bancodao = new BancoDAO();
@@ -361,7 +363,7 @@ public class HomeFXMLController implements Initializable {
                 String nomeTabela = tab.getText();
                 List<Campo> campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
                 ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
-                comboboxCampoFiltro.setItems(observableCampos);                
+                comboboxCampoFiltro.setItems(observableCampos);
             }
         });
         textoTab = tab.getText();
@@ -496,7 +498,7 @@ public class HomeFXMLController implements Initializable {
         listViewTabela.getSelectionModel().clearSelection();
         filtrosSelecionados.clear();
         areaTrabalho.getChildren().clear();
-        setResultado();        
+        setResultado();
         comboboxCampoFiltro.setItems(null);
 
     }
@@ -572,11 +574,12 @@ public class HomeFXMLController implements Initializable {
                         if (!camposSelecionados.contains(campo)) {
                             camposSelecionados.add(campo);
                         }
-                        setResultado();
+                            setResultado();
                     }
                     if (!campo.getCheckbox().isSelected()) {
                         camposSelecionados.remove(campo);
                         setResultado();
+
                     }
                 }
             });

@@ -5,13 +5,18 @@
  */
 package modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
  * @author Junnio
  */
 public class Campo {
+
     private String nome;
     private String tipo;
     private String filtro;
@@ -19,7 +24,8 @@ public class Campo {
     private String valor;
     private String operador;
     private CheckBox checkbox;
-
+    List<Campo> camposSelecionados = new ArrayList<>();
+    
     public Campo() {
         checkbox = new CheckBox();
     }
@@ -43,7 +49,7 @@ public class Campo {
     public String getOrdenador() {
         return ordenador;
     }
-    
+
     public void setOrdenador(String ordenador) {
         this.ordenador = ordenador;
     }
@@ -79,12 +85,10 @@ public class Campo {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
+
     @Override
     public String toString() {
         return nome;
     }
-    
-    
-    
+
 }
