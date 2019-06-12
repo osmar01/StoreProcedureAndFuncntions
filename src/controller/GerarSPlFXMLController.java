@@ -62,11 +62,7 @@ public class GerarSPlFXMLController implements Initializable {
 
             parametros.add(p);
         }              
-    }
-    
-
- 
-    
+    }         
    
     @FXML
     private void gerarStoredProcedure(){

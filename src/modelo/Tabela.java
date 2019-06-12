@@ -12,6 +12,7 @@ import java.util.List;
  * @author Junnio
  */
 public class Tabela {
+
     private String nome;
     private String nomeColuna;
     private String nomeReferenciada;
@@ -22,9 +23,8 @@ public class Tabela {
 
     public Tabela() {
     }
-  
-    
-  public void verificaRelacionameto(List<Tabela> tabelasRelacionadas,List<Tabela> tabelasReferenciadas, List<Tabela> tabelasCriadas) {
+
+    public List<Tabela> verificaRelacionameto(List<Tabela> tabelasRelacionadas, List<Tabela> tabelasReferenciadas, List<Tabela> tabelasCriadas) {
         tabelasRelacionadas.clear();
         for (int i = 0; i < tabelasReferenciadas.size(); i++) {
             for (int j = 0; j < tabelasCriadas.size(); j++) {
@@ -43,14 +43,47 @@ public class Tabela {
             System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
             System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
         }
+        return tabelasRelacionadas;
     }
 
-    public void exibirTabela(){
+    public List<Tabela> atualizaRelacionamento(List<Tabela> tabelasRelacionadas, List<Tabela> tabelasCriadas) {
+        int cont = 0;
+
+        for (int i = 0; i < tabelasCriadas.size(); i++) {
+            for (int j = 0; j < tabelasRelacionadas.size(); j++) {
+
+                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNome())) {
+                    cont++;
+                    if (cont >= 2) {
+                        tabelasRelacionadas.get(j).setNome(" ");
+                    }
+                }
+                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNomeReferenciada())) {
+                    cont++;
+                    if (cont >= 2) {
+                        tabelasRelacionadas.get(j).setNomeReferenciada(" ");
+                    }
+                }
+            }
+            cont = 0;
+        }
+        return tabelasRelacionadas;
     }
-    
-    public void exibirCampos(){
+
+    public List<Tabela> setTabelasCriadas(String nome, List<Campo> campos, List<Tabela> tabelasCriadas) {
+        Tabela tabela = new Tabela();
+        tabela.setNome(nome);
+        tabela.setCampos(campos);
+        tabelasCriadas.add(tabela);
+        return tabelasCriadas;
     }
-    
+
+    public void exibirTabela() {
+    }
+
+    public void exibirCampos() {
+    }
+
     public String getNome() {
         return nome;
     }
@@ -106,14 +139,10 @@ public class Tabela {
     public void setNomeColunaReferenciada(String nomeColunaReferenciada) {
         this.nomeColunaReferenciada = nomeColunaReferenciada;
     }
-    
-    
-        
+
     @Override
     public String toString() {
         return nome;
     }
-    
-    
-    
+
 }

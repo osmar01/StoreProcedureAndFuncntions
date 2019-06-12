@@ -46,6 +46,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import modelo.Banco;
 import modelo.Campo;
+import modelo.ExpressaoSQL;
 import modelo.Tabela;
 
 /**
@@ -58,11 +59,7 @@ public class HomeFXMLController implements Initializable {
     private BancoDAO bancodao;
     private List<Banco> bancos;
     private ObservableList<Banco> observableBancos;
-    private CampoDAO campoDAO = new CampoDAO();
-    private Campo cmp = new Campo();
-    private List<Campo> campos;
 
-    private ObservableList<Campo> observableCampos;
     private ObservableList<String> observableFiltro;
     private ObservableList<String> observableOperador;
 
@@ -74,12 +71,17 @@ public class HomeFXMLController implements Initializable {
     private List<Tabela> tabelasRelacionadas = new ArrayList<>();
     private ObservableList<Tabela> observableTabelas;
 
-    public List<Campo> camposSelecionados = new ArrayList<>();
+    private Campo cmp = new Campo();
+    private CampoDAO campoDAO = new CampoDAO();
+    private List<Campo> campos;
+    private List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
     private List<Campo> parametros = new ArrayList<>();
     private List<Campo> camposOrdenadosPor = new ArrayList<>();
+    private ObservableList<Campo> observableCampos;
 
-    String textoTab;
+    private ExpressaoSQL query = new ExpressaoSQL();
+    private String textoTab;
 
     @FXML
     private ListView<Banco> listViewBancos;
@@ -137,40 +139,12 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void inicializarComboboxFiltro() {
-        String selecione = "Selecione";
-        String igual = "=";
-        String maior = ">";
-        String menor = "<";
-        String menorIgual = "<=";
-        String maoirIgual = ">=";
-        String diferente = "!=";
-
-        List<String> filtros = new ArrayList<>();
-        filtros.add(selecione);
-        filtros.add(igual);
-        filtros.add(menor);
-        filtros.add(maior);
-        filtros.add(menorIgual);
-        filtros.add(maoirIgual);
-        filtros.add(diferente);
-
-        observableFiltro = FXCollections.observableArrayList(filtros);
+        observableFiltro = FXCollections.observableArrayList(cmp.getfiltros());
         comboboxFiltro.setItems(observableFiltro);
     }
 
     public void inicializarComboboxOperadorLogico() {
-        String selecione = "Selecione";
-        String and = "AND";
-        String or = "OR";
-        String not = "NOT";
-
-        List<String> operadores = new ArrayList<>();
-        operadores.add(selecione);
-        operadores.add(and);
-        operadores.add(or);
-        operadores.add(not);
-
-        observableOperador = FXCollections.observableArrayList(operadores);
+        observableOperador = FXCollections.observableArrayList(cmp.getOperadores());
         comboboxOperadorLogico.setItems(observableOperador);
     }
 
@@ -231,64 +205,14 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void setResultado() {
-        String campo = "";
-        String filtro = "";
-        String rel = "";
-        String ordenador = "";
-        String pontoVirgula = ";";
-        if (camposSelecionados.isEmpty()) {
-            campo = "*";
-        } else {
-            campo = camposSelecionados.get(0).toString();
-            for (int i = 1; i < camposSelecionados.size(); i++) {
-                campo = campo + ", " + camposSelecionados.get(i).toString();
-            }
-        }
-        if (!filtrosSelecionados.isEmpty()) {
-            filtro = " WHERE ";
-            for (int i = 0; i < filtrosSelecionados.size(); i++) {
-                if (filtrosSelecionados.get(i).getOperador().equals("Selecione")) {
-                    filtrosSelecionados.get(i).setOperador("");
-                }
-                filtro = filtro + filtrosSelecionados.get(i).getNome() + " "
-                        + filtrosSelecionados.get(i).getFiltro() + " "
-                        + filtrosSelecionados.get(i).getValor() + "\n "
-                        + filtrosSelecionados.get(i).getOperador() + " ";
-            }
-        }
+        
+        query.setCamposSelecionados(camposSelecionados);
+        query.setFiltrosSelecionados(filtrosSelecionados);
+        query.setTabelasRelacionadas(tabelasRelacionadas);
+        query.setCamposOrdenadosPor(camposOrdenadosPor);
+        query.setTabelaSelecionada(getTabelaSelecionada().getNome());
+        textAreaResultado.setText(query.getQuery());
 
-        if (!tabelasRelacionadas.isEmpty()) {
-            rel = rel + tabelasRelacionadas.get(0).getNome() + " INNER JOIN "
-                    + tabelasRelacionadas.get(0).getNomeReferenciada() + " ON "
-                    + tabelasRelacionadas.get(0).getNomeColuna() + " = "
-                    + tabelasRelacionadas.get(0).getNomeColunaReferenciada() + "\n";
-            for (int i = 1; i < tabelasRelacionadas.size(); i++) {
-                if (tabelasRelacionadas.get(i).getNome() != " "
-                        || tabelasRelacionadas.get(i).getNomeReferenciada() != " ") {
-                    rel = rel + " INNER JOIN " + tabelasRelacionadas.get(i).getNome()
-                            + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
-                            + tabelasRelacionadas.get(i).getNomeColuna() + " = "
-                            + tabelasRelacionadas.get(i).getNomeColunaReferenciada() + "\n";
-                }
-            }
-        } else if (getTabelaSelecionada() != null) {
-            rel = getTabelaSelecionada().getNome();
-        }
-
-        if (!camposOrdenadosPor.isEmpty()) {
-            ordenador = " ORDER BY " + camposOrdenadosPor.get(0).getNome()
-                    + " " + camposOrdenadosPor.get(0).getOrdenador();
-            for (int i = 1; i < camposOrdenadosPor.size(); i++) {
-                ordenador = ordenador + ", " + camposOrdenadosPor.get(i).getNome()
-                        + " " + camposOrdenadosPor.get(i).getOrdenador();
-            }
-        } else {
-            ordenador = ";";
-            pontoVirgula = "";
-        }
-
-        textAreaResultado.setWrapText(true);
-        textAreaResultado.setText("SELECT " + campo + " FROM " + rel + filtro + ordenador + pontoVirgula);
     }
 
     public void criarTabela() {
@@ -425,69 +349,17 @@ public class HomeFXMLController implements Initializable {
             System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
         }
 
-        setTabelasCriadas(getTabelaSelecionada().getNome(), campos, tabelasReferenciadas);
+        tabelasCriadas = tabela.setTabelasCriadas(getTabelaSelecionada().getNome(),
+                campos, tabelasCriadas);
 
-        verificaRelacionameto();
+        tabelasRelacionadas = tabela.verificaRelacionameto(tabelasRelacionadas,
+                tabelasReferenciadas, tabelasCriadas);
 
-        atualizaRelacionamento();
+        tabelasRelacionadas = tabela.atualizaRelacionamento(tabelasRelacionadas, tabelasCriadas);
 
         setResultado();
 
         areaTrabalho.getChildren().addAll(tabPaneTabela);
-    }
-
-    public void verificaRelacionameto() {
-        tabelasRelacionadas.clear();
-        for (int i = 0; i < tabelasReferenciadas.size(); i++) {
-            for (int j = 0; j < tabelasCriadas.size(); j++) {
-                if (tabelasReferenciadas.get(i).getNomeReferenciada().equals(tabelasCriadas.get(j).getNome())) {
-                    Tabela tabela = new Tabela();
-                    tabela.setNomeReferenciada(tabelasReferenciadas.get(i).getNomeReferenciada());//cidade
-                    tabela.setNome(tabelasReferenciadas.get(i).getNome());//bairro
-                    tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
-                    tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
-                    tabelasRelacionadas.add(tabela);
-                }
-            }
-        }
-        System.out.println("tabelas relacionadas ");
-        for (int i = 0; i < tabelasRelacionadas.size(); i++) {
-            System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
-            System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
-        }
-    }
-
-    public void atualizaRelacionamento() {
-        int cont = 0;
-
-        System.out.println("atualiza metodo");
-        for (int i = 0; i < tabelasCriadas.size(); i++) {
-            for (int j = 0; j < tabelasRelacionadas.size(); j++) {
-
-                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNome())) {
-                    cont++;
-                    if (cont >= 2) {
-                        tabelasRelacionadas.get(j).setNome(" ");
-                    }
-                }
-                if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNomeReferenciada())) {
-                    cont++;
-                    if (cont >= 2) {
-                        tabelasRelacionadas.get(j).setNomeReferenciada(" ");
-                    }
-                }
-            }
-            cont = 0;
-        }
-
-    }
-
-    public void setTabelasCriadas(String nome, List<Campo> campos, List<Tabela> referenciadas) {
-        Tabela tabela = new Tabela();
-        tabela.setNome(nome);
-        tabela.setCampos(campos);
-        tabela.setReferenciadas(referenciadas);
-        tabelasCriadas.add(tabela);
     }
 
     @FXML
@@ -499,6 +371,7 @@ public class HomeFXMLController implements Initializable {
         filtrosSelecionados.clear();
         areaTrabalho.getChildren().clear();
         setResultado();
+        textAreaResultado.clear();
         comboboxCampoFiltro.setItems(null);
 
     }
@@ -574,7 +447,7 @@ public class HomeFXMLController implements Initializable {
                         if (!camposSelecionados.contains(campo)) {
                             camposSelecionados.add(campo);
                         }
-                            setResultado();
+                        setResultado();
                     }
                     if (!campo.getCheckbox().isSelected()) {
                         camposSelecionados.remove(campo);
@@ -627,9 +500,8 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void removerCamposFiltrados() {
-        String campoRemove;
         if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
-            campoRemove = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+            String campoRemove = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
             for (int i = 0; i < filtrosSelecionados.size(); i++) {
                 if (filtrosSelecionados.get(i).getNome().equals(campoRemove)) {
                     filtrosSelecionados.remove(filtrosSelecionados.get(i));

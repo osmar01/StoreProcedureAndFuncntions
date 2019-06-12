@@ -7,9 +7,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
-import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -25,9 +23,30 @@ public class Campo {
     private String operador;
     private CheckBox checkbox;
     List<Campo> camposSelecionados = new ArrayList<>();
-    
+
     public Campo() {
         checkbox = new CheckBox();
+    }
+
+    public List<String> getfiltros() {
+        List<String> filtros = new ArrayList<>();
+        filtros.add("selecione");
+        filtros.add("=");
+        filtros.add("<");
+        filtros.add(">");
+        filtros.add("<=");
+        filtros.add(">=");
+        filtros.add("!=");
+        return filtros;
+    }
+
+    public List<String> getOperadores() {
+        List<String> operadores = new ArrayList<>();
+        operadores.add("Selecione");
+        operadores.add("AND");
+        operadores.add("OR");
+        operadores.add("NOT");
+        return operadores;
     }
 
     public String getNome() {
