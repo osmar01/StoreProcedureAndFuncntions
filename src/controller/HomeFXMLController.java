@@ -151,7 +151,7 @@ public class HomeFXMLController implements Initializable {
     @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
-                getTabelaSelecionada().getNome());
+                getTabelaSelecionada());
         inicializarComboboxCampoFiltro();
         setResultado();
         criarTabela();
@@ -178,9 +178,13 @@ public class HomeFXMLController implements Initializable {
         return nomeBanco;
     }
 
-    public Tabela getTabelaSelecionada() {
-        Tabela nomeTabela = listViewTabela.getSelectionModel().getSelectedItem();
-        return nomeTabela;
+    public String getTabelaSelecionada() {
+        String nomeTabela = "";        
+        if (listViewTabela.getSelectionModel().getSelectedItem()!=null) {
+            nomeTabela = listViewTabela.getSelectionModel().getSelectedItem().getNome();
+            return nomeTabela;
+        }
+        return "";
     }
 
     @FXML
@@ -205,12 +209,12 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void setResultado() {
-        
+
         query.setCamposSelecionados(camposSelecionados);
         query.setFiltrosSelecionados(filtrosSelecionados);
         query.setTabelasRelacionadas(tabelasRelacionadas);
         query.setCamposOrdenadosPor(camposOrdenadosPor);
-        query.setTabelaSelecionada(getTabelaSelecionada().getNome());
+        query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQuery());
 
     }
@@ -229,7 +233,7 @@ public class HomeFXMLController implements Initializable {
             }
         });
 
-        TableColumn<Campo, String> nomeColuna = new TableColumn<>(getTabelaSelecionada().getNome());
+        TableColumn<Campo, String> nomeColuna = new TableColumn<>(getTabelaSelecionada());
         nomeColuna.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nomeColuna.setSortable(false);
 
@@ -255,7 +259,7 @@ public class HomeFXMLController implements Initializable {
         tabPaneTabela.setLayoutY(10);
 
         Tab tab = new Tab();
-        tab.setText(getTabelaSelecionada().getNome());
+        tab.setText(getTabelaSelecionada());
         tab.setContent(tabelaView);
 
         tabPaneTabela.getTabs().add(tab);
@@ -340,7 +344,7 @@ public class HomeFXMLController implements Initializable {
 
         //acumula as tabelas referencias 
         List<Tabela> listAux = tabelaDAO.referenciadas(getBancoSelecionado().getNome(),
-                getTabelaSelecionada().getNome());
+                getTabelaSelecionada());
         for (int i = 0; i < listAux.size(); i++) {
             tabelasReferenciadas.add(listAux.get(i));
 
@@ -349,7 +353,7 @@ public class HomeFXMLController implements Initializable {
             System.out.println(tabelasReferenciadas.get(i).getNomeReferenciada());
         }
 
-        tabelasCriadas = tabela.setTabelasCriadas(getTabelaSelecionada().getNome(),
+        tabelasCriadas = tabela.setTabelasCriadas(getTabelaSelecionada(),
                 campos, tabelasCriadas);
 
         tabelasRelacionadas = tabela.verificaRelacionameto(tabelasRelacionadas,
