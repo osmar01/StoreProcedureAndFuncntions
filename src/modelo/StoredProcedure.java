@@ -17,7 +17,6 @@ public class StoredProcedure {
     private String nome;    
     private List<Parametro> parametros = new ArrayList<>();
     private ExpressaoSQL query;
-    private String procedure;
 
     final String COMECO = "DELIMITER $$\n";
     final String TERMINO = "DELIMITER $$";
@@ -28,7 +27,8 @@ public class StoredProcedure {
     public StoredProcedure() {
     }
 
-    public String storedProcedure(String query) {
+    public String gerarStoredProcedure(String query) {
+    String procedure="";
         
         String parametro = "";
         tornarParametro();
@@ -82,13 +82,4 @@ public class StoredProcedure {
     public void setQuery(ExpressaoSQL query) {
         this.query = query;
     }
-
-    public String getResultado() {
-        return procedure;
-    }
-
-    public void setResultado(String resultado) {
-        this.procedure = resultado;
-    }
-    
 }

@@ -15,19 +15,13 @@ import java.util.List;
 public class ExpressaoSQL {
 
     private String tipo;
-    private String tabelaSelecionada;
-    private List relacionamento;
+    private String tabelaSelecionada;    
     private List<Campo> campos;
     private List<Campo> camposSelecionados;
     private List<Campo> filtrosSelecionados;
     private List<Tabela> tabelasRelacionadas;
     private List<Campo> camposOrdenadosPor ;
-
-    public String gerarExpressaoSQL(Tabela tabela, List<Campo> campos) {
-
-        return null;
-    }
-
+   
     public String getQuery() {
         String campo = "";
         String filtro = "";
@@ -102,14 +96,6 @@ public class ExpressaoSQL {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
-    }
-
-    public List getRelacionamento() {
-        return relacionamento;
-    }
-
-    public void setRelacionamento(List relacionamento) {
-        this.relacionamento = relacionamento;
     }
 
     public List<Campo> getCampos() {

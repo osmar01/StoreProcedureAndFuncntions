@@ -69,7 +69,7 @@ public class GerarSPlFXMLController implements Initializable {
         procedures.setNome(txtNomeProcedure.getText());
         procedures.setParametros(parametros);
         
-        txtAreaResultFinal.setText(procedures.storedProcedure(resultado));
+        txtAreaResultFinal.setText(procedures.gerarStoredProcedure(resultado));
 
     }
 
