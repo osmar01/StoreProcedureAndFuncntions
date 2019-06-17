@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import modelo.Campo;
+import modelo.ExpressaoSQL;
 import modelo.Parametro;
 import modelo.StoredProcedure;
 
@@ -25,19 +26,14 @@ import modelo.StoredProcedure;
  */
 public class GerarSPlFXMLController implements Initializable {
 
-        
-    public List<Parametro> parametros;    
-    
-    private StoredProcedure procedures = new StoredProcedure();
-    
-    public String resultado = "";
-    
+    private ExpressaoSQL query;
+    private StoredProcedure procedure = new StoredProcedure();
+    String textoFinal;
+
     @FXML
     private Button btnGerarSP;
     @FXML
     private TextArea txtAreaResultFinal;
-
-    
     @FXML
     private TextField txtNomeProcedure;
 
@@ -49,28 +45,17 @@ public class GerarSPlFXMLController implements Initializable {
 
     }
 
-    public void setResultado(String resultado) {
-        this.resultado = resultado;        
+    @FXML
+    private void inicializaStoredProcedure() {
+        procedure.setNome(txtNomeProcedure.getText());
+        procedure.setQuery(query);
+        textoFinal = procedure.gerarStoredProcedure();
+        txtAreaResultFinal.setText(textoFinal);
+
     }
 
-    public void setParametros(List<Campo> campos) {
-        parametros = new ArrayList<>();
-        for (int i = 0; i < campos.size(); i++) {
-            Parametro p = new Parametro();
-            p.setNome(campos.get(i).getNome());
-            p.setTipo(campos.get(i).getTipo());
-
-            parametros.add(p);
-        }              
-    }         
-   
-    @FXML
-    private void gerarStoredProcedure(){
-        procedures.setNome(txtNomeProcedure.getText());
-        procedures.setParametros(parametros);
-        
-        txtAreaResultFinal.setText(procedures.gerarStoredProcedure(resultado));
-
+    public void setQueryReference(ExpressaoSQL query) {
+        this.query = query;
     }
 
 }

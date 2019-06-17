@@ -158,6 +158,7 @@ public class HomeFXMLController implements Initializable {
         camposSelecionadosExibir();
         adicionarCampoOrdenarPorCrescente();
         adicionarCampoOrdenarPorDescrescente();
+        adicionarCampoAgrupado();
     }
 
     public void inicializarComboboxCampoFiltro() {
@@ -463,6 +464,9 @@ public class HomeFXMLController implements Initializable {
         }
     }
 
+    public void adicionarCampoAgrupado(){
+    }
+    
     @FXML
     public void adicionarCamposFiltrar() {
         Campo cmpo = new Campo();
@@ -554,11 +558,8 @@ public class HomeFXMLController implements Initializable {
                 loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
                 Parent root = loader.load();
                 GerarSPlFXMLController spController = loader.getController();
-                System.out.println(textAreaResultado.getText());
-                tornarParametro();
-                spController.setResultado(this.textAreaResultado.getText());
-                spController.setParametros(filtrosSelecionados);
-
+                //System.out.println(textAreaResultado.getText());                
+                spController.setQueryReference(query);
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();

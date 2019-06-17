@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -10,7 +11,10 @@
    <children>
       <HBox alignment="CENTER" layoutX="5.0" layoutY="46.0" prefHeight="17.0" prefWidth="582.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Label alignment="CENTER" layoutX="490.0" layoutY="46.0" prefHeight="17.0" prefWidth="97.0" text="Stored Procedure" textAlignment="CENTER" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="437.0" />
+            <Label alignment="CENTER" layoutX="490.0" layoutY="46.0" prefHeight="17.0" prefWidth="122.0" text="Stored Procedure" textAlignment="CENTER" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="437.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
          </children>
       </HBox>
       <HBox alignment="CENTER" layoutY="77.0" prefHeight="25.0" prefWidth="1022.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -28,7 +32,7 @@
       </HBox>
       <HBox alignment="TOP_CENTER" layoutX="253.0" layoutY="135.0" prefHeight="30.0" prefWidth="511.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="btnGerarSP" alignment="CENTER" mnemonicParsing="false" onAction="#gerarStoredProcedure" prefHeight="30.0" prefWidth="109.0" text="Gerar" textAlignment="CENTER" />
+            <Button fx:id="btnGerarSP" alignment="CENTER" mnemonicParsing="false" onAction="#inicializaStoredProcedure" prefHeight="30.0" prefWidth="109.0" text="Gerar" textAlignment="CENTER" />
          </children>
       </HBox>
       <HBox alignment="CENTER" layoutX="259.0" layoutY="177.0" prefHeight="17.0" prefWidth="503.0" AnchorPane.leftAnchor="259.0" AnchorPane.rightAnchor="260.0">

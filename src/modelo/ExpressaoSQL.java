@@ -20,7 +20,7 @@ public class ExpressaoSQL {
     private List<Campo> camposSelecionados;
     private List<Campo> filtrosSelecionados;
     private List<Tabela> tabelasRelacionadas;
-    private List<Campo> camposOrdenadosPor ;
+    private List<Campo> camposOrdenadosPor;
    
     public String getQuery() {
         String campo = "";
