@@ -172,12 +172,13 @@
                         <Button layoutX="550.0" layoutY="226.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
                         <RadioButton fx:id="radioFunction" layoutX="688.0" layoutY="85.0" mnemonicParsing="false" text="Function" />
                         <RadioButton fx:id="radioStoredProcedure" layoutX="688.0" layoutY="60.0" mnemonicParsing="false" text="Stored Procedure" />
+                        <Button fx:id="btnAlterar" layoutX="127.0" layoutY="190.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" prefHeight="25.0" prefWidth="67.0" text="Alterar" />
                             </children>
                         </Pane>
                     </children>
                 </AnchorPane>
             </content>
         </TitledPane>
-        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="432.0" prefWidth="1056.0" />
+        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="401.0" prefWidth="1047.0" style="-fx-background-color: e3f2fd;" />
     </children>
 </AnchorPane>
