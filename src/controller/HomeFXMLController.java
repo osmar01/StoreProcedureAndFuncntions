@@ -62,6 +62,7 @@ public class HomeFXMLController implements Initializable {
 
     private ObservableList<String> observableFiltro;
     private ObservableList<String> observableOperador;
+    private ObservableList<String> observableAgrupador;
 
     private TabelaDAO tabelaDAO = new TabelaDAO();
     private Tabela tabela = new Tabela();
@@ -76,6 +77,7 @@ public class HomeFXMLController implements Initializable {
     private List<Campo> campos;
     private List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
+    private List<String> agrupadoresSelecionados = new ArrayList<>();
     private List<Campo> parametros = new ArrayList<>();
     private List<Campo> camposOrdenadosPor = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
@@ -122,6 +124,10 @@ public class HomeFXMLController implements Initializable {
     private double initX;
     private double initY;
     private Point2D dragAnchor;
+    @FXML
+    private Button btnAlterar;
+    @FXML
+    private ComboBox<String> comboboxAgrupar;
 
     /**
      * Initializes the controller class.
@@ -134,6 +140,7 @@ public class HomeFXMLController implements Initializable {
         inicializarListViewBancos();
         inicializarComboboxFiltro();
         inicializarComboboxOperadorLogico();
+        inicializarComboboxAgrupadores();
         inicializaRadioButton();
 
     }
@@ -147,7 +154,11 @@ public class HomeFXMLController implements Initializable {
         observableOperador = FXCollections.observableArrayList(cmp.getOperadores());
         comboboxOperadorLogico.setItems(observableOperador);
     }
-
+    
+    public void inicializarComboboxAgrupadores(){
+        observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadores());
+        comboboxAgrupar.setItems(observableAgrupador);
+    }
     @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
@@ -157,8 +168,7 @@ public class HomeFXMLController implements Initializable {
         criarTabela();
         camposSelecionadosExibir();
         adicionarCampoOrdenarPorCrescente();
-        adicionarCampoOrdenarPorDescrescente();
-        adicionarCampoAgrupado();
+        adicionarCampoOrdenarPorDescrescente();        
     }
 
     public void inicializarComboboxCampoFiltro() {
@@ -369,14 +379,16 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void limpar() {
+        
         tabelasRelacionadas.clear();
         tabelasReferenciadas.clear();
         tabelasCriadas.clear();
         listViewTabela.getSelectionModel().clearSelection();
         filtrosSelecionados.clear();
-        areaTrabalho.getChildren().clear();
+        camposSelecionados.clear();
         setResultado();
         textAreaResultado.clear();
+        areaTrabalho.getChildren().clear();
         comboboxCampoFiltro.setItems(null);
 
     }
@@ -464,7 +476,17 @@ public class HomeFXMLController implements Initializable {
         }
     }
 
-    public void adicionarCampoAgrupado(){
+    @FXML
+    public void adicionarCampoAgrupador(){        
+        String nome = "";
+        if(!comboboxAgrupar.getSelectionModel().isEmpty()){
+            nome = comboboxAgrupar.getSelectionModel().getSelectedItem();
+            agrupadoresSelecionados.add(nome);
+        }
+        for (int i = 0; i < agrupadoresSelecionados.size(); i++) {
+            System.out.println(agrupadoresSelecionados.get(i));
+        }
+        
     }
     
     @FXML
@@ -497,13 +519,6 @@ public class HomeFXMLController implements Initializable {
             }
         }
         return tipoCampo;
-    }
-
-    public void tornarParametro() {
-        for (int i = 0; i < filtrosSelecionados.size(); i++) {
-            filtrosSelecionados.get(i).setValor("param_" + i);
-        }
-        setResultado();
     }
 
     @FXML

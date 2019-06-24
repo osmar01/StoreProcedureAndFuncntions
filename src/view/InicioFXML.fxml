@@ -135,7 +135,8 @@
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox layoutX="895.0" layoutY="59.0" prefHeight="25.0" prefWidth="108.0" promptText="Selecione" />
+                                    <ComboBox fx:id="comboboxAgrupar" layoutX="895.0" layoutY="59.0" prefHeight="25.0" prefWidth="102.0" promptText="Selecione" />
+                                    <Button fx:id="btnAdionarAgrupador" layoutX="1008.0" layoutY="60.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" prefHeight="25.0" prefWidth="29.0" text="+" />
                                             </children>
                                         </AnchorPane>
                                     </content>
@@ -179,6 +180,6 @@
                 </AnchorPane>
             </content>
         </TitledPane>
-        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="401.0" prefWidth="1047.0" style="-fx-background-color: e3f2fd;" />
+        <AnchorPane fx:id="areaTrabalho" layoutX="222.0" layoutY="36.0" prefHeight="401.0" prefWidth="1047.0" style="-fx-background-color: e3f2fd;" AnchorPane.bottomAnchor="463.0" AnchorPane.leftAnchor="222.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="36.0" />
     </children>
 </AnchorPane>

@@ -49,6 +49,17 @@ public class Campo {
         return operadores;
     }
 
+    public List<String> getAgrupadores() {
+        List<String> agrupadores = new ArrayList<>();
+        agrupadores.add("Selecione");
+        agrupadores.add("COUNT()");
+        agrupadores.add("SUM()");
+        agrupadores.add("MAX()");
+        agrupadores.add("MIN()");
+        agrupadores.add("AVG()");
+        return agrupadores;
+    }
+
     public String getNome() {
         return nome;
     }
