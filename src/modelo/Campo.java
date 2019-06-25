@@ -7,7 +7,10 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -22,10 +25,21 @@ public class Campo {
     private String valor;
     private String operador;
     private CheckBox checkbox;
+    private ComboBox comboboxFiltro;
+    private ComboBox comboboxOperador;
     List<Campo> camposSelecionados = new ArrayList<>();
+    private ObservableList<String> observableFiltros;
+    private ObservableList<String> observableOperadores;
 
     public Campo() {
         checkbox = new CheckBox();
+        comboboxFiltro = new ComboBox<String>();
+        observableFiltros = FXCollections.observableArrayList(getfiltros());
+        comboboxFiltro.setItems(observableFiltros);
+        comboboxOperador = new ComboBox<String>();
+        observableOperadores = FXCollections.observableArrayList(getOperadores());
+        comboboxOperador.setItems(observableOperadores);
+        
     }
 
     public List<String> getfiltros() {
@@ -52,11 +66,11 @@ public class Campo {
     public List<String> getAgrupadores() {
         List<String> agrupadores = new ArrayList<>();
         agrupadores.add("Selecione");
-        agrupadores.add("COUNT()");
-        agrupadores.add("SUM()");
-        agrupadores.add("MAX()");
-        agrupadores.add("MIN()");
-        agrupadores.add("AVG()");
+        agrupadores.add("COUNT");
+        agrupadores.add("SUM");
+        agrupadores.add("MAX");
+        agrupadores.add("MIN");
+        agrupadores.add("AVG");
         return agrupadores;
     }
 
@@ -120,5 +134,23 @@ public class Campo {
     public String toString() {
         return nome;
     }
+
+    public ComboBox getComboboxFiltro() {
+        return comboboxFiltro;
+    }
+
+    public void setComboboxFiltro(ComboBox comboboxFiltro) {
+        this.comboboxFiltro = comboboxFiltro;
+    }
+
+    public ComboBox getComboboxOperador() {
+        return comboboxOperador;
+    }
+
+    public void setComboboxOperador(ComboBox comboboxOperador) {
+        this.comboboxOperador = comboboxOperador;
+    }
+    
+    
 
 }

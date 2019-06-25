@@ -81,7 +81,7 @@
                     <children>
                         <TabPane layoutX="7.0" layoutY="5.0" prefHeight="145.0" prefWidth="1061.0" style="-fx-background-color: #e3f2fd;" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0">
                             <tabs>
-                                <Tab text="Select">
+                                <Tab fx:id="tabSelect" text="Select">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="179.0" prefWidth="1061.0">
                                             <children>
@@ -90,11 +90,11 @@
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <ComboBox fx:id="comboboxCampoFiltro" layoutX="17.0" layoutY="61.0" pickOnBounds="false" prefHeight="25.0" prefWidth="135.0" promptText="Selecione" />
+                                                <ComboBox fx:id="comboboxCampoFiltro" layoutX="17.0" layoutY="61.0" pickOnBounds="false" prefHeight="25.0" prefWidth="150.0" promptText="Selecione" />
                                                 <ComboBox fx:id="comboboxFiltro" layoutX="185.0" layoutY="61.0" prefHeight="25.0" prefWidth="95.0" promptText="Selecione" />
-                                                <TextField fx:id="campoCriterio" layoutX="301.0" layoutY="61.0" prefHeight="25.0" prefWidth="119.0" />
+                                                <TextField fx:id="campoCriterio" layoutX="301.0" layoutY="61.0" prefHeight="25.0" prefWidth="128.0" />
                                                 <ComboBox fx:id="comboboxOperadorLogico" layoutX="450.0" layoutY="61.0" prefHeight="25.0" prefWidth="115.0" promptText="Selecione" visibleRowCount="4" />
-                                                <Button fx:id="btnAdd" layoutX="578.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" prefHeight="25.0" prefWidth="71.0" text="Adicionar" />
+                                                <Button fx:id="btnAdd" layoutX="578.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" prefHeight="25.0" prefWidth="42.0" text="+" />
                                                 <Label layoutX="17.0" layoutY="36.0" text="Campos">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
@@ -111,69 +111,108 @@
                                                     </font>
                                                 </Label>
                                                 <Separator layoutX="17.0" layoutY="7.0" prefHeight="13.0" prefWidth="1016.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" />
-                                                <Separator layoutX="720.0" layoutY="57.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
-                                                <Label layoutX="772.0" layoutY="25.0" text="Ordenar por">
+                                                <Separator layoutX="663.0" layoutY="57.0" prefHeight="7.0" prefWidth="60.0" rotate="90.0" />
+                                                <Label layoutX="710.0" layoutY="26.0" text="Ordenar por">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <CheckBox fx:id="checkBoxCrescente" layoutX="770.0" layoutY="48.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
+                                                <CheckBox fx:id="checkBoxCrescente" layoutX="708.0" layoutY="49.0" mnemonicParsing="false" onAction="#marcarCheckBoxCrescente" text="Crescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="770.0" layoutY="69.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
+                                                <CheckBox fx:id="checkBoxDecrescente" layoutX="708.0" layoutY="70.0" mnemonicParsing="false" onAction="#marcarCheckBoxDecrescente" text="Decrescente">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
                                                 </CheckBox>
-                                    <Button fx:id="btnRemover" layoutX="659.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" prefHeight="25.0" prefWidth="67.0" text="Remover" />
+                                    <Button fx:id="btnRemover" layoutX="634.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" prefHeight="25.0" prefWidth="41.0" text="-" />
                                     <Separator layoutX="27.0" layoutY="101.0" prefHeight="0.0" prefWidth="1016.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="1.0" />
-                                    <Separator layoutX="851.0" layoutY="48.0" prefHeight="18.0" prefWidth="61.0" rotate="90.0" />
-                                    <Label layoutX="895.0" layoutY="26.0" text="Agrupar por">
+                                    <Separator layoutX="789.0" layoutY="49.0" prefHeight="18.0" prefWidth="61.0" rotate="90.0" />
+                                    <Label layoutX="833.0" layoutY="27.0" text="Agrupar por">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="comboboxAgrupar" layoutX="895.0" layoutY="59.0" prefHeight="25.0" prefWidth="102.0" promptText="Selecione" />
-                                    <Button fx:id="btnAdionarAgrupador" layoutX="1008.0" layoutY="60.0" mnemonicParsing="false" onAction="#adicionarCamposFiltrar" prefHeight="25.0" prefWidth="29.0" text="+" />
+                                    <ComboBox fx:id="comboboxAgrupar" layoutX="833.0" layoutY="60.0" prefHeight="25.0" prefWidth="102.0" promptText="Selecione" />
+                                    <Button fx:id="btnAdionarAgrupador" layoutX="949.0" layoutY="61.0" mnemonicParsing="false" onAction="#adicionarCampoAgrupador" prefHeight="25.0" prefWidth="37.0" text="+" />
+                                    <Button fx:id="btnRemoverAgrupador" layoutX="997.0" layoutY="61.0" mnemonicParsing="false" onAction="#removerCampoAgrupador" prefHeight="25.0" prefWidth="37.0" text="-" />
                                             </children>
                                         </AnchorPane>
                                     </content>
                                 </Tab>
-                                <Tab text="Insert">
+                                <Tab fx:id="tabInsert" text="Insert">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="236.0" layoutY="48.0" text="Campos:">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="comboboxCamposInsert" layoutX="300.0" layoutY="46.0" prefWidth="150.0" promptText="Selecione" />
+                                    <TextField fx:id="txtValorInput" layoutX="457.0" layoutY="46.0" promptText="Valor" />
+                                    <Button fx:id="btnAdicionarInput" layoutX="615.0" layoutY="46.0" mnemonicParsing="false" text="Adicionar" />
+                                    <Button fx:id="btnRemoverInput" layoutX="692.0" layoutY="46.0" mnemonicParsing="false" text="Remover" />
+                                    <Label layoutX="483.0" layoutY="40.0">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children></AnchorPane>
                                     </content>
                                 </Tab>
-                                <Tab text="Delete">
+                                <Tab fx:id="tabDelete" text="Delete">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="236.0" layoutY="48.0" text="Campos:" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="comboboxDelete" layoutX="299.0" layoutY="46.0" prefWidth="150.0" />
+                                    <TextField fx:id="txtValorDelete" layoutX="457.0" layoutY="46.0" promptText="Valor" />
+                                    <Button fx:id="btnAdicionarDelete" layoutX="615.0" layoutY="46.0" mnemonicParsing="false" text="Adicionar" />
+                                    <Button fx:id="btnRemoverDelete" layoutX="690.0" layoutY="46.0" mnemonicParsing="false" text="Remover" />
+                                 </children></AnchorPane>
                                     </content>
                                 </Tab>
-                                <Tab text="Update">
+                                <Tab fx:id="tabUpdate" text="Update">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="236.0" layoutY="48.0" text="Campos:">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox layoutX="299.0" layoutY="46.0" prefWidth="150.0" />
+                                    <TextField layoutX="457.0" layoutY="46.0" promptText="Valor" />
+                                    <Button layoutX="615.0" layoutY="46.0" mnemonicParsing="false" text="Adicionar" />
+                                    <Button layoutX="690.0" layoutY="46.0" mnemonicParsing="false" text="Remover" />
+                                 </children></AnchorPane>
                                     </content>
                                 </Tab>
                             </tabs>
                         </TabPane>
                         <Pane layoutX="19.6" layoutY="150.0" prefHeight="276.0" prefWidth="1050.0" style="-fx-background-color: #e3f2fd;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                             <children>
-                                <TextArea fx:id="textAreaResultado" layoutX="200.0" layoutY="34.0" prefHeight="181.0" prefWidth="473.0" />
-                                <Label layoutX="230.0" layoutY="8.0" text="Resultado da expressao SQL">
+                                <TextArea fx:id="textAreaResultado" layoutX="112.0" layoutY="27.0" prefHeight="188.0" prefWidth="713.0" />
+                                <Label layoutX="112.0" layoutY="4.0" text="Resultado da expressao SQL">
                                     <font>
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <Button layoutX="246.0" layoutY="226.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
-                                <Button layoutX="447.0" layoutY="226.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
-                                <ComboBox layoutX="346.0" layoutY="226.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
-                                <Button fx:id="btnGerarStoredProcedure" layoutX="688.0" layoutY="124.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="25.0" prefWidth="125.0" text="Criar" />
-                        <Button layoutX="550.0" layoutY="226.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
-                        <RadioButton fx:id="radioFunction" layoutX="688.0" layoutY="85.0" mnemonicParsing="false" text="Function" />
-                        <RadioButton fx:id="radioStoredProcedure" layoutX="688.0" layoutY="60.0" mnemonicParsing="false" text="Stored Procedure" />
-                        <Button fx:id="btnAlterar" layoutX="127.0" layoutY="190.0" mnemonicParsing="false" onAction="#removerCamposFiltrados" prefHeight="25.0" prefWidth="67.0" text="Alterar" />
+                                <Button layoutX="273.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
+                                <Button layoutX="474.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Executar" />
+                                <ComboBox layoutX="373.0" layoutY="224.0" prefHeight="25.0" prefWidth="90.0" promptText="Exportar" />
+                                <Button fx:id="btnGerarStoredProcedure" layoutX="848.0" layoutY="134.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="25.0" prefWidth="125.0" text="Criar" />
+                        <Button layoutX="577.0" layoutY="224.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
+                        <RadioButton fx:id="radioFunction" layoutX="848.0" layoutY="95.0" mnemonicParsing="false" text="Function" />
+                        <RadioButton fx:id="radioStoredProcedure" layoutX="848.0" layoutY="70.0" mnemonicParsing="false" text="Stored Procedure" />
+                        <Button fx:id="btnAlterar" layoutX="38.0" layoutY="190.0" mnemonicParsing="false" onAction="#abrirTelaAlteracao" prefHeight="25.0" prefWidth="67.0" text="Alterar" />
                             </children>
                         </Pane>
                     </children>

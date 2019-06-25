@@ -31,6 +31,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -78,6 +79,7 @@ public class HomeFXMLController implements Initializable {
     private List<Campo> camposSelecionados = new ArrayList<>();
     private List<Campo> filtrosSelecionados = new ArrayList<>();
     private List<String> agrupadoresSelecionados = new ArrayList<>();
+    private List<String> camposAgrupadores = new ArrayList<>();
     private List<Campo> parametros = new ArrayList<>();
     private List<Campo> camposOrdenadosPor = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
@@ -128,6 +130,34 @@ public class HomeFXMLController implements Initializable {
     private Button btnAlterar;
     @FXML
     private ComboBox<String> comboboxAgrupar;
+    @FXML
+    private Tab tabSelect;
+    @FXML
+    private Button btnAdionarAgrupador;
+    @FXML
+    private Button btnRemoverAgrupador;
+    @FXML
+    private Tab tabInsert;
+    @FXML
+    private ComboBox<?> comboboxCamposInsert;
+    @FXML
+    private TextField txtValorInput;
+    @FXML
+    private Button btnAdicionarInput;
+    @FXML
+    private Button btnRemoverInput;
+    @FXML
+    private Tab tabDelete;
+    @FXML
+    private ComboBox<?> comboboxDelete;
+    @FXML
+    private TextField txtValorDelete;
+    @FXML
+    private Button btnAdicionarDelete;
+    @FXML
+    private Button btnRemoverDelete;
+    @FXML
+    private Tab tabUpdate;
 
     /**
      * Initializes the controller class.
@@ -154,11 +184,12 @@ public class HomeFXMLController implements Initializable {
         observableOperador = FXCollections.observableArrayList(cmp.getOperadores());
         comboboxOperadorLogico.setItems(observableOperador);
     }
-    
-    public void inicializarComboboxAgrupadores(){
+
+    public void inicializarComboboxAgrupadores() {
         observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadores());
         comboboxAgrupar.setItems(observableAgrupador);
     }
+
     @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
@@ -168,7 +199,7 @@ public class HomeFXMLController implements Initializable {
         criarTabela();
         camposSelecionadosExibir();
         adicionarCampoOrdenarPorCrescente();
-        adicionarCampoOrdenarPorDescrescente();        
+        adicionarCampoOrdenarPorDescrescente();
     }
 
     public void inicializarComboboxCampoFiltro() {
@@ -190,8 +221,8 @@ public class HomeFXMLController implements Initializable {
     }
 
     public String getTabelaSelecionada() {
-        String nomeTabela = "";        
-        if (listViewTabela.getSelectionModel().getSelectedItem()!=null) {
+        String nomeTabela = "";
+        if (listViewTabela.getSelectionModel().getSelectedItem() != null) {
             nomeTabela = listViewTabela.getSelectionModel().getSelectedItem().getNome();
             return nomeTabela;
         }
@@ -225,6 +256,8 @@ public class HomeFXMLController implements Initializable {
         query.setFiltrosSelecionados(filtrosSelecionados);
         query.setTabelasRelacionadas(tabelasRelacionadas);
         query.setCamposOrdenadosPor(camposOrdenadosPor);
+        query.setAgrupadoresSelecionados(agrupadoresSelecionados);
+        query.setCamposAgrupados(camposAgrupadores);
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQuery());
 
@@ -379,7 +412,7 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void limpar() {
-        
+
         tabelasRelacionadas.clear();
         tabelasReferenciadas.clear();
         tabelasCriadas.clear();
@@ -469,7 +502,6 @@ public class HomeFXMLController implements Initializable {
                     if (!campo.getCheckbox().isSelected()) {
                         camposSelecionados.remove(campo);
                         setResultado();
-
                     }
                 }
             });
@@ -477,18 +509,56 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
-    public void adicionarCampoAgrupador(){        
-        String nome = "";
-        if(!comboboxAgrupar.getSelectionModel().isEmpty()){
-            nome = comboboxAgrupar.getSelectionModel().getSelectedItem();
-            agrupadoresSelecionados.add(nome);
+    public void adicionarCampoAgrupador() {
+        String group = "";
+        if (!comboboxAgrupar.getSelectionModel().isEmpty()) {
+            group = comboboxAgrupar.getSelectionModel().getSelectedItem();
+            if (!group.equals("Selecione")) {
+                group = group + "(" + comboboxCampoFiltro.getSelectionModel().getSelectedItem() + ")";
+                if (!agrupadoresSelecionados.contains(group)) {
+                    agrupadoresSelecionados.add(group);
+                    setResultado();
+                }
+            } else {
+                group = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+                camposAgrupadores.add(group);
+                setResultado();
+            }
+        }
+        comboboxAgrupar.getSelectionModel().select(0);
+        for (int i = 0; i < agrupadoresSelecionados.size(); i++) {
+            System.out.println(agrupadoresSelecionados.get(i));
+        }
+        for (int i = 0; i < camposAgrupadores.size(); i++) {
+            System.out.println(camposAgrupadores.get(i));
+        }
+    }
+
+    @FXML
+    public void removerCampoAgrupador() {
+        String group = "";
+        if (!comboboxAgrupar.getSelectionModel().isEmpty()) {
+            group = comboboxAgrupar.getSelectionModel().getSelectedItem();
+            if (!group.equals("Selecione")) {
+                group = group + "(" + comboboxCampoFiltro.getSelectionModel().getSelectedItem() + ")";
+                if (agrupadoresSelecionados.contains(group)) {
+                    agrupadoresSelecionados.remove(group);
+                    setResultado();
+                }
+            } else {
+                group = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+                camposAgrupadores.remove(group);
+                setResultado();
+            }
         }
         for (int i = 0; i < agrupadoresSelecionados.size(); i++) {
             System.out.println(agrupadoresSelecionados.get(i));
         }
-        
+        for (int i = 0; i < camposAgrupadores.size(); i++) {
+            System.out.println(camposAgrupadores.get(i));
+        }
     }
-    
+
     @FXML
     public void adicionarCamposFiltrar() {
         Campo cmpo = new Campo();
@@ -561,6 +631,21 @@ public class HomeFXMLController implements Initializable {
             System.out.println("Selecione uma opção!");
             return false;
         }
+    }
+
+    
+    @FXML
+    public void abrirTelaAlteracao() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ResultFXML.fxml"));
+        Parent root = loader.load();
+        ResultFXMLController controller = loader.getController();
+        controller.setControllerHome(this);
+        controller.setListFiltrosSelecionados(filtrosSelecionados);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

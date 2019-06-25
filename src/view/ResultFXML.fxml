@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="193.0" prefWidth="468.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultFXMLController">
+   <children>
+      <TableView fx:id="tabelaAlteracao" layoutY="31.0" prefHeight="159.0" prefWidth="466.0">
+        <columns>
+          <TableColumn fx:id="colunacampo" editable="false" prefWidth="144.0" sortable="false" text="Campo" />
+            <TableColumn fx:id="colunaFiltro" editable="false" prefWidth="75.0" text="Filtro" />
+          <TableColumn fx:id="colunaCriterio" minWidth="6.0" onEditCommit="#alterarCriterio" prefWidth="122.0" text="Critério" />
+            <TableColumn fx:id="colunaOperador" editable="false" prefWidth="124.0" sortable="false" text="Operador" />
+        </columns>
+      </TableView>
+      <Label layoutX="10.0" layoutY="8.0" text="Alteração de Critério" />
+   </children>
+</AnchorPane>
