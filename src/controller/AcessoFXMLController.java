@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -61,6 +62,7 @@ public class AcessoFXMLController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/view/InicioFXML.fxml"));        
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagem/icone.png")));
         stage.show();
         conectarbtn.getScene().getWindow().hide();
 
