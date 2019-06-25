@@ -23,6 +23,11 @@ public class ExpressaoSQL {
     private List<Campo> camposOrdenadosPor;
     private List<String> camposAgrupados;
     private List<String> agrupadoresSelecionados;
+    private List<Campo> camposInsert;
+    private List<Campo> camposDelete;
+    private List<Campo> camposUpdates;
+    private List<Campo> camposUpdatesCondicao;
+    private List<Campo> camposInsertSelecionados;
 
     public String getQuery() {
         String campo = "";
@@ -35,11 +40,11 @@ public class ExpressaoSQL {
         String camposAgrupado = "";
 
         if (camposSelecionados.isEmpty()) {
-             if (!agrupadoresSelecionados.isEmpty()) {
+            if (!agrupadoresSelecionados.isEmpty()) {
                 campo = "";
-             }else{
+            } else {
                 campo = " * ";
-             }
+            }
         } else {
             campo = camposSelecionados.get(0).toString();
             for (int i = 1; i < camposSelecionados.size(); i++) {
@@ -96,7 +101,7 @@ public class ExpressaoSQL {
                 agrupador = ", " + agrupadoresSelecionados.get(0);
             }
             for (int i = 1; i < agrupadoresSelecionados.size(); i++) {
-                agrupador = ", "+agrupador + agrupadoresSelecionados.get(i);
+                agrupador = ", " + agrupador + agrupadoresSelecionados.get(i);
             }
         }
 
@@ -111,6 +116,57 @@ public class ExpressaoSQL {
                 + camposAgrupado + ordenador + pontoVirgula;
     }
 
+    public String getQueryInsert() {
+        String camposInserir = "";
+        String valoresInserir = "";
+        String queryInsert;
+        if (!camposInsert.isEmpty()) {
+            camposInserir = camposInsert.get(0).getNome();
+            for (int i = 1; i < camposInsert.size(); i++) {
+                camposInserir = camposInserir + ", " + camposInsert.get(i).getNome();                
+            }
+            valoresInserir = camposInsert.get(0).getValor();
+            for (int i = 1; i < camposInsert.size(); i++) {
+                valoresInserir = valoresInserir + ", " + camposInsert.get(i).getValor();                
+            }
+        }
+        return queryInsert = "INSERT INTO " + getTabelaSelecionada()+
+                " ("+ camposInserir+")" + "\nVALUES ("+ valoresInserir+");";
+
+    }
+    
+    public String getQueryDelete(){
+        String camposDel = "";        
+        String queryDelete;
+        if (!camposDelete.isEmpty()) {
+            camposDel = camposDelete.get(0).getNome()+" = '"+ camposDelete.get(0).getValor()+"'";
+            for (int i = 1; i < camposDelete.size(); i++) {
+                camposDel = camposDel + ", " + camposDelete.get(i).getNome()+" = '"+ camposDelete.get(0).getValor()+"'";                
+            }            
+        }
+        return queryDelete = "DELETE FROM " + getTabelaSelecionada()+
+                " WHERE "+ camposDel;
+    }
+    
+    public String getQueryUpdate(){
+        String camposUp = "";        
+        String camposUpdateCondicao = "";        
+        String queryUp;
+        if (!camposUpdates.isEmpty()) {
+            camposUp = camposUpdates.get(0).getNome()+" = '"+ camposUpdates.get(0).getValor()+"'";
+            for (int i = 1; i < camposUpdates.size(); i++) {
+                camposUp = camposUp + ", " + camposUpdates.get(i).getNome()+" = '"+ camposUpdates.get(0).getValor()+"'";                
+            }            
+            camposUpdateCondicao = camposUpdatesCondicao.get(0).getNome()+" = '"+ camposUpdatesCondicao.get(0).getValor()+"'";
+            for (int i = 1; i < camposUpdatesCondicao.size(); i++) {
+                camposUpdateCondicao = camposUpdateCondicao + ", " + camposUpdatesCondicao.get(i).getNome()+" = '"+ camposUpdatesCondicao.get(0).getValor()+"'";                
+            }            
+        }
+        return queryUp = "UPDATE " + getTabelaSelecionada()+ "\nSET "+
+                camposUp + "\nWHERE "+ camposUpdateCondicao+";";
+    }
+
+    
     public void salvarConsulta() {
 
     }
@@ -186,5 +242,27 @@ public class ExpressaoSQL {
     public void setAgrupadoresSelecionados(List<String> agrupadoresSelecionados) {
         this.agrupadoresSelecionados = agrupadoresSelecionados;
     }
+
+    public List<Campo> getCamposInsertSelecionados() {
+        return camposInsertSelecionados;
+    }
+
+    public void setCamposInsertSelecionados(List<Campo> camposInsertSelecionados) {
+        this.camposInsert = camposInsertSelecionados;
+        
+    }
+    public void setCamposDeleteSelecionados(List<Campo> camposDeleteSelecionados) {
+        this.camposDelete = camposDeleteSelecionados;
+        
+    }
+    public void setCamposUpdateSelecionados(List<Campo> camposUpdateSelecionados) {
+        this.camposUpdates = camposUpdateSelecionados;        
+    }
+    public void setCamposCondicaoUpdateSelecionados(List<Campo> camposCondicaoUpdateSelecionados) {
+        this.camposUpdatesCondicao = camposCondicaoUpdateSelecionados;
+        
+    }
+    
+    
 
 }

@@ -8,6 +8,9 @@ package controller;
 import dao.BancoDAO;
 import dao.CampoDAO;
 import dao.TabelaDAO;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +34,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -82,6 +84,10 @@ public class HomeFXMLController implements Initializable {
     private List<String> camposAgrupadores = new ArrayList<>();
     private List<Campo> parametros = new ArrayList<>();
     private List<Campo> camposOrdenadosPor = new ArrayList<>();
+    private List<Campo> camposInserir = new ArrayList<>();
+    private List<Campo> camposDelete = new ArrayList<>();
+    private List<Campo> camposUpdate = new ArrayList<>();
+    private List<Campo> camposUpdateCondicao = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
 
     private ExpressaoSQL query = new ExpressaoSQL();
@@ -139,9 +145,7 @@ public class HomeFXMLController implements Initializable {
     @FXML
     private Tab tabInsert;
     @FXML
-    private ComboBox<?> comboboxCamposInsert;
-    @FXML
-    private TextField txtValorInput;
+    private ComboBox<Campo> comboboxCamposInsert;
     @FXML
     private Button btnAdicionarInput;
     @FXML
@@ -149,7 +153,7 @@ public class HomeFXMLController implements Initializable {
     @FXML
     private Tab tabDelete;
     @FXML
-    private ComboBox<?> comboboxDelete;
+    private ComboBox<Campo> comboboxDelete;
     @FXML
     private TextField txtValorDelete;
     @FXML
@@ -158,6 +162,14 @@ public class HomeFXMLController implements Initializable {
     private Button btnRemoverDelete;
     @FXML
     private Tab tabUpdate;
+    @FXML
+    private TextField txtValorInsert;
+    @FXML
+    private ComboBox<Campo> comboboxUpdate;
+    @FXML
+    private TextField txtUpdateCampo;
+    @FXML
+    private TextField txtUpdateCondicao;
 
     /**
      * Initializes the controller class.
@@ -195,6 +207,9 @@ public class HomeFXMLController implements Initializable {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
                 getTabelaSelecionada());
         inicializarComboboxCampoFiltro();
+        inicializaComboboxCamposInserir();
+        inicializaComboboxCamposDelete();
+        inicializaComboboxCamposUpdate();
         setResultado();
         criarTabela();
         camposSelecionadosExibir();
@@ -251,7 +266,6 @@ public class HomeFXMLController implements Initializable {
     }
 
     public void setResultado() {
-
         query.setCamposSelecionados(camposSelecionados);
         query.setFiltrosSelecionados(filtrosSelecionados);
         query.setTabelasRelacionadas(tabelasRelacionadas);
@@ -423,6 +437,7 @@ public class HomeFXMLController implements Initializable {
         textAreaResultado.clear();
         areaTrabalho.getChildren().clear();
         comboboxCampoFiltro.setItems(null);
+        campoCriterio.clear();
 
     }
 
@@ -577,7 +592,10 @@ public class HomeFXMLController implements Initializable {
             filtrosSelecionados.add(cmpo);
             setResultado();
         }
-        System.out.println("Selecione um campo");
+        comboboxCampoFiltro.getSelectionModel().select(0);
+        comboboxFiltro.getSelectionModel().select(0);
+        comboboxOperadorLogico.getSelectionModel().select(0);
+        
     }
 
     //retorna o tipo do campo (varchar, int, double)
@@ -632,8 +650,105 @@ public class HomeFXMLController implements Initializable {
             return false;
         }
     }
-
     
+    //exportar -----------------------------------------------
+    @FXML
+    public void exportarConsulta(){
+        try {
+            // Conteudo
+            String content = textAreaResultado.getText();
+
+            // Cria arquivo
+            File file = new File("query.sql");
+
+            // Se o arquivo nao existir, ele gera
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Prepara para escrever no arquivo
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            // Escreve e fecha arquivo
+            bw.write(content);
+            bw.close();
+            } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//Delete ---------------------------------------------
+    public void inicializaComboboxCamposDelete(){
+        comboboxDelete.setItems(observableCampos);
+    }
+    @FXML
+    public void adicionarCamposDelete() {
+        Campo cmp = new Campo();
+        cmp.setNome(comboboxDelete.getSelectionModel().getSelectedItem().getNome());
+        cmp.setValor(txtValorDelete.getText());
+        camposDelete.add(cmp);        
+        setResultadoDelete();
+        comboboxDelete.getSelectionModel().select(0);
+    }
+    @FXML
+    public void setResultadoDelete(){
+        query.setCamposDeleteSelecionados(camposDelete);
+        query.setTabelaSelecionada(getTabelaSelecionada());
+        textAreaResultado.setText(query.getQueryDelete());
+    }
+
+    //Insert ----------------------------------------------
+    public void inicializaComboboxCamposInserir(){
+        comboboxCamposInsert.setItems(observableCampos);
+    }
+    
+    @FXML
+    public void adicionarCamposInserir() {
+        Campo cmp = new Campo();
+        cmp.setNome(comboboxCamposInsert.getSelectionModel().getSelectedItem().getNome());
+        cmp.setValor(txtValorInsert.getText());
+        camposInserir.add(cmp);        
+        setResultadoInsert();
+        comboboxCamposInsert.getSelectionModel().select(0);
+    }
+    @FXML
+    public void setResultadoInsert(){
+        query.setCamposInsertSelecionados(camposInserir);
+        query.setTabelaSelecionada(getTabelaSelecionada());
+        textAreaResultado.setText(query.getQueryInsert());
+    }
+    //Update -------------------------------------------------------
+    
+    public void inicializaComboboxCamposUpdate(){
+        comboboxUpdate.setItems(observableCampos);
+    }
+    
+    public void adicionarCamposUpdate() {
+        Campo cmp = new Campo();
+        cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
+        cmp.setValor(txtUpdateCampo.getText());
+        camposUpdate.add(cmp);        
+        setResultadoUpdate();
+        comboboxUpdate.getSelectionModel().select(0);
+    }
+    public void adicionarCamposUpdateCondicao() {
+        Campo cmp = new Campo();
+        cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
+        cmp.setValor(txtUpdateCondicao.getText());
+        camposUpdateCondicao.add(cmp);        
+        setResultadoUpdate();
+        comboboxUpdate.getSelectionModel().select(0);
+    }
+    public void setResultadoUpdate(){
+        query.setCamposUpdateSelecionados(camposUpdate);
+        query.setCamposCondicaoUpdateSelecionados(camposUpdateCondicao);
+        query.setTabelaSelecionada(getTabelaSelecionada());
+        textAreaResultado.setText(query.getQueryUpdate());
+    }
+    // Telas ------------------------------------------------
+
     @FXML
     public void abrirTelaAlteracao() throws IOException {
         Stage stage = new Stage();
