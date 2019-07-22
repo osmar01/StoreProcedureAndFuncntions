@@ -33,6 +33,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -170,6 +171,8 @@ public class HomeFXMLController implements Initializable {
     private TextField txtUpdateCampo;
     @FXML
     private TextField txtUpdateCondicao;
+    @FXML
+    private MenuItem menuItemAtualizar;
 
     /**
      * Initializes the controller class.
@@ -222,12 +225,16 @@ public class HomeFXMLController implements Initializable {
         comboboxCampoFiltro.setItems(observableCampos);
 
     }
-
+    
+    @FXML
     public void inicializarListViewBancos() {
         bancodao = new BancoDAO();
         bancos = bancodao.listarBancos();
         observableBancos = FXCollections.observableArrayList(bancos);
         listViewBancos.setItems(observableBancos);
+        for (Banco banco : bancos) {
+            System.out.println(banco.getNome());
+        }
     }
 
     public Banco getBancoSelecionado() {
@@ -265,6 +272,7 @@ public class HomeFXMLController implements Initializable {
         }
     }
 
+    @FXML
     public void setResultado() {
         query.setCamposSelecionados(camposSelecionados);
         query.setFiltrosSelecionados(filtrosSelecionados);
@@ -725,6 +733,7 @@ public class HomeFXMLController implements Initializable {
         comboboxUpdate.setItems(observableCampos);
     }
     
+    @FXML
     public void adicionarCamposUpdate() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
@@ -733,6 +742,7 @@ public class HomeFXMLController implements Initializable {
         setResultadoUpdate();
         comboboxUpdate.getSelectionModel().select(0);
     }
+    @FXML
     public void adicionarCamposUpdateCondicao() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
@@ -741,6 +751,7 @@ public class HomeFXMLController implements Initializable {
         setResultadoUpdate();
         comboboxUpdate.getSelectionModel().select(0);
     }
+    @FXML
     public void setResultadoUpdate(){
         query.setCamposUpdateSelecionados(camposUpdate);
         query.setCamposCondicaoUpdateSelecionados(camposUpdateCondicao);

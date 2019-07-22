@@ -13,17 +13,17 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Menu">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="menuItemAtualizar" mnemonicParsing="false" onAction="#inicializarListViewBancos" text="Atualizar" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Opções">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem mnemonicParsing="false" text="Exportar" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Sobre">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="Informações" />
                     </items>
                 </Menu>
             </menus>

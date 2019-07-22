@@ -67,6 +67,7 @@ public class Campo {
         List<String> agrupadores = new ArrayList<>();
         agrupadores.add("Selecione");
         agrupadores.add("COUNT");
+        agrupadores.add("COUNT(*)");
         agrupadores.add("SUM");
         agrupadores.add("MAX");
         agrupadores.add("MIN");

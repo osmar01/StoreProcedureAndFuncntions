@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 
 /**
  *
@@ -23,6 +26,8 @@ public class Conection {
     private static String senha;
 
     private static Connection con = null;
+    
+    
 
     public static void Conectar() {
         
@@ -34,7 +39,8 @@ public class Conection {
             System.out.println("Classe não encontrada, adicione o driver");
             Logger.getLogger(Conection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException e) {
-            System.out.println(e);
+            msgError();
+            System.out.println("erro: ---------"+e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -50,6 +56,14 @@ public class Conection {
             return con!=null;
     }
 
+    public static void msgError(){
+        Alert msg = new Alert(AlertType.ERROR);
+        msg.setTitle("Informação da conexão");
+        msg.setHeaderText("Erro de conexão");
+        msg.setContentText("Não foi possivel conectar com MySQL.");
+        msg.showAndWait();
+    }
+    
     /**
      * @return the host
      */

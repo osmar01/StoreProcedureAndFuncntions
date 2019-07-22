@@ -17,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -40,7 +42,8 @@ public class AcessoFXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {  
     }
-
+    
+    @FXML
     public void acessar() throws IOException {
         Conection.setHost(localhosttxt.getText());
         Conection.setPorta(portatxt.getText());
