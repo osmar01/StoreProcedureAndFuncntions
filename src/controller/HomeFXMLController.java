@@ -44,7 +44,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -214,7 +218,7 @@ public class HomeFXMLController implements Initializable {
         inicializaComboboxCamposDelete();
         inicializaComboboxCamposUpdate();
         setResultado();
-        criarTabela();
+        //criarTabela();
         camposSelecionadosExibir();
         adicionarCampoOrdenarPorCrescente();
         adicionarCampoOrdenarPorDescrescente();
@@ -225,7 +229,7 @@ public class HomeFXMLController implements Initializable {
         comboboxCampoFiltro.setItems(observableCampos);
 
     }
-    
+
     @FXML
     public void inicializarListViewBancos() {
         bancodao = new BancoDAO();
@@ -256,6 +260,57 @@ public class HomeFXMLController implements Initializable {
         tabelas = tabelaDAO.listarTabelas(getBancoSelecionado().getNome());
         observableTabelas = FXCollections.observableArrayList(tabelas);
         listViewTabela.setItems(observableTabelas);
+        detectarArrasto();
+        arrastoAreaTrabalho();
+        novaPosicaoAreaTrabalho();
+    }
+
+    public void detectarArrasto() {
+        listViewTabela.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                
+                System.out.println("onDragDetected");
+
+                
+                Dragboard db = listViewTabela.startDragAndDrop(TransferMode.ANY);
+
+                /* put a string on dragboard */
+                ClipboardContent content = new ClipboardContent();
+                content.putString(listViewTabela.getSelectionModel().getSelectedItem().getNome());
+                System.out.println(getTabelaSelecionada());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+    }
+
+    public void arrastoAreaTrabalho() {
+        areaTrabalho.setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                if (event.getGestureSource() != areaTrabalho
+                        && event.getDragboard().hasString()) {
+                    /* allow for both copying and moving, whatever user chooses */
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+
+                event.consume();
+            }
+        });
+    }
+
+    public void novaPosicaoAreaTrabalho() {
+        areaTrabalho.setOnDragDropped(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                initX = event.getSceneX() - 220;
+                initY = event.getSceneY() - 26;
+                System.out.println(initX);
+                System.out.println(initY);
+                event.consume();
+                getCampos();
+                criarTabela();
+            }
+        });
     }
 
     @FXML
@@ -298,7 +353,7 @@ public class HomeFXMLController implements Initializable {
                 header.setVisible(false);
             }
         });
-
+        System.out.println(getTabelaSelecionada());
         TableColumn<Campo, String> nomeColuna = new TableColumn<>(getTabelaSelecionada());
         nomeColuna.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nomeColuna.setSortable(false);
@@ -320,9 +375,9 @@ public class HomeFXMLController implements Initializable {
         tabelaView.maxHeightProperty().bind(tabelaView.prefHeightProperty());
 
         TabPane tabPaneTabela = new TabPane();
-        //posicoes inicias da tabpane
-        tabPaneTabela.setLayoutX(10);
-        tabPaneTabela.setLayoutY(10);
+        //posicoes inicias da tabpane        
+        tabPaneTabela.setLayoutX(initX);
+        tabPaneTabela.setLayoutY(initY);
 
         Tab tab = new Tab();
         tab.setText(getTabelaSelecionada());
@@ -603,7 +658,7 @@ public class HomeFXMLController implements Initializable {
         comboboxCampoFiltro.getSelectionModel().select(0);
         comboboxFiltro.getSelectionModel().select(0);
         comboboxOperadorLogico.getSelectionModel().select(0);
-        
+
     }
 
     //retorna o tipo do campo (varchar, int, double)
@@ -658,10 +713,10 @@ public class HomeFXMLController implements Initializable {
             return false;
         }
     }
-    
+
     //exportar -----------------------------------------------
     @FXML
-    public void exportarConsulta(){
+    public void exportarConsulta() {
         try {
             // Conteudo
             String content = textAreaResultado.getText();
@@ -677,82 +732,86 @@ public class HomeFXMLController implements Initializable {
             // Prepara para escrever no arquivo
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
-            
+
             // Escreve e fecha arquivo
             bw.write(content);
             bw.close();
-            } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
 //Delete ---------------------------------------------
-    public void inicializaComboboxCamposDelete(){
+    public void inicializaComboboxCamposDelete() {
         comboboxDelete.setItems(observableCampos);
     }
+
     @FXML
     public void adicionarCamposDelete() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxDelete.getSelectionModel().getSelectedItem().getNome());
         cmp.setValor(txtValorDelete.getText());
-        camposDelete.add(cmp);        
+        camposDelete.add(cmp);
         setResultadoDelete();
         comboboxDelete.getSelectionModel().select(0);
     }
+
     @FXML
-    public void setResultadoDelete(){
+    public void setResultadoDelete() {
         query.setCamposDeleteSelecionados(camposDelete);
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryDelete());
     }
 
     //Insert ----------------------------------------------
-    public void inicializaComboboxCamposInserir(){
+    public void inicializaComboboxCamposInserir() {
         comboboxCamposInsert.setItems(observableCampos);
     }
-    
+
     @FXML
     public void adicionarCamposInserir() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxCamposInsert.getSelectionModel().getSelectedItem().getNome());
         cmp.setValor(txtValorInsert.getText());
-        camposInserir.add(cmp);        
+        camposInserir.add(cmp);
         setResultadoInsert();
         comboboxCamposInsert.getSelectionModel().select(0);
     }
+
     @FXML
-    public void setResultadoInsert(){
+    public void setResultadoInsert() {
         query.setCamposInsertSelecionados(camposInserir);
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryInsert());
     }
     //Update -------------------------------------------------------
-    
-    public void inicializaComboboxCamposUpdate(){
+
+    public void inicializaComboboxCamposUpdate() {
         comboboxUpdate.setItems(observableCampos);
     }
-    
+
     @FXML
     public void adicionarCamposUpdate() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
         cmp.setValor(txtUpdateCampo.getText());
-        camposUpdate.add(cmp);        
+        camposUpdate.add(cmp);
         setResultadoUpdate();
         comboboxUpdate.getSelectionModel().select(0);
     }
+
     @FXML
     public void adicionarCamposUpdateCondicao() {
         Campo cmp = new Campo();
         cmp.setNome(comboboxUpdate.getSelectionModel().getSelectedItem().getNome());
         cmp.setValor(txtUpdateCondicao.getText());
-        camposUpdateCondicao.add(cmp);        
+        camposUpdateCondicao.add(cmp);
         setResultadoUpdate();
         comboboxUpdate.getSelectionModel().select(0);
     }
+
     @FXML
-    public void setResultadoUpdate(){
+    public void setResultadoUpdate() {
         query.setCamposUpdateSelecionados(camposUpdate);
         query.setCamposCondicaoUpdateSelecionados(camposUpdateCondicao);
         query.setTabelaSelecionada(getTabelaSelecionada());
