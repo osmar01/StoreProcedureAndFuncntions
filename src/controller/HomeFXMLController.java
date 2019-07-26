@@ -16,6 +16,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +30,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -51,7 +56,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import modelo.Banco;
 import modelo.Campo;
 import modelo.ExpressaoSQL;
@@ -94,6 +101,7 @@ public class HomeFXMLController implements Initializable {
     private List<Campo> camposUpdate = new ArrayList<>();
     private List<Campo> camposUpdateCondicao = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
+    List<TabPane> tabelasTabPanes = new ArrayList<>();
 
     private ExpressaoSQL query = new ExpressaoSQL();
     private String textoTab;
@@ -268,10 +276,9 @@ public class HomeFXMLController implements Initializable {
     public void detectarArrasto() {
         listViewTabela.setOnDragDetected(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                
+
                 System.out.println("onDragDetected");
 
-                
                 Dragboard db = listViewTabela.startDragAndDrop(TransferMode.ANY);
 
                 /* put a string on dragboard */
@@ -484,7 +491,60 @@ public class HomeFXMLController implements Initializable {
 
         setResultado();
 
-        areaTrabalho.getChildren().addAll(tabPaneTabela);
+        tabelasTabPanes.add(tabPaneTabela);
+
+        if (tabelasTabPanes.size() > 1) {
+            System.out.println("natália");
+            
+            
+            Bounds bounds1 = tabelasTabPanes.get(0).localToScene(tabelasTabPanes.get(0).getBoundsInLocal());
+            Bounds bounds2 = tabelasTabPanes.get(1).localToScene(tabelasTabPanes.get(1).getBoundsInLocal());
+            Line line = new Line(bounds1.getMinX() + bounds1.getWidth() / 2, bounds1.getMinY() + bounds1.getHeight() / 2,
+                    bounds2.getMinX() + bounds2.getWidth() / 2, bounds2.getMinY() + bounds2.getHeight() / 2);
+            line.setStrokeWidth(2.5f);
+            line.getStrokeDashArray().addAll(10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d, 10d);
+            line.toBack();
+
+//            tabelasTabPanes.get(0).toFront();
+//            tabelasTabPanes.get(1).toFront();
+//            line.toBack();
+            addLineAnimation(line);
+            areaTrabalho.getChildren().addAll(line);
+            areaTrabalho.getChildren().addAll(tabelasTabPanes.get(0));
+            areaTrabalho.getChildren().addAll(tabelasTabPanes.get(1));
+            //areaTrabalho.getChildren().addAll(tabPaneTabela);
+            
+        }
+    }
+    
+    public void addLineAnimation(Line line) {
+        double maxOffset
+                = line.getStrokeDashArray().stream()
+                        .reduce(
+                                0d,
+                                (a, b) -> a + b
+                        );
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.ZERO,
+                        new KeyValue(
+                                line.strokeDashOffsetProperty(),
+                                0,
+                                Interpolator.LINEAR
+                        )
+                ),
+                new KeyFrame(
+                        Duration.seconds(70),
+                        new KeyValue(
+                                line.strokeDashOffsetProperty(),
+                                maxOffset,
+                                Interpolator.LINEAR
+                        )
+                )
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     @FXML
