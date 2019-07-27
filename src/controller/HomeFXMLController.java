@@ -410,8 +410,8 @@ public class HomeFXMLController implements Initializable {
             @Override
             public void handle(Event event) {
                 String nomeTabela = tab.getText();
-                List<Campo> campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
-                ObservableList<Campo> observableCampos = FXCollections.observableArrayList(campos);
+                campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
+                observableCampos = FXCollections.observableArrayList(campos);
                 comboboxCampoFiltro.setItems(observableCampos);
             }
         });
@@ -496,7 +496,9 @@ public class HomeFXMLController implements Initializable {
         listViewTabela.getSelectionModel().clearSelection();
         filtrosSelecionados.clear();
         camposSelecionados.clear();
+        camposOrdenadosPor.clear();
         setResultado();
+        
         textAreaResultado.clear();
         areaTrabalho.getChildren().clear();
         comboboxCampoFiltro.setItems(null);
