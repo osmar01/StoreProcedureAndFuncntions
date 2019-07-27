@@ -6,6 +6,9 @@
 package modelo;
 
 import java.util.List;
+import javafx.geometry.Bounds;
+import javafx.scene.control.TabPane;
+import javafx.scene.shape.Line;
 
 /**
  *
@@ -20,6 +23,7 @@ public class Tabela {
     private List<Campo> campos;
     List<Tabela> referenciadas;
     private int tamanho;
+    private List<TabPane> tabelasTabPane;
 
     public Tabela() {
     }
@@ -40,13 +44,13 @@ public class Tabela {
         }
         System.out.println("tabelas relacionadas ");
         for (int i = 0; i < tabelasRelacionadas.size(); i++) {
-            System.out.println("referencida: " + tabelasRelacionadas.get(i).getNomeReferenciada());
+            System.out.println("referenciada: " + tabelasRelacionadas.get(i).getNomeReferenciada());
             System.out.println("nome: " + tabelasRelacionadas.get(i).getNome());
         }
         return tabelasRelacionadas;
     }
-
-    public List<Tabela> atualizaRelacionamento(List<Tabela> tabelasRelacionadas, List<Tabela> tabelasCriadas) {
+    
+      public List<Tabela> atualizaRelacionamento(List<Tabela> tabelasRelacionadas, List<Tabela> tabelasCriadas) {
         int cont = 0;
 
         for (int i = 0; i < tabelasCriadas.size(); i++) {
