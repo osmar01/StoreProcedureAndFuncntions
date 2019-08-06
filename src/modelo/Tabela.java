@@ -27,7 +27,7 @@ public class Tabela {
     private int tamanho;
     private List<TabPane> tabelasTabPane;
     private TabPane tabelaTabPane;
-    Line line;
+    
     private List<Line> linhas = new ArrayList<>();
 
     public Tabela() {
@@ -36,6 +36,11 @@ public class Tabela {
     public List<Tabela> verificaRelacionameto(List<Tabela> tabelasRelacionadas,
             List<Tabela> tabelasReferenciadas, List<Tabela> tabelasCriadas, AnchorPane areaTrabalho) {
         tabelasRelacionadas.clear();
+        for (int i = 0; i < linhas.size(); i++) {
+            areaTrabalho.getChildren().remove(linhas.get(i));
+        }
+        linhas.clear();
+        int cont=0;
 
         for (int i = 0; i < tabelasReferenciadas.size(); i++) {
             for (int j = 0; j < tabelasCriadas.size(); j++) {
@@ -45,7 +50,6 @@ public class Tabela {
                     tabela.setNome(tabelasReferenciadas.get(i).getNome());//bairro
                     tabela.setNomeColuna(tabelasReferenciadas.get(i).getNomeColuna());
                     tabela.setNomeColunaReferenciada(tabelasReferenciadas.get(i).getNomeColunaReferenciada());
-                    tabelasRelacionadas.add(tabela);
                     //---------------- tabPane --------------
                     Bounds bounds1 = null;
 
@@ -61,23 +65,24 @@ public class Tabela {
                             }
                         }
                     }
-                    Bounds bounds2 = null;
 
-                    bounds2 = tabelasCriadas.get(j).getTabelaTabPane().localToScene(tabelasCriadas.get(j).getTabelaTabPane().getBoundsInLocal());
+                    Bounds bounds2 = tabelasCriadas.get(j).getTabelaTabPane().localToScene(tabelasCriadas.get(j).getTabelaTabPane().getBoundsInLocal());
 
-                    line = new Line(bounds1.getMinX() - 220 + bounds1.getWidth() / 2, bounds1.getMinY() + bounds1.getHeight() / 2,
+                    Line line = new Line(bounds1.getMinX() - 220 + bounds1.getWidth() / 2, bounds1.getMinY() + bounds1.getHeight() / 2,
                             bounds2.getMinX() - 220 + bounds2.getWidth() / 2, bounds2.getMinY() + bounds2.getHeight() / 2);
-                    
+
                     line.setStrokeWidth(1.0f);
-                    line.getStrokeDashArray().addAll(2000d);                   
+                    line.getStrokeDashArray().addAll(2000d);
 
                     if (!areaTrabalho.getChildren().contains(tabelasCriadas.get(j).getTabelaTabPane())) {
                         areaTrabalho.getChildren().addAll(tabelasCriadas.get(j).getTabelaTabPane());
                     }
+                    linhas.add(line);
+                    tabelasRelacionadas.add(tabela);
 
-                    
-                    areaTrabalho.getChildren().addAll(line);
-                    areaTrabalho.getChildren();
+                    areaTrabalho.getChildren().addAll(linhas.get(cont));
+                    cont++;
+
                 }
             }
         }
@@ -104,7 +109,7 @@ public class Tabela {
                     cont++;
                     if (cont >= 2) {
                         tabelasRelacionadas.get(j).setNome(" ");
-                        
+
                     }
                 }
                 if (tabelasCriadas.get(i).getNome().equals(tabelasRelacionadas.get(j).getNomeReferenciada())) {

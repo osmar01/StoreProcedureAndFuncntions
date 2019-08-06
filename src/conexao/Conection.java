@@ -60,7 +60,10 @@ public class Conection {
         Alert msg = new Alert(AlertType.ERROR);
         msg.setTitle("Informação da conexão");
         msg.setHeaderText("Erro de conexão");
-        msg.setContentText("Não foi possivel conectar com MySQL.");
+        msg.setContentText("Não foi possivel conectar com MySQL."
+                + "\nVerifique o status do Serviço MySQL ou"
+                + "\na versão do MySQL não é compatível."
+                + "\nVersão recomendada: 5.7.18");
         msg.showAndWait();
     }
     
