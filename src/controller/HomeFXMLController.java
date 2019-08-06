@@ -272,7 +272,7 @@ public class HomeFXMLController implements Initializable {
 
     public void detectarArrasto() {
         listViewTabela.setOnDragDetected(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {                
+            public void handle(MouseEvent event) {
 
                 Dragboard db = listViewTabela.startDragAndDrop(TransferMode.ANY);
 
@@ -303,7 +303,7 @@ public class HomeFXMLController implements Initializable {
         areaTrabalho.setOnDragDropped(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
                 initX = event.getSceneX() - 220;
-                initY = event.getSceneY() - 26;               
+                initY = event.getSceneY() - 26;
                 event.consume();
                 getCampos();
                 criarTabela();
@@ -350,7 +350,7 @@ public class HomeFXMLController implements Initializable {
                 header.setPrefHeight(0);
                 header.setVisible(false);
             }
-        });       
+        });
         TableColumn<Campo, String> nomeColuna = new TableColumn<>(getTabelaSelecionada());
         nomeColuna.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nomeColuna.setSortable(false);
@@ -381,6 +381,7 @@ public class HomeFXMLController implements Initializable {
         tab.setContent(tabelaView);
 
         tabPaneTabela.getTabs().add(tab);
+        tabPaneTabela.toFront();
         //calcula a nova posição arrastando a tabela
         tabPaneTabela.setOnMouseDragged((MouseEvent me) -> {
             double dragX = me.getSceneX() - dragAnchor.getX();
@@ -391,6 +392,14 @@ public class HomeFXMLController implements Initializable {
 
             tabPaneTabela.setTranslateX(newXPosition);
             tabPaneTabela.setTranslateY(newYPosition);
+
+            if (tabelasCriadas.size() > 1) {
+                tabelasRelacionadas = tabela.verificaRelacionameto(tabelasRelacionadas,
+                        tabelasReferenciadas, tabelasCriadas, areaTrabalho);
+
+                tabelasRelacionadas = tabela.atualizaRelacionamento(tabelasRelacionadas, tabelasCriadas);
+            }
+            tabPaneTabela.toFront();
         });
 
         tabPaneTabela.setOnMouseEntered((MouseEvent me) -> {
@@ -401,6 +410,7 @@ public class HomeFXMLController implements Initializable {
             initX = tabPaneTabela.getTranslateX();
             initY = tabPaneTabela.getTranslateY();
             dragAnchor = new Point2D(me.getSceneX(), me.getSceneY());
+            tabPaneTabela.toFront();
         });
 
         tabPaneTabela.setOnMouseClicked(new EventHandler<Event>() {
@@ -410,6 +420,7 @@ public class HomeFXMLController implements Initializable {
                 campos = campoDAO.listarCampos(getBancoSelecionado().getNome(), nomeTabela);
                 observableCampos = FXCollections.observableArrayList(campos);
                 comboboxCampoFiltro.setItems(observableCampos);
+                tabPaneTabela.toFront();
             }
         });
         textoTab = tab.getText();
@@ -473,50 +484,28 @@ public class HomeFXMLController implements Initializable {
 
         tabelasCriadas = tabela.setTabelasCriadas(getTabelaSelecionada(),
                 tabelasCriadas, tabPaneTabela);
-        if (!areaTrabalho.getChildren().contains(tabPaneTabela)){
+        if (!areaTrabalho.getChildren().contains(tabPaneTabela)) {
             areaTrabalho.getChildren().addAll(tabPaneTabela);
         }
-        
-        if(tabelasCriadas.size()>1){
+
+        if (tabelasCriadas.size() > 1) {
             tabelasRelacionadas = tabela.verificaRelacionameto(tabelasRelacionadas,
                     tabelasReferenciadas, tabelasCriadas, areaTrabalho);
 
             tabelasRelacionadas = tabela.atualizaRelacionamento(tabelasRelacionadas, tabelasCriadas);
-   
-    }
 
+        }
         setResultado();
 
-        //tabelasTabPanes.add(tabPaneTabela);
-//        if (tabelasTabPanes.size() > 1) {
-//
-//            Bounds bounds1 = tabelasTabPanes.get(0).localToScene(tabelasTabPanes.get(0).getBoundsInLocal());
-//            Bounds bounds2 = tabelasTabPanes.get(1).localToScene(tabelasTabPanes.get(1).getBoundsInLocal());
-//            Line line = new Line(bounds1.getMinX() + bounds1.getWidth() / 2, bounds1.getMinY() + bounds1.getHeight() / 2,
-//                    bounds2.getMinX() + bounds2.getWidth() / 2, bounds2.getMinY() + bounds2.getHeight() / 2);
-//            line.setStrokeWidth(2.5f);
-//            line.getStrokeDashArray().addAll(2000d);
-//            line.toBack();
-//
-////            tabelasTabPanes.get(0).toFront();
-////            tabelasTabPanes.get(1).toFront();
-////            line.toBack();
-//            //addLineAnimation(line);
-//            areaTrabalho.getChildren().addAll(line);
-//            areaTrabalho.getChildren().addAll(tabelasTabPanes.get(0));
-//            areaTrabalho.getChildren().addAll(tabelasTabPanes.get(1));
-            
-//
-//        }
     }
 
     public void addLineAnimation(Line line) {
         double maxOffset
                 = line.getStrokeDashArray().stream()
-                .reduce(
-                        0d,
-                        (a, b) -> a + b
-                );
+                        .reduce(
+                                0d,
+                                (a, b) -> a + b
+                        );
 
         Timeline timeline = new Timeline(
                 new KeyFrame(

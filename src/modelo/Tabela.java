@@ -60,6 +60,7 @@ public class Tabela {
 
                         if (referenciada.equals(tabelasCriadas.get(k).getNome())) {
                             bounds1 = tabRefenciada.localToScene(tabRefenciada.getBoundsInLocal());
+                            tabRefenciada.toFront();
                             if (!areaTrabalho.getChildren().contains(tabRefenciada)) {
                                 areaTrabalho.getChildren().addAll(tabRefenciada);
                             }
@@ -73,8 +74,9 @@ public class Tabela {
 
                     line.setStrokeWidth(1.0f);
                     line.getStrokeDashArray().addAll(2000d);
-
+                    line.toBack();
                     if (!areaTrabalho.getChildren().contains(tabelasCriadas.get(j).getTabelaTabPane())) {
+                        tabelasCriadas.get(j).getTabelaTabPane().toFront();
                         areaTrabalho.getChildren().addAll(tabelasCriadas.get(j).getTabelaTabPane());
                     }
                     linhas.add(line);
