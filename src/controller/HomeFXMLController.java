@@ -30,10 +30,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -185,6 +185,8 @@ public class HomeFXMLController implements Initializable {
     private TextField txtUpdateCondicao;
     @FXML
     private MenuItem menuItemAtualizar;
+    @FXML
+    private MenuItem menuItemsobre;
 
     /**
      * Initializes the controller class.
@@ -199,7 +201,6 @@ public class HomeFXMLController implements Initializable {
         inicializarComboboxOperadorLogico();
         inicializarComboboxAgrupadores();
         inicializaRadioButton();
-
     }
 
     public void inicializarComboboxFiltro() {
@@ -499,36 +500,6 @@ public class HomeFXMLController implements Initializable {
 
     }
 
-    public void addLineAnimation(Line line) {
-        double maxOffset
-                = line.getStrokeDashArray().stream()
-                        .reduce(
-                                0d,
-                                (a, b) -> a + b
-                        );
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(
-                        Duration.ZERO,
-                        new KeyValue(
-                                line.strokeDashOffsetProperty(),
-                                0,
-                                Interpolator.LINEAR
-                        )
-                ),
-                new KeyFrame(
-                        Duration.seconds(70),
-                        new KeyValue(
-                                line.strokeDashOffsetProperty(),
-                                maxOffset,
-                                Interpolator.LINEAR
-                        )
-                )
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-    }
-
     @FXML
     public void limpar() {
 
@@ -756,6 +727,15 @@ public class HomeFXMLController implements Initializable {
             System.out.println("Selecione uma opção!");
             return false;
         }
+    }
+    
+    @FXML
+    public void msgSobre(){
+        Alert msg = new Alert(Alert.AlertType.INFORMATION);
+        msg.setTitle("Procedure Creator");
+        msg.setHeaderText("Procedure Creator");
+        msg.setContentText("Esta Ferramenta foi desenvolvida por: Osmar Frota");
+        msg.showAndWait();
     }
 
     //exportar -----------------------------------------------
