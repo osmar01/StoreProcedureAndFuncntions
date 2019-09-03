@@ -842,6 +842,15 @@ public class HomeFXMLController implements Initializable {
         textAreaResultado.setText(query.getQueryUpdate());
     }
     // Telas ------------------------------------------------
+    
+    @FXML
+    public void abrirExecute(){
+        List<String> campos = tabelaDAO.execute(query.getQuery(), camposSelecionados);
+        
+        for (int i = 0; i < camposSelecionados.size(); i++) {
+            System.out.println(campos.get(i).toString());
+        }
+    }
 
     @FXML
     public void abrirTelaAlteracao() throws IOException {
