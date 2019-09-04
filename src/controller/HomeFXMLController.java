@@ -16,11 +16,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -56,9 +53,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import modelo.Banco;
 import modelo.Campo;
 import modelo.ExpressaoSQL;
@@ -728,9 +723,9 @@ public class HomeFXMLController implements Initializable {
             return false;
         }
     }
-    
+
     @FXML
-    public void msgSobre(){
+    public void msgSobre() {
         Alert msg = new Alert(Alert.AlertType.INFORMATION);
         msg.setTitle("Procedure Creator");
         msg.setHeaderText("Procedure Creator");
@@ -842,14 +837,29 @@ public class HomeFXMLController implements Initializable {
         textAreaResultado.setText(query.getQueryUpdate());
     }
     // Telas ------------------------------------------------
-    
+
     @FXML
-    public void abrirExecute(){
-        List<String> campos = tabelaDAO.execute(query.getQuery(), camposSelecionados);
+    public void abrirExecute() throws IOException {
+
+        System.out.println(getBancoSelecionado().getNome());
+        System.out.println(query.getQueryExecute(getBancoSelecionado().getNome()));
+        List<String> campos = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         
-        for (int i = 0; i < camposSelecionados.size(); i++) {
-            System.out.println(campos.get(i).toString());
-        }
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/ExecutaSQLFXML.fxml"));
+        Parent root = loader.load();
+        ExecutaSQLFXMLController executeController = loader.getController();
+
+        
+        executeController.setCampos(campos);
+        executeController.setCamposSelecionados(camposSelecionados);
+        executeController.setTableViewExecute();
+        
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();        
+
     }
 
     @FXML

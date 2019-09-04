@@ -213,13 +213,14 @@
                                         <Font name="System Bold" size="14.0" />
                                     </font>
                                 </Label>
-                                <Button layoutX="326.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
+                                <Button layoutX="238.0" layoutY="224.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Copiar" />
                                 <Button fx:id="btnGerarStoredProcedure" layoutX="848.0" layoutY="134.0" mnemonicParsing="false" onAction="#abrirTelaGerarStoredProcedure" prefHeight="25.0" prefWidth="125.0" text="Criar" />
-                        <Button layoutX="525.0" layoutY="224.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
+                        <Button layoutX="437.0" layoutY="224.0" mnemonicParsing="false" onAction="#limpar" prefHeight="25.0" prefWidth="88.0" text="Limpar" />
                         <RadioButton fx:id="radioFunction" layoutX="848.0" layoutY="95.0" mnemonicParsing="false" text="Function" />
                         <RadioButton fx:id="radioStoredProcedure" layoutX="848.0" layoutY="70.0" mnemonicParsing="false" text="Stored Procedure" />
                         <Button fx:id="btnAlterar" layoutX="38.0" layoutY="190.0" mnemonicParsing="false" onAction="#abrirTelaAlteracao" prefHeight="25.0" prefWidth="67.0" text="Alterar" />
-                        <Button layoutX="422.0" layoutY="224.0" mnemonicParsing="false" onAction="#exportarConsulta" prefHeight="25.0" prefWidth="96.0" text="Exportar" />
+                        <Button layoutX="334.0" layoutY="224.0" mnemonicParsing="false" onAction="#exportarConsulta" prefHeight="25.0" prefWidth="96.0" text="Exportar" />
+                        <Button layoutX="533.0" layoutY="224.0" mnemonicParsing="false" onAction="#abrirExecute" prefHeight="25.0" prefWidth="88.0" text="Executar" />
                             </children>
                         </Pane>
                     </children>

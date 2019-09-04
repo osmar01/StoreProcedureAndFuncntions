@@ -116,6 +116,93 @@ public class ExpressaoSQL {
                 + camposAgrupado + ordenador + pontoVirgula;
     }
 
+    public String getQueryExecute(String banco) {
+        String campo = "";
+        String filtro = "";
+        String rel = "";
+        String ordenador = "";
+        String pontoVirgula = ";";
+        String queryExecute = "";
+        String agrupador = "";
+        String camposAgrupado = "";
+
+        if (camposSelecionados.isEmpty()) {
+            if (!agrupadoresSelecionados.isEmpty()) {
+                campo = "";
+            } else {
+                campo = " * ";
+            }
+        } else {
+            campo = camposSelecionados.get(0).toString();
+            for (int i = 1; i < camposSelecionados.size(); i++) {
+                campo = campo + ", " + camposSelecionados.get(i).toString();
+            }
+        }
+        if (!filtrosSelecionados.isEmpty()) {
+            filtro = "\nWHERE ";
+            for (int i = 0; i < filtrosSelecionados.size(); i++) {
+                if (filtrosSelecionados.get(i).getOperador().equals("Selecione")) {
+                    filtrosSelecionados.get(i).setOperador("");
+                }
+                filtro = filtro + filtrosSelecionados.get(i).getNome() + " "
+                        + filtrosSelecionados.get(i).getFiltro() + " "
+                        + filtrosSelecionados.get(i).getValor() + " "
+                        + filtrosSelecionados.get(i).getOperador() + " ";
+            }
+        }
+
+        if (!tabelasRelacionadas.isEmpty()) {
+            rel = rel + banco + "." + tabelasRelacionadas.get(0).getNome() + "\nINNER JOIN "
+                    + banco + "." + tabelasRelacionadas.get(0).getNomeReferenciada() + " ON "
+                    + tabelasRelacionadas.get(0).getNome() + "." + tabelasRelacionadas.get(0).getNomeColuna() + " = "
+                    + tabelasRelacionadas.get(0).getNomeReferenciada() + "." + tabelasRelacionadas.get(0).getNomeColunaReferenciada();
+            for (int i = 1; i < tabelasRelacionadas.size(); i++) {
+                if (tabelasRelacionadas.get(i).getNome() != " "
+                        || tabelasRelacionadas.get(i).getNomeReferenciada() != " ") {
+                    rel = rel + "\nINNER JOIN " + banco + "." + tabelasRelacionadas.get(i).getNome()
+                            + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
+                            + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeColuna() + " = "
+                            + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeColunaReferenciada();
+                }
+            }
+        } else if (tabelaSelecionada != null) {
+            rel = tabelaSelecionada;
+        }
+
+        if (!camposOrdenadosPor.isEmpty()) {
+            ordenador = "\nORDER BY " + camposOrdenadosPor.get(0).getNome()
+                    + " " + camposOrdenadosPor.get(0).getOrdenador();
+            for (int i = 1; i < camposOrdenadosPor.size(); i++) {
+                ordenador = ordenador + ", " + camposOrdenadosPor.get(i).getNome()
+                        + " " + camposOrdenadosPor.get(i).getOrdenador();
+            }
+        } else {
+            ordenador = ";";
+            pontoVirgula = "";
+        }
+
+        if (!agrupadoresSelecionados.isEmpty()) {
+            if (camposSelecionados.isEmpty()) {
+                agrupador = agrupadoresSelecionados.get(0);
+            } else {
+                agrupador = ", " + agrupadoresSelecionados.get(0);
+            }
+            for (int i = 1; i < agrupadoresSelecionados.size(); i++) {
+                agrupador = ", " + agrupador + agrupadoresSelecionados.get(i);
+            }
+        }
+
+        if (!camposAgrupados.isEmpty()) {
+            camposAgrupado = "\nGROUP BY " + camposAgrupados.get(0);
+            for (int i = 1; i < camposAgrupados.size(); i++) {
+                camposAgrupado = ", " + camposAgrupado + camposAgrupados.get(i);
+            }
+        }
+
+        return queryExecute = "SELECT " + campo + agrupador + "\nFROM " + rel + filtro
+                + camposAgrupado + ordenador + pontoVirgula;
+    }
+
     public String getQueryInsert() {
         String camposInserir = "";
         String valoresInserir = "";
@@ -123,50 +210,49 @@ public class ExpressaoSQL {
         if (!camposInsert.isEmpty()) {
             camposInserir = camposInsert.get(0).getNome();
             for (int i = 1; i < camposInsert.size(); i++) {
-                camposInserir = camposInserir + ", " + camposInsert.get(i).getNome();                
+                camposInserir = camposInserir + ", " + camposInsert.get(i).getNome();
             }
             valoresInserir = camposInsert.get(0).getValor();
             for (int i = 1; i < camposInsert.size(); i++) {
-                valoresInserir = valoresInserir + ", " + camposInsert.get(i).getValor();                
+                valoresInserir = valoresInserir + ", " + camposInsert.get(i).getValor();
             }
         }
-        return queryInsert = "INSERT INTO " + getTabelaSelecionada()+
-                " ("+ camposInserir+")" + "\nVALUES ("+ valoresInserir+");";
+        return queryInsert = "INSERT INTO " + getTabelaSelecionada()
+                + " (" + camposInserir + ")" + "\nVALUES (" + valoresInserir + ");";
 
     }
-    
-    public String getQueryDelete(){
-        String camposDel = "";        
+
+    public String getQueryDelete() {
+        String camposDel = "";
         String queryDelete;
         if (!camposDelete.isEmpty()) {
-            camposDel = camposDelete.get(0).getNome()+" = '"+ camposDelete.get(0).getValor()+"'";
+            camposDel = camposDelete.get(0).getNome() + " = '" + camposDelete.get(0).getValor() + "'";
             for (int i = 1; i < camposDelete.size(); i++) {
-                camposDel = camposDel + ", " + camposDelete.get(i).getNome()+" = '"+ camposDelete.get(0).getValor()+"'";                
-            }            
+                camposDel = camposDel + ", " + camposDelete.get(i).getNome() + " = '" + camposDelete.get(0).getValor() + "'";
+            }
         }
-        return queryDelete = "DELETE FROM " + getTabelaSelecionada()+
-                " WHERE "+ camposDel;
-    }
-    
-    public String getQueryUpdate(){
-        String camposUp = "";        
-        String camposUpdateCondicao = "";        
-        String queryUp;
-        if (!camposUpdates.isEmpty()) {
-            camposUp = camposUpdates.get(0).getNome()+" = '"+ camposUpdates.get(0).getValor()+"'";
-            for (int i = 1; i < camposUpdates.size(); i++) {
-                camposUp = camposUp + ", " + camposUpdates.get(i).getNome()+" = '"+ camposUpdates.get(0).getValor()+"'";                
-            }            
-            camposUpdateCondicao = camposUpdatesCondicao.get(0).getNome()+" = '"+ camposUpdatesCondicao.get(0).getValor()+"'";
-            for (int i = 1; i < camposUpdatesCondicao.size(); i++) {
-                camposUpdateCondicao = camposUpdateCondicao + ", " + camposUpdatesCondicao.get(i).getNome()+" = '"+ camposUpdatesCondicao.get(0).getValor()+"'";                
-            }            
-        }
-        return queryUp = "UPDATE " + getTabelaSelecionada()+ "\nSET "+
-                camposUp + "\nWHERE "+ camposUpdateCondicao+";";
+        return queryDelete = "DELETE FROM " + getTabelaSelecionada()
+                + " WHERE " + camposDel;
     }
 
-    
+    public String getQueryUpdate() {
+        String camposUp = "";
+        String camposUpdateCondicao = "";
+        String queryUp;
+        if (!camposUpdates.isEmpty()) {
+            camposUp = camposUpdates.get(0).getNome() + " = '" + camposUpdates.get(0).getValor() + "'";
+            for (int i = 1; i < camposUpdates.size(); i++) {
+                camposUp = camposUp + ", " + camposUpdates.get(i).getNome() + " = '" + camposUpdates.get(0).getValor() + "'";
+            }
+            camposUpdateCondicao = camposUpdatesCondicao.get(0).getNome() + " = '" + camposUpdatesCondicao.get(0).getValor() + "'";
+            for (int i = 1; i < camposUpdatesCondicao.size(); i++) {
+                camposUpdateCondicao = camposUpdateCondicao + ", " + camposUpdatesCondicao.get(i).getNome() + " = '" + camposUpdatesCondicao.get(0).getValor() + "'";
+            }
+        }
+        return queryUp = "UPDATE " + getTabelaSelecionada() + "\nSET "
+                + camposUp + "\nWHERE " + camposUpdateCondicao + ";";
+    }
+
     public void salvarConsulta() {
 
     }
@@ -249,20 +335,21 @@ public class ExpressaoSQL {
 
     public void setCamposInsertSelecionados(List<Campo> camposInsertSelecionados) {
         this.camposInsert = camposInsertSelecionados;
-        
+
     }
+
     public void setCamposDeleteSelecionados(List<Campo> camposDeleteSelecionados) {
         this.camposDelete = camposDeleteSelecionados;
-        
+
     }
+
     public void setCamposUpdateSelecionados(List<Campo> camposUpdateSelecionados) {
-        this.camposUpdates = camposUpdateSelecionados;        
+        this.camposUpdates = camposUpdateSelecionados;
     }
+
     public void setCamposCondicaoUpdateSelecionados(List<Campo> camposCondicaoUpdateSelecionados) {
         this.camposUpdatesCondicao = camposCondicaoUpdateSelecionados;
-        
+
     }
-    
-    
 
 }

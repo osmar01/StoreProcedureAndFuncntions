@@ -108,7 +108,7 @@ public class TabelaDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Erro encotrado   001T, causa:" + e.getMessage());
+            System.err.println("Erro encontrado   002T, causa:" + e.getMessage());
         }
         
         return resultado;
