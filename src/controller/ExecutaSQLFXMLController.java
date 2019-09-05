@@ -32,15 +32,16 @@ public class ExecutaSQLFXMLController implements Initializable {
 
     public void setTableViewExecute() {
 
+        TableColumn<String, String> coluna = null;
         for (int i = 0; i < camposSelecionados.size(); i++) {
-            TableColumn<String, String> coluna = new TableColumn(camposSelecionados.get(i).toString());
+            coluna = new TableColumn(camposSelecionados.get(i).toString());
             tableviewExecute.getColumns().add(coluna);
             coluna.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
         }
 
         ObservableList<String> observableCampos = FXCollections.observableArrayList(campos);
         tableviewExecute.setItems(observableCampos);
-        
+
         for (int i = 0; i < campos.size(); i++) {
             System.out.println(campos.get(i).toString());
         }

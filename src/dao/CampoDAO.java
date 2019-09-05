@@ -55,9 +55,31 @@ public class CampoDAO {
                 campos.add(campo);
             }
         } catch (Exception e) {
-            System.err.println("Erro encotrado   003 Campo_SQL, causa:" + e.getMessage());
+            System.err.println("Erro encontrado   003 Campo_SQL, causa:" + e.getMessage());
         }
         return campos;
+
+    }
+
+    public void executarSQL(String sql, List<Campo> campos) {
+
+        try {
+
+            pstm = con.prepareStatement(sql);
+            rs = pstm.executeQuery(sql);
+            
+            while (rs.next()) {
+                for (int i = 0; i < campos.size(); i++) {
+                    Campo campo = new Campo();
+                    
+                    campo.setNome(rs.getString(campos.get(i).getNome()));
+                    campos.add(campo);
+                }
+
+            }
+        } catch (Exception e) {
+            System.err.println("Erro encotrado   003 Campo_SQL, causa:" + e.getMessage());
+        }
 
     }
 
