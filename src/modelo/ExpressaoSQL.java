@@ -166,7 +166,7 @@ public class ExpressaoSQL {
                 }
             }
         } else if (tabelaSelecionada != null) {
-            rel = tabelaSelecionada;
+            rel = banco + "."+tabelaSelecionada;
         }
 
         if (!camposOrdenadosPor.isEmpty()) {
