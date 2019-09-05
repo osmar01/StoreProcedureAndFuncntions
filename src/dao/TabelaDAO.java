@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import modelo.Campo;
 import modelo.Tabela;
 
@@ -79,10 +81,11 @@ public class TabelaDAO {
         return tabelasReferenciadas;
     }
 
-    public List<String> execute(String sql, List<Campo> camposSelecionados) {
+    public Map<String, String> execute(String sql, List<Campo> camposSelecionados) {
 
         List<String> resultado = new ArrayList<>();
-
+        Map<String, String> map = new HashMap<>();
+        
         try {
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery(sql);
@@ -92,15 +95,19 @@ public class TabelaDAO {
                     switch (camposSelecionados.get(i).getTipo().substring(0,3)) {
                         case "var":
                             resultado.add(rs.getString(camposSelecionados.get(i).getNome()));
+                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "dec":
                             resultado.add(("" + rs.getDouble(camposSelecionados.get(i).getNome())));
+                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "int":
                             resultado.add(("" + rs.getInt(camposSelecionados.get(i).getNome())));
+                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "dat":
                             resultado.add(("" + rs.getDate(camposSelecionados.get(i).getNome())));
+                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         default:
                         // code block
@@ -111,7 +118,7 @@ public class TabelaDAO {
             System.err.println("Erro encontrado   002T, causa:" + e.getMessage());
         }
         
-        return resultado;
+        return map;
     }
 
 }

@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -97,7 +97,7 @@ public class HomeFXMLController implements Initializable {
     private List<Campo> camposUpdateCondicao = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
     List<TabPane> tabelasTabPanes = new ArrayList<>();
-
+    
     private ExpressaoSQL query = new ExpressaoSQL();
     private String textoTab;
 
@@ -841,9 +841,8 @@ public class HomeFXMLController implements Initializable {
     @FXML
     public void abrirExecute() throws IOException {
 
-        System.out.println(getBancoSelecionado().getNome());
-        System.out.println(query.getQueryExecute(getBancoSelecionado().getNome()));
-        List<String> campos = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
+        //List<String> camposExecute = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
+        Map<String, String> map = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
@@ -851,16 +850,21 @@ public class HomeFXMLController implements Initializable {
         Parent root = loader.load();
         ExecutaSQLFXMLController executeController = loader.getController();
 
+        //executeController.setCampos(camposExecute);
+        executeController.setMap(map);
         
-        executeController.setCampos(campos);
         executeController.setCamposSelecionados(camposSelecionados);
         executeController.setTableViewExecute();
-        
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.show();        
+        stage.show();
 
     }
+    
+    
+
+   
 
     @FXML
     public void abrirTelaAlteracao() throws IOException {
