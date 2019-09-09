@@ -840,10 +840,24 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void abrirExecute() throws IOException {
-
-        //List<String> camposExecute = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
-        Map<String, String> map = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         
+        String[][] staffArray = {{"nice to ", "have", "titles"},
+                                 {"a", "b", "c"},
+                                 {"d", "e", "f"}};
+
+        List<String> camposExecute = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
+        int linha = camposExecute.size();
+        int col = camposSelecionados.size();
+        String matriz[][] = new String[linha][col];
+        //Map<String, String> map = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
+        //String matriz[][] =  tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
+        for (int i = 0; i < camposExecute.size(); i++) {
+            for (int j = 0; j < camposSelecionados.size(); j++) {
+                matriz[i][j] = camposExecute.get(j);
+                System.out.println(matriz[i][j]+"\n");
+            }
+            
+        }
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/ExecutaSQLFXML.fxml"));
@@ -851,7 +865,8 @@ public class HomeFXMLController implements Initializable {
         ExecutaSQLFXMLController executeController = loader.getController();
 
         //executeController.setCampos(camposExecute);
-        executeController.setMap(map);
+        //executeController.setMap(map);
+        executeController.setMatriz(matriz);
         
         executeController.setCamposSelecionados(camposSelecionados);
         executeController.setTableViewExecute();

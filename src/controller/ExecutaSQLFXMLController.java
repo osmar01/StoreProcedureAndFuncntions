@@ -6,6 +6,7 @@
 package controller;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import modelo.Campo;
@@ -31,7 +33,8 @@ import modelo.Campo;
 public class ExecutaSQLFXMLController implements Initializable {
 
     @FXML
-    private TableView<Map.Entry<String,String>> tableviewExecute;
+//    private TableView<Map.Entry<String, String>> tableviewExecute;
+    private TableView<String[]> tableviewExecute;
 
     List<String> campos;
     List<Campo> camposSelecionados;
@@ -39,9 +42,10 @@ public class ExecutaSQLFXMLController implements Initializable {
     private int N_COLS;
     private int N_ROWS;
     private static final int MAX_DATA_VALUE = 100;
+    private String matriz[][];
 
     public void setTableViewExecute() {
-        
+
 //        for (int i = 0; i < camposSelecionados.size(); i++) {
 //            TableColumn<String, String> coluna = new TableColumn(camposSelecionados.get(i).toString());
 //            tableviewExecute.getColumns().add(coluna);
@@ -50,50 +54,76 @@ public class ExecutaSQLFXMLController implements Initializable {
 //
 //        ObservableList<String> observableCampos = FXCollections.observableArrayList(campos);
 //        tableviewExecute.setItems(observableCampos);
+//        TableColumn<Map.Entry<String, String>, String> column1 = new TableColumn<>("Key");
+//        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String, String>, String>, ObservableValue<String>>() {
+//
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
+//                // this callback returns property for just one cell, you can't use a loop here
+//                // for first column we use key
+//                return new SimpleStringProperty(p.getValue().getKey());
+//            }
+//        });
+        for (int i = 0; i < camposSelecionados.size(); i++) {
 
-        TableColumn<Map.Entry<String, String>, String> column1 = new TableColumn<>("Key");
-        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String, String>, String>, ObservableValue<String>>() {
+            TableColumn<Map.Entry<String, String>, String> column2 = new TableColumn<>(camposSelecionados.get(i).getNome());
+            column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String, String>, String>, ObservableValue<String>>() {
 
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
-                // this callback returns property for just one cell, you can't use a loop here
-                // for first column we use key
-                return new SimpleStringProperty(p.getValue().getKey());
-            }
-        });
 
-        TableColumn<Map.Entry<String, String>, String> column2 = new TableColumn<>("Value");
-        column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String, String>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
 
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
-                // for second column we use value
-                return new SimpleStringProperty(p.getValue().getValue());
-            }
-        });
+                    
+                    for (int j = 0; j < 10; j++) {
+                        String value = map.get("key"+j);
+                        
+                    }
+                        return new SimpleStringProperty("");
+                    // for second column we use value
 
-        ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(map.entrySet());
-        tableviewExecute.setItems(items);
 
-        tableviewExecute.getColumns().setAll(column1, column2);
-        
-        
+                }
+
+            });
+            //tableviewExecute.getColumns().add(column2);
+        }
+//        ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(map.entrySet());
+        //tableviewExecute.setItems(items);
+
 //        N_ROWS = campos.size()/camposSelecionados.size();
- //       N_COLS = camposSelecionados.size();
-        
-        
+        //       N_COLS = camposSelecionados.size();
 //        ObservableList<double[]> data = generateData();
 //
 //        TableView<double[]> table = new TableView<>(data);
 //        table.getColumns().setAll(createColumns());
 //        table.setPrefSize(200, 250);
-        
 //        for (int i = 0; i < campos.size(); i++) {
 //            System.out.println(campos.get(i).toString());
+        
+        
 //        }
-
+        
+        ObservableList<String[]> data = FXCollections.observableArrayList();
+        data.addAll(Arrays.asList(matriz));
+        data.remove(0);//remove titles from data
+        TableView<String[]> table = new TableView<>();
+        for (int i = 0; i < matriz[0].length; i++) {
+            TableColumn tc = new TableColumn(matriz[0][i]);
+            final int colNo = i;
+            tc.setCellValueFactory(new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
+                    return new SimpleStringProperty((p.getValue()[colNo]));
+                }
+            });
+            tc.setPrefWidth(90);
+            tableviewExecute.getColumns().add(tc);
+        }
+        tableviewExecute.setItems(data);
+        
+        
     }
-    
+
 //    private ObservableList<double[]> generateData() {;
 //        return FXCollections.observableArrayList(
 //                IntStream.range(0, N_ROWS)
@@ -104,7 +134,6 @@ public class ExecutaSQLFXMLController implements Initializable {
 //                        ).collect(Collectors.toList())
 //        );
 //    }
-
     private List<TableColumn<double[], Double>> createColumns() {
         return IntStream.range(0, N_COLS)
                 .mapToObj(this::createColumn)
@@ -118,6 +147,16 @@ public class ExecutaSQLFXMLController implements Initializable {
         return col;
     }
 
+    public String[][] getMatriz() {
+        return matriz;
+    }
+
+    public void setMatriz(String[][] matriz) {
+        this.matriz = matriz;
+    }
+
+    
+    
     public Map<String, String> getMap() {
         return map;
     }
@@ -125,8 +164,6 @@ public class ExecutaSQLFXMLController implements Initializable {
     public void setMap(Map<String, String> map) {
         this.map = map;
     }
-    
-    
 
     public List<String> getCampos() {
         return campos;
