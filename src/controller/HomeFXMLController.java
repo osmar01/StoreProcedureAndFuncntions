@@ -841,10 +841,6 @@ public class HomeFXMLController implements Initializable {
     @FXML
     public void abrirExecute() throws IOException {
         
-        String[][] staffArray = {{"nice to ", "have", "titles"},
-                                 {"a", "b", "c"},
-                                 {"d", "e", "f"}};
-
         List<String> camposExecute = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         int linha = camposExecute.size();
         int col = camposSelecionados.size();
@@ -852,11 +848,14 @@ public class HomeFXMLController implements Initializable {
         //Map<String, String> map = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         //String matriz[][] =  tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
         for (int i = 0; i < camposExecute.size(); i++) {
+            System.out.println("\n");
             for (int j = 0; j < camposSelecionados.size(); j++) {
                 matriz[i][j] = camposExecute.get(j);
-                System.out.println(matriz[i][j]+"\n");
+                System.out.println(matriz[i][j]);
             }
-            
+        }
+        for (int i = 0; i < camposExecute.size(); i++) {
+            System.out.println(camposExecute.get(i).toString());
         }
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();

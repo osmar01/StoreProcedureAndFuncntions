@@ -84,39 +84,33 @@ public class TabelaDAO {
     public List<String> execute(String sql, List<Campo> camposSelecionados) {
 
         List<String> resultado = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
-        
+
         try {
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery(sql);
             while (rs.next()) {
                 for (int i = 0; i < camposSelecionados.size(); i++) {
-                    switch (camposSelecionados.get(i).getTipo().substring(0,3)) {
+                    switch (camposSelecionados.get(i).getTipo().substring(0, 3)) {
                         case "var":
                             resultado.add(rs.getString(camposSelecionados.get(i).getNome()));
-                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "dec":
                             resultado.add(("" + rs.getDouble(camposSelecionados.get(i).getNome())));
-                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "int":
                             resultado.add(("" + rs.getInt(camposSelecionados.get(i).getNome())));
-                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         case "dat":
                             resultado.add(("" + rs.getDate(camposSelecionados.get(i).getNome())));
-                            map.put("key"+i, rs.getString(camposSelecionados.get(i).getNome()));
                             break;
                         default:
-                        // code block
                     }
                 }
             }
         } catch (Exception e) {
             System.err.println("Erro encontrado   002T, causa:" + e.getMessage());
         }
-        
+
         return resultado;
     }
 
