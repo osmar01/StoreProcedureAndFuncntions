@@ -97,7 +97,7 @@ public class HomeFXMLController implements Initializable {
     private List<Campo> camposUpdateCondicao = new ArrayList<>();
     private ObservableList<Campo> observableCampos;
     List<TabPane> tabelasTabPanes = new ArrayList<>();
-    
+
     private ExpressaoSQL query = new ExpressaoSQL();
     private String textoTab;
 
@@ -840,33 +840,44 @@ public class HomeFXMLController implements Initializable {
 
     @FXML
     public void abrirExecute() throws IOException {
-        
+
         List<String> camposExecute = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
-        int linha = camposExecute.size();
+        int linha = 1;
         int col = camposSelecionados.size();
+        if (!camposExecute.isEmpty()) {
+            linha = camposExecute.size() / camposSelecionados.size();
+        }
+
         String matriz[][] = new String[linha][col];
-        //Map<String, String> map = tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
-        //String matriz[][] =  tabelaDAO.execute(query.getQueryExecute(getBancoSelecionado().getNome()), camposSelecionados);
-        for (int i = 0; i < camposExecute.size(); i++) {
-            System.out.println("\n");
-            for (int j = 0; j < camposSelecionados.size(); j++) {
-                matriz[i][j] = camposExecute.get(j);
-                System.out.println(matriz[i][j]);
+
+        if (!camposExecute.isEmpty()) {
+            int k = 0;
+            for (int i = 0; i < linha; i++) {
+                System.out.println("\n");
+                for (int j = 0; j < col; j++) {
+                    matriz[i][j] = camposExecute.get(k);
+                    k++;
+                    System.out.print(matriz[i][j] + " ");
+
+                }
             }
+        } else {
+            for (int i = 0; i < 1; i++) {
+                for (int j = 0; j < col; j++) {
+                    matriz[i][j] = "";
+                }
+            }
+            matriz[0][0] = "sem reultados";
         }
-        for (int i = 0; i < camposExecute.size(); i++) {
-            System.out.println(camposExecute.get(i).toString());
-        }
+        
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/ExecutaSQLFXML.fxml"));
         Parent root = loader.load();
         ExecutaSQLFXMLController executeController = loader.getController();
 
-        //executeController.setCampos(camposExecute);
-        //executeController.setMap(map);
         executeController.setMatriz(matriz);
-        
+
         executeController.setCamposSelecionados(camposSelecionados);
         executeController.setTableViewExecute();
 
@@ -875,10 +886,6 @@ public class HomeFXMLController implements Initializable {
         stage.show();
 
     }
-    
-    
-
-   
 
     @FXML
     public void abrirTelaAlteracao() throws IOException {

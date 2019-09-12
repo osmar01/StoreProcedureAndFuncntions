@@ -30,7 +30,6 @@ import modelo.Campo;
 public class ExecutaSQLFXMLController implements Initializable {
 
     @FXML
-//    private TableView<Map.Entry<String, String>> tableviewExecute;
     private TableView<String[]> tableviewExecute;
 
     List<String> campos;
@@ -41,7 +40,6 @@ public class ExecutaSQLFXMLController implements Initializable {
 
         ObservableList<String[]> data = FXCollections.observableArrayList();
         data.addAll(Arrays.asList(matriz));
-        data.remove(0);
         for (int i = 0; i < matriz[0].length; i++) {
             TableColumn tc = new TableColumn(camposSelecionados.get(i).getNome());
             final int colNo = i;

@@ -84,13 +84,14 @@ public class TabelaDAO {
     public List<String> execute(String sql, List<Campo> camposSelecionados) {
 
         List<String> resultado = new ArrayList<>();
-
+        String tipo="";
         try {
             pstm = con.prepareStatement(sql);
             rs = pstm.executeQuery(sql);
             while (rs.next()) {
                 for (int i = 0; i < camposSelecionados.size(); i++) {
-                    switch (camposSelecionados.get(i).getTipo().substring(0, 3)) {
+                    tipo = camposSelecionados.get(i).getTipo().substring(0, 3);
+                    switch (tipo) {
                         case "var":
                             resultado.add(rs.getString(camposSelecionados.get(i).getNome()));
                             break;

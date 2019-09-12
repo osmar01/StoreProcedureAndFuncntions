@@ -162,7 +162,7 @@ public class ExpressaoSQL {
                     rel = rel + "\nINNER JOIN " + banco + "." + tabelasRelacionadas.get(i).getNome()
                             + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeReferenciada() + " ON "
                             + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeColuna() + " = "
-                            + tabelasRelacionadas.get(i).getNome() + "." + tabelasRelacionadas.get(i).getNomeColunaReferenciada();
+                            + tabelasRelacionadas.get(i).getNomeReferenciada() + "." + tabelasRelacionadas.get(i).getNomeColunaReferenciada();
                 }
             }
         } else if (tabelaSelecionada != null) {
