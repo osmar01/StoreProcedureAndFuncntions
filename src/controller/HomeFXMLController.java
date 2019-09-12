@@ -214,6 +214,30 @@ public class HomeFXMLController implements Initializable {
     }
 
     @FXML
+    public void getAgrupadorPortipo() {
+        String nome = "";
+        if (!comboboxCampoFiltro.getSelectionModel().isEmpty()) {
+            nome = comboboxCampoFiltro.getSelectionModel().getSelectedItem().getNome();
+            System.out.println(nome);
+            for (int i = 0; i < campos.size(); i++) {
+                if (campos.get(i).getNome().equals(nome)) {
+                    String tipo = campos.get(i).getTipo().substring(0, 3);
+                    System.out.println(tipo);
+                    if (tipo.equals("var")) {
+                        observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadoresVarchar());
+                        comboboxAgrupar.setItems(observableAgrupador);
+                    }
+                    else{
+                        observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadores());
+                        comboboxAgrupar.setItems(observableAgrupador);
+                    }
+                }
+            }
+        }
+
+    }
+
+    @FXML
     public void getCampos() {
         campos = campoDAO.listarCampos(getBancoSelecionado().getNome(),
                 getTabelaSelecionada());
@@ -728,8 +752,16 @@ public class HomeFXMLController implements Initializable {
     public void msgSobre() {
         Alert msg = new Alert(Alert.AlertType.INFORMATION);
         msg.setTitle("Procedure Creator");
-        msg.setHeaderText("Procedure Creator");
-        msg.setContentText("Esta Ferramenta foi desenvolvida por: Osmar Frota");
+        msg.setHeaderText("Procedure Creator - geração visual de consultas SQL");
+        msg.setContentText(
+                "Software de geração visual de consultas SQL e conversão\n"
+                + "para procedimentos armazenados e funções do SGBD MySQL.\n"
+                + "Desenvolvido como Trabalho de Conclusão de Curso de\n "
+                + "Tecnologia em Análise e Desenvolvimento de Sistemas - IFAM\n"
+                + "pelo aluno Osmar Junio Evangelista Frota \n"
+                + "(osmarj.frota@gmail.com), idealizado e orientado pelo \n"
+                + "professor Marcelo Chamy Machado (marcelo.chamy@ifam.edu.br).\n \n"
+                + "Este software é distribuído sob a licença GPLv3.");
         msg.showAndWait();
     }
 
@@ -869,7 +901,7 @@ public class HomeFXMLController implements Initializable {
             }
             matriz[0][0] = "sem reultados";
         }
-        
+
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/ExecutaSQLFXML.fxml"));

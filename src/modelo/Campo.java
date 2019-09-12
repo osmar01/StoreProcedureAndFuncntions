@@ -74,6 +74,15 @@ public class Campo {
         agrupadores.add("AVG");
         return agrupadores;
     }
+    
+    public List<String> getAgrupadoresVarchar() {
+        List<String> agrupadores = new ArrayList<>();
+        agrupadores.add("Selecione");
+        agrupadores.add("COUNT");
+        agrupadores.add("COUNT(*)");
+        return agrupadores;
+    }
+
 
     public String getNome() {
         return nome;
