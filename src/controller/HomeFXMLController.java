@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -46,6 +45,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -226,8 +227,7 @@ public class HomeFXMLController implements Initializable {
                     if (tipo.equals("var")) {
                         observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadoresVarchar());
                         comboboxAgrupar.setItems(observableAgrupador);
-                    }
-                    else{
+                    } else {
                         observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadores());
                         comboboxAgrupar.setItems(observableAgrupador);
                     }
@@ -752,7 +752,7 @@ public class HomeFXMLController implements Initializable {
     public void msgSobre() {
         Alert msg = new Alert(Alert.AlertType.INFORMATION);
         msg.setTitle("Procedure Creator");
-        msg.setHeaderText("Procedure Creator - geração visual de consultas SQL");
+        msg.setHeaderText("Procedure Creator - Geração visual de consultas SQL e conversão");
         msg.setContentText(
                 "Software de geração visual de consultas SQL e conversão\n"
                 + "para procedimentos armazenados e funções do SGBD MySQL.\n"
@@ -762,29 +762,31 @@ public class HomeFXMLController implements Initializable {
                 + "(osmarj.frota@gmail.com), idealizado e orientado pelo \n"
                 + "professor Marcelo Chamy Machado (marcelo.chamy@ifam.edu.br).\n \n"
                 + "Este software é distribuído sob a licença GPLv3.");
+        msg.getDialogPane().setGraphic(new ImageView("/imagem/icone.png"));
+        
+        Stage stage = (Stage) msg.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(this.getClass().getResource("/imagem/icone.png").toString()));
+        
         msg.showAndWait();
     }
 
     //exportar -----------------------------------------------
+    
     @FXML
     public void exportarConsulta() {
         try {
-            // Conteudo
+            
             String content = textAreaResultado.getText();
-
-            // Cria arquivo
+            
             File file = new File("query.sql");
-
-            // Se o arquivo nao existir, ele gera
+            
             if (!file.exists()) {
                 file.createNewFile();
             }
-
-            // Prepara para escrever no arquivo
+            
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
 
-            // Escreve e fecha arquivo
             bw.write(content);
             bw.close();
         } catch (IOException e) {
@@ -792,7 +794,8 @@ public class HomeFXMLController implements Initializable {
         }
     }
 
-//Delete ---------------------------------------------
+    //Delete ---------------------------------------------
+    
     public void inicializaComboboxCamposDelete() {
         comboboxDelete.setItems(observableCampos);
     }
@@ -835,6 +838,7 @@ public class HomeFXMLController implements Initializable {
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryInsert());
     }
+    
     //Update -------------------------------------------------------
 
     public void inicializaComboboxCamposUpdate() {
@@ -868,7 +872,8 @@ public class HomeFXMLController implements Initializable {
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryUpdate());
     }
-    // Telas ------------------------------------------------
+    
+// Telas ------------------------------------------------
 
     @FXML
     public void abrirExecute() throws IOException {
@@ -915,6 +920,7 @@ public class HomeFXMLController implements Initializable {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagem/icone.png")));
         stage.show();
 
     }
@@ -930,6 +936,7 @@ public class HomeFXMLController implements Initializable {
         controller.setListFiltrosSelecionados(filtrosSelecionados);
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagem/icone.png")));
         stage.show();
     }
 
@@ -943,10 +950,10 @@ public class HomeFXMLController implements Initializable {
                 loader.setLocation(getClass().getResource("/view/GerarSPFXML.fxml"));
                 Parent root = loader.load();
                 GerarSPlFXMLController spController = loader.getController();
-                //System.out.println(textAreaResultado.getText());                
                 spController.setQueryReference(query);
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagem/icone.png")));
                 stage.show();
             }
             if (radioFunction.isSelected()) {
@@ -954,6 +961,7 @@ public class HomeFXMLController implements Initializable {
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagem/icone.png")));
                 stage.show();
             }
         }
