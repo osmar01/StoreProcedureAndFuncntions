@@ -221,6 +221,7 @@
                         <Button fx:id="btnAlterar" layoutX="38.0" layoutY="190.0" mnemonicParsing="false" onAction="#abrirTelaAlteracao" prefHeight="25.0" prefWidth="67.0" text="Alterar" />
                         <Button layoutX="334.0" layoutY="224.0" mnemonicParsing="false" onAction="#exportarConsulta" prefHeight="25.0" prefWidth="96.0" text="Exportar" />
                         <Button layoutX="533.0" layoutY="224.0" mnemonicParsing="false" onAction="#abrirExecute" prefHeight="25.0" prefWidth="88.0" text="Executar" />
+                        <ComboBox fx:id="comboBoxExportar" layoutX="630.0" layoutY="224.0" onAction="#exportarConsulta" prefHeight="25.0" prefWidth="87.0" promptText="Exportar" />
                             </children>
                         </Pane>
                     </children>

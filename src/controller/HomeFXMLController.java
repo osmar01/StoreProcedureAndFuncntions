@@ -32,6 +32,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -100,7 +101,6 @@ public class HomeFXMLController implements Initializable {
     List<TabPane> tabelasTabPanes = new ArrayList<>();
 
     private ExpressaoSQL query = new ExpressaoSQL();
-    private String textoTab;
 
     @FXML
     private ListView<Banco> listViewBancos;
@@ -183,6 +183,8 @@ public class HomeFXMLController implements Initializable {
     private MenuItem menuItemAtualizar;
     @FXML
     private MenuItem menuItemsobre;
+    @FXML
+    private ComboBox<String> comboBoxExportar;
 
     /**
      * Initializes the controller class.
@@ -197,6 +199,7 @@ public class HomeFXMLController implements Initializable {
         inicializarComboboxOperadorLogico();
         inicializarComboboxAgrupadores();
         inicializaRadioButton();
+        comboBoxExportar();
     }
 
     public void inicializarComboboxFiltro() {
@@ -212,6 +215,11 @@ public class HomeFXMLController implements Initializable {
     public void inicializarComboboxAgrupadores() {
         observableAgrupador = FXCollections.observableArrayList(cmp.getAgrupadores());
         comboboxAgrupar.setItems(observableAgrupador);
+    }
+
+    public void comboBoxExportar() {
+        ObservableList<String> exports = FXCollections.observableArrayList("sql", "txt");
+        comboBoxExportar.setItems(exports);
     }
 
     @FXML
@@ -443,7 +451,6 @@ public class HomeFXMLController implements Initializable {
                 tabPaneTabela.toFront();
             }
         });
-        textoTab = tab.getText();
 
         tab.setOnClosed(new EventHandler<Event>() {
             @Override
@@ -763,39 +770,35 @@ public class HomeFXMLController implements Initializable {
                 + "professor Marcelo Chamy Machado (marcelo.chamy@ifam.edu.br).\n \n"
                 + "Este software é distribuído sob a licença GPLv3.");
         msg.getDialogPane().setGraphic(new ImageView("/imagem/icone.png"));
-        
+
         Stage stage = (Stage) msg.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(this.getClass().getResource("/imagem/icone.png").toString()));
-        
+
         msg.showAndWait();
     }
 
     //exportar -----------------------------------------------
-    
     @FXML
-    public void exportarConsulta() {
-        try {
-            
-            String content = textAreaResultado.getText();
-            
-            File file = new File("query.sql");
-            
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
+    public void exportarConsulta() throws IOException {
+        String arquivo = comboBoxExportar.getSelectionModel().getSelectedItem();
+        
+        String content = textAreaResultado.getText();
 
-            bw.write(content);
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        File file = new File("query."+arquivo);
+
+        if (!file.exists()) {
+            file.createNewFile();
         }
+
+        FileWriter fw = new FileWriter(file.getAbsoluteFile());
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        bw.write(content);
+        bw.close();
+
     }
 
     //Delete ---------------------------------------------
-    
     public void inicializaComboboxCamposDelete() {
         comboboxDelete.setItems(observableCampos);
     }
@@ -838,9 +841,8 @@ public class HomeFXMLController implements Initializable {
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryInsert());
     }
-    
-    //Update -------------------------------------------------------
 
+    //Update -------------------------------------------------------
     public void inicializaComboboxCamposUpdate() {
         comboboxUpdate.setItems(observableCampos);
     }
@@ -872,9 +874,8 @@ public class HomeFXMLController implements Initializable {
         query.setTabelaSelecionada(getTabelaSelecionada());
         textAreaResultado.setText(query.getQueryUpdate());
     }
-    
-// Telas ------------------------------------------------
 
+// Telas ------------------------------------------------
     @FXML
     public void abrirExecute() throws IOException {
 
